@@ -1,0 +1,158 @@
+NAME
+    Org::Parser - Parse Org documents
+
+VERSION
+    version 0.01
+
+SYNOPSIS
+     use 5.010;
+     use Org::Parser;
+     use Data::Dump::OneLine qw(dump1);
+     my $orgp = Org::Parser->new();
+     $op->handler(sub {
+         my ($orgp, $ev, $args) = @_;
+         say "\$ev=$ev, $args=", dump1($args);
+     });
+     $op->parse(<<EOF);
+     #+FILETAGS: :tag1:tag2:tag3:
+     text1 ...
+     * h1 1  :tag1:tag2:
+     ** TODO h2 1
+     ** DONE h2 2
+     * h1 2
+     text2 *bold* ...
+     | a | b |
+     |---+---|
+     | 1 | 2 |
+     | 3 | 4 |
+     [[link][description]]
+     - unordered
+     - list
+       1. ordered
+       2. list
+         * term1 :: description1
+         * term2 :: description2
+       3. back to ordered list
+     - back to unordered list
+     EOF
+
+    Will output something like:
+
+     $ev:element, $args={element=>'setting', setting=>'FILETAGS', raw_arg=>':tag1:tag2:tag3', tags=>[qw/tag1 tag2 tag3/], raw=>"#+FILETAGS :tag1:tag2:tag3:\n"}
+     $ev:element, $args={element=>'text', text=>"text1 ...\n", raw=>"text1 ...\n"}
+     $ev:element, $args={element=>'headline', level=>1, title=>'h1 1', tags=>['tag1', 'tag2'], raw=>"* h1 1  :tag1:tag2:\n"}
+     $ev:element, $args={element=>'headline', level=>2, title=>'h2 1', is_todo=>1, todo_state=>'TODO', raw=>"** TODO h2 1\n"}
+     $ev:element, $args={element=>'headline', level=>2, title=>'h2 1', is_todo=>1, is_done=>1, todo_state=>'DONE', raw=>"** DONE h2 2\n"}
+     $ev:element, $args={element=>'headline', level=>1, title=>'h1 2', raw=>"* h1 2\n"}
+     $ev:element, $args={element=>'text', text=>'text2 ', raw=>"text2 "}
+     $ev:element, $args={element=>'text', is_bold=>1, text=>"bold", raw=>"*bold*"}
+     $ev:element, $args={element=>'text', text=>"...\n", raw=>"...\n"
+     $ev:element, $args={element=>'table', table=>[['a', 'b'], '--', [1, 2], [3, 4]], raw=>"| a | b |\n|---+---|\n| 1 | 2 |\n| 3 | 4 |\n"}
+     $ev:element, $args={element=>'link', target=>'link', description=>'description', raw=>'[[link][description]]'}
+     $ev:element, $args={element=>'text', text=>"\n", raw=>"\n"}
+     $ev:element, $args={element=>'list item', type=>'unordered',   level=>1, bullet=>'-',  seq=>1, item=>'unordered', raw=>"- unordered\n"}
+     $ev:element, $args={element=>'list item', type=>'unordered',   level=>1, bullet=>'-',  seq=>2, item=>'list', raw=>"- list\n"}
+     $ev:element, $args={element=>'list item', type=>'ordered',     level=>2, bullet=>'1.', seq=>1, item=>'ordered', raw=>"  1. ordered\n"}
+     $ev:element, $args={element=>'list item', type=>'ordered',     level=>2, bullet=>'2.', seq=>2, item=>'list', raw=>"  2. list\n"}
+     $ev:element, $args={element=>'list item', type=>'description', level=>3, bullet=>'*',  seq=>1, term=>'term1', description=>'description1', raw=>"    * term1 :: description1\n"}
+     $ev:element, $args={element=>'list item', type=>'description', level=>3, bullet=>'*',  seq=>2, term=>'term2', description=>'description2', raw=>"    * term2 :: description2\n"}
+     $ev:element, $args={element=>'list item', type=>'ordered',     level=>2, bullet=>'3.', seq=>3, item=>'back to ordered list', raw=>"  3. back to ordered list\n"}
+     $ev:element, $args={element=>'list item', type=>'unordered',   level=>1, bullet=>'-',  seq=>3, item=>'back to unordered list', raw=>"- back to unordered list\n"}
+
+DESCRIPTION
+    NOTE: This module is in alpha stage. See "BUGS/TODO/LIMITATIONS" for the
+    list of stuffs not yet implemented.
+
+    This module parses Org documents. See http://orgmode.org/ for more
+    details on Org documents.
+
+    This module uses Log::Any logging framework.
+
+    This module uses Moo object system.
+
+ATTRIBUTES
+  handler => CODEREF
+    The handler which will be called repeatedly by the parser during
+    parsing. The default handler will do nothing ('sub{1}').
+
+    Handler will be passed these arguments:
+
+     $orgp, $ev, \%args
+
+    $orgp is the parser instance, $ev is the type of event (currently only
+    'element') and %args are extra information depending on $ev and type of
+    elements. See the SYNOPSIS for the various content of %args.
+
+METHODS
+  new()
+    Create a new parser instance.
+
+  $orgp->parse($str | $arrayref | $coderef | $filehandle)
+    Parse document (which can be contained in a scalar $str, an array of
+    lines $arrayref, a subroutine which will be called for chunks until it
+    returns undef, or a filehandle.
+
+    Will call handler (specified in 'handler' attribute) for each element
+    being parsed. See documentation for 'handler' attribute for more
+    details.
+
+    Will die if there are syntax errors in documents.
+
+  $orgp->parse_file($filename)
+    Just like parse(), but will load document from file instead.
+
+BUGS/TODO/LIMITATIONS
+    *   Single-pass parser
+
+        Parser is currently a single-pass parser, so you need to preset
+        stuffs before using them. For example, when declaring custom TODO
+        keywords:
+
+         #+TODO: TODO | DONE
+         #+TODO: BUG WISHLIST | FIXED CANTREPRO
+
+         * FIXED blah
+
+        and not:
+
+         * FIXED blah (at this point, custom TODO keywords not yet recognized)
+
+         #+TODO: TODO | DONE
+         #+TODO: BUG WISHLIST | FIXED CANTREPRO
+
+    *   What's the syntax for multiple in-buffer settings on a single line?
+
+        Currently the parser assumes a single in-buffer settings per line
+
+    *   Difference between TYP_TODO and TODO/SEQ_TODO?
+
+        Currently we assume it to be the same as the other two.
+
+    *   Parse link & link abbreviations (#+LINK)
+
+    *   Parse timestamps & timestamp pairs
+
+    *   Parse repeats in schedule timestamps
+
+    *   Parse tables
+
+    *   Parse text markups
+
+    *   Parse headline percentageS
+
+    *   Parse {unordered,ordered,description,check) lists
+
+    *   Process includes (#+INCLUDE)
+
+SEE ALSO
+    Org::Document
+
+AUTHOR
+    Steven Haryanto <stevenharyanto@gmail.com>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2011 by Steven Haryanto.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+
