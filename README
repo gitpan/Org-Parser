@@ -2,67 +2,39 @@ NAME
     Org::Parser - Parse Org documents
 
 VERSION
-    version 0.01
+    version 0.02
 
 SYNOPSIS
      use 5.010;
      use Org::Parser;
-     use Data::Dump::OneLine qw(dump1);
      my $orgp = Org::Parser->new();
-     $op->handler(sub {
-         my ($orgp, $ev, $args) = @_;
-         say "\$ev=$ev, $args=", dump1($args);
+
+     # parse into a document object
+     my $doc  = $orgp->parse_file("$ENV{HOME}/todo.org");
+
+     # print out elements while parsing
+     $orgp->handler(sub {
+         my ($orgp, $event, @args) = @_;
+         next unless $event eq 'element';
+         my $el = shift @args;
+         next unless $el->isa('Org::Element::Headline') &&
+             $el->is_todo && !$el->is_done;
+         say "found todo item: ", $el->title->as_string;
      });
-     $op->parse(<<EOF);
-     #+FILETAGS: :tag1:tag2:tag3:
-     text1 ...
-     * h1 1  :tag1:tag2:
-     ** TODO h2 1
-     ** DONE h2 2
-     * h1 2
-     text2 *bold* ...
-     | a | b |
-     |---+---|
-     | 1 | 2 |
-     | 3 | 4 |
-     [[link][description]]
-     - unordered
-     - list
-       1. ordered
-       2. list
-         * term1 :: description1
-         * term2 :: description2
-       3. back to ordered list
-     - back to unordered list
+     $orgp->parse(<<EOF);
+     * heading1a
+     ** TODO heading2a
+     ** DONE heading2b
+     * TODO heading1b
+     * heading1c
      EOF
 
-    Will output something like:
+    will print something like:
 
-     $ev:element, $args={element=>'setting', setting=>'FILETAGS', raw_arg=>':tag1:tag2:tag3', tags=>[qw/tag1 tag2 tag3/], raw=>"#+FILETAGS :tag1:tag2:tag3:\n"}
-     $ev:element, $args={element=>'text', text=>"text1 ...\n", raw=>"text1 ...\n"}
-     $ev:element, $args={element=>'headline', level=>1, title=>'h1 1', tags=>['tag1', 'tag2'], raw=>"* h1 1  :tag1:tag2:\n"}
-     $ev:element, $args={element=>'headline', level=>2, title=>'h2 1', is_todo=>1, todo_state=>'TODO', raw=>"** TODO h2 1\n"}
-     $ev:element, $args={element=>'headline', level=>2, title=>'h2 1', is_todo=>1, is_done=>1, todo_state=>'DONE', raw=>"** DONE h2 2\n"}
-     $ev:element, $args={element=>'headline', level=>1, title=>'h1 2', raw=>"* h1 2\n"}
-     $ev:element, $args={element=>'text', text=>'text2 ', raw=>"text2 "}
-     $ev:element, $args={element=>'text', is_bold=>1, text=>"bold", raw=>"*bold*"}
-     $ev:element, $args={element=>'text', text=>"...\n", raw=>"...\n"
-     $ev:element, $args={element=>'table', table=>[['a', 'b'], '--', [1, 2], [3, 4]], raw=>"| a | b |\n|---+---|\n| 1 | 2 |\n| 3 | 4 |\n"}
-     $ev:element, $args={element=>'link', target=>'link', description=>'description', raw=>'[[link][description]]'}
-     $ev:element, $args={element=>'text', text=>"\n", raw=>"\n"}
-     $ev:element, $args={element=>'list item', type=>'unordered',   level=>1, bullet=>'-',  seq=>1, item=>'unordered', raw=>"- unordered\n"}
-     $ev:element, $args={element=>'list item', type=>'unordered',   level=>1, bullet=>'-',  seq=>2, item=>'list', raw=>"- list\n"}
-     $ev:element, $args={element=>'list item', type=>'ordered',     level=>2, bullet=>'1.', seq=>1, item=>'ordered', raw=>"  1. ordered\n"}
-     $ev:element, $args={element=>'list item', type=>'ordered',     level=>2, bullet=>'2.', seq=>2, item=>'list', raw=>"  2. list\n"}
-     $ev:element, $args={element=>'list item', type=>'description', level=>3, bullet=>'*',  seq=>1, term=>'term1', description=>'description1', raw=>"    * term1 :: description1\n"}
-     $ev:element, $args={element=>'list item', type=>'description', level=>3, bullet=>'*',  seq=>2, term=>'term2', description=>'description2', raw=>"    * term2 :: description2\n"}
-     $ev:element, $args={element=>'list item', type=>'ordered',     level=>2, bullet=>'3.', seq=>3, item=>'back to ordered list', raw=>"  3. back to ordered list\n"}
-     $ev:element, $args={element=>'list item', type=>'unordered',   level=>1, bullet=>'-',  seq=>3, item=>'back to unordered list', raw=>"- back to unordered list\n"}
+     found todo item: heading2a
+     found todo item: heading1b
 
 DESCRIPTION
-    NOTE: This module is in alpha stage. See "BUGS/TODO/LIMITATIONS" for the
-    list of stuffs not yet implemented.
-
     This module parses Org documents. See http://orgmode.org/ for more
     details on Org documents.
 
@@ -70,35 +42,64 @@ DESCRIPTION
 
     This module uses Moo object system.
 
+    NOTE: This module is in alpha stage. See "BUGS/TODO/LIMITATIONS" for the
+    list of stuffs not yet implemented.
+
+    Already implemented/parsed:
+
+    *   in-buffer settings
+
+    *   blocks
+
+    *   headlines & TODO items
+
+        Including custom TODO keywords, custom priorities
+
+    *   schedule timestamps (subset of)
+
+    *   drawers & properties
+
+  $orgp->parse_inline($str, $doc[, $parent])
+    Inline elements are elements that can be put under a heading, table
+    cell, heading title, etc. these include normal text (and text with
+    markups), timestamps, links, etc.
+
+    Found elements will be added into $parent's children. If $parent is not
+    specified, it will be set to $orgp->_last_headline (or, if undef, $doc).
+
 ATTRIBUTES
-  handler => CODEREF
-    The handler which will be called repeatedly by the parser during
-    parsing. The default handler will do nothing ('sub{1}').
+  handler => CODEREF (default undef)
+    If set, the handler which will be called repeatedly by the parser during
+    parsing. This can be used to quickly filter/extract wanted elements
+    (e.g. headlines, timestamps, etc) from an Org document.
 
     Handler will be passed these arguments:
 
-     $orgp, $ev, \%args
+     $orgp, $event, $args
 
-    $orgp is the parser instance, $ev is the type of event (currently only
-    'element') and %args are extra information depending on $ev and type of
-    elements. See the SYNOPSIS for the various content of %args.
+    $orgp is the parser instance, $event is the type of event (currently
+    only 'element', triggered after the parser parses an element) and $args
+    is a hashref containing extra information depending on $event and type
+    of elements. For $event == 'element', $args->{element} will be set to
+    the element object.
 
 METHODS
   new()
     Create a new parser instance.
 
-  $orgp->parse($str | $arrayref | $coderef | $filehandle)
+  $orgp->parse($str | $arrayref | $coderef | $filehandle) => $doc
     Parse document (which can be contained in a scalar $str, an array of
     lines $arrayref, a subroutine which will be called for chunks until it
-    returns undef, or a filehandle.
+    returns undef, or a filehandle).
 
-    Will call handler (specified in 'handler' attribute) for each element
-    being parsed. See documentation for 'handler' attribute for more
-    details.
+    Returns Org::Document object.
+
+    If 'handler' attribute is specified, will call handler repeatedly during
+    parsing. See the 'handler' attribute for more details.
 
     Will die if there are syntax errors in documents.
 
-  $orgp->parse_file($filename)
+  $orgp->parse_file($filename) => $doc
     Just like parse(), but will load document from file instead.
 
 BUGS/TODO/LIMITATIONS
@@ -134,19 +135,33 @@ BUGS/TODO/LIMITATIONS
 
     *   Parse repeats in schedule timestamps
 
-    *   Parse tables
+    *   Set table's caption, etc from settings
+
+         #+CAPTION: A long table
+         #+LABEL: tbl:long
+         |...|...|
+         |...|...|
+
+        Question: is this still valid caption?
+
+         #+CAPTION: A long table
+         some text
+         #+LABEL: tbl:long
+         some more text
+         |...|...|
+         |...|...|
 
     *   Parse text markups
 
-    *   Parse headline percentageS
+    *   Parse headline percentages
 
     *   Parse {unordered,ordered,description,check) lists
 
     *   Process includes (#+INCLUDE)
 
-SEE ALSO
-    Org::Document
+    *   Parse buffer-wide header arguments (#+BABEL, 14.8.1)
 
+SEE ALSO
 AUTHOR
     Steven Haryanto <stevenharyanto@gmail.com>
 

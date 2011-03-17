@@ -1,126 +1,194 @@
 package Org::Parser;
 BEGIN {
-  $Org::Parser::VERSION = '0.01';
+  $Org::Parser::VERSION = '0.02';
 }
 # ABSTRACT: Parse Org documents
 
 use 5.010;
-use strict;
-use warnings;
+use Moo;
 use Log::Any '$log';
 
 use File::Slurp;
+use Org::Document;
 use Scalar::Util qw(blessed);
 
-use Moo;
-has handler                 => (is => 'rw', default => sub{ sub{1} });
-has raw                     => (is => 'rw');
-has todo_states             => (is => 'rw', default => sub{[qw/TODO/]});
-has done_states             => (is => 'rw', default => sub{[qw/DONE/]});
-has priorities              => (is => 'rw', default => sub{[qw/A B C/]});
-has drawers                 => (is => 'rw', default => sub{[
-    qw/CLOCK LOGBOOK PROPERTIES/]});
+has handler         => (is => 'rw');
 
-my $tags_re = qr/:(?:[^:]+:)+/;
-my $ls_     = qr/(?:(?<=[\015\012])|\A)/;
-my $le      = qr/(?:\R|\z)/;
+has _last_headlines => (is => 'rw'); #[undef, $last_lvl1_h, $last_lvl2_h, ...]
+has _last_headline  => (is => 'rw');
 
-# parse blocks + settings + headlines
+our $tags_re    = qr/:(?:[^:]+:)+/;
+our $ls_re      = qr/(?:(?<=[\015\012])|\A)/;
+our $le_re      = qr/(?:\R|\z)/;
+our $arg_val_re = qr/(?: '(?<squote> [^']*)' |
+                         "(?<dquote> [^"]*)" |
+                         (?<bare> \S+) ) \z
+                    /x;
+
+sub __get_arg_val {
+    my $val = shift;
+    $val =~ /\A $arg_val_re \z/ or return;
+    if (defined $+{squote}) {
+        return $+{squote};
+    } elsif (defined $+{dquote}) {
+        return $+{dquote};
+    } else {
+        return $+{bare};
+    }
+}
+
+# parse blocky elements: setting, blocks, header argument
 sub _parse {
-    my ($self) = @_;
-    my $raw = $self->raw;
-    die "BUG: raw attribute has not been set" unless defined($raw);
+    my ($self, $str, $doc) = @_;
+    $log->tracef('-> _parse(%s)', $str);
 
-    state $re  = qr/(?<block>    $ls_ \#\+BEGIN_(?<sname>\w+)
-                                 (?:.|\R)*
-                                 \R\#\+END_\k<sname> $le) |
-                   (?<setting>   $ls_ \#\+.* $le) |
-                   (?<headline>  $ls_ \*+[ \t].* $le) |
-                   (?<other>     [^#*]+ | # to lump things more
+    $doc //= Org::Document->new(_parser => $self);
+    if (!$self->_last_headline ) { $self->_last_headline ($doc)   }
+    if (!$self->_last_headlines) { $self->_last_headlines([$doc]) }
+
+    state $re  = qr/(?<block>    $ls_re \#\+BEGIN_(?<sname>\w+)
+                                 (?:.|\R)*?
+                                 \R\#\+END_\k<sname> $le_re) |
+                   (?<setting>   $ls_re \#\+.* $le_re) |
+                   (?<headline>  $ls_re \*+[ \t].* $le_re) |
+                   (?<table>     (?: $ls_re [ \t]* \| [ \t]* \S.* $le_re)+) |
+                   (?<drawer>    $ls_re [ \t]* :(?<drawer_name> \w+): [ \t]*\R
+                                 (?:.|\R)*?
+                                 $ls_re [ \t]* :END:) |
+                   (?<other>     [^#*:|]+ | # to lump things more
                                  .+?)
-                  /mx;
+                  /mxi;
 
     my @other;
-    while ($raw =~ /$re/g) {
+    while ($str =~ /$re/g) {
         $log->tracef("match: %s", \%+);
         if (defined $+{other}) {
             push @other, $+{other};
             next;
         } else {
             if (@other) {
-                $self->_parse2(join "", @other);
+                $self->parse_inline(join("", @other), $doc);
             }
             @other = ();
         }
 
+        my $parent = $self->_last_headline;
+        my $el;
         if ($+{block}) {
-            $self->_parse_block($+{block});
+            require Org::Element::Block;
+            $el = Org::Element::Block->new(
+                document=>$doc, raw=>$+{block});
         } elsif ($+{setting}) {
-            $self->_parse_setting($+{setting});
+            require Org::Element::Setting;
+            $el = Org::Element::Setting->new(
+                document=>$doc, raw=>$+{setting});
+        } elsif ($+{table}) {
+            require Org::Element::Table;
+            $el = Org::Element::Table->new(
+                document=>$doc, raw=>$+{table});
+        } elsif ($+{drawer}) {
+            my $d = uc($+{drawer_name});
+            if ($d eq 'PROPERTIES') {
+                require Org::Element::Properties;
+                $el = Org::Element::Properties->new(
+                    document=>$doc, raw=>$+{drawer});
+            } else {
+                require Org::Element::Drawer;
+                $el = Org::Element::Drawer->new(
+                    document=>$doc, raw=>$+{drawer});
+            }
         } elsif ($+{headline}) {
-            $self->_parse_headline($+{headline});
+            require Org::Element::Headline;
+            $el = Org::Element::Headline->new(
+                document=>$doc, raw=>$+{headline});
+            for (my $i=$el->level-1; $i>=0; $i--) {
+                $parent = $self->_last_headlines->[$i] and last;
+            }
+            $self->_last_headlines->[$el->level] = $el;
+            $self->_last_headline($el);
         }
+        $el->parent($parent);
+        $parent->children([]) if !$parent->children;
+        push @{ $parent->children }, $el;
+        $self->handler->($self, "element", {element=>$el})
+            if $el && $self->handler;
+        $el = undef;
     }
 
     # remaining text
     if (@other) {
-        $self->_parse2(join "", @other);
+        $self->parse_inline(join("", @other), $doc);
     }
     @other = ();
+
+    $log->tracef('<- _parse()');
+    $doc;
 }
 
-# parse text: timestamps, drawers
-sub _parse2 {
-    my ($self, $raw) = @_;
-    $log->tracef("-> _parse2(%s)", $raw);
+
+sub parse_inline {
+    my ($self, $str, $doc, $parent) = @_;
+    $parent //= $self->_last_headline // $doc;
+
+    $log->tracef("-> parse_inline(%s)", $str);
     state $re = qr/(?<timestamp_pair>          \[\d{4}-\d{2}-\d{2} \s[^\]]*\]--
                                                \[\d{4}-\d{2}-\d{2} \s[^\]]*\]) |
                    (?<timestamp>               \[\d{4}-\d{2}-\d{2} \s[^\]]*\]) |
                    (?<schedule_timestamp_pair> <\d{4}-\d{2}-\d{2}  \s[^>]*>--
                                                <\d{4}-\d{2}-\d{2}  \s[^>]*>) |
                    (?<schedule_timestamp>      <\d{4}-\d{2}-\d{2}  \s[^>]*>) |
-                   (?<drawer>                  $ls_ [ \t]* :\w+: [ \t]*\R
-                                               .*?
-                                               $ls_ [ \t]* :END:) |
-                   (?<other>                   [^\[<:]+ | # to lump things more
+                   # link
+                   # (marked up) text
+                   (?<other>                   [^\[<]+ | # to lump things more
                                                .+?)
-                  /sx;
+                  /sxi;
     my @other;
-    while ($raw =~ /$re/g) {
-        $log->tracef("match: %s", \%+);
+    while ($str =~ /$re/g) {
+        $log->tracef("match inline: %s", \%+);
         if (defined $+{other}) {
             push @other, $+{other};
             next;
         } else {
             if (@other) {
-                $self->_parse_text(join "", @other);
+                $self->_parse_text(join("", @other), $doc, $parent);
             }
             @other = ();
         }
 
+        my $el;
         if      ($+{timestamp_pair}) {
-            $self->_parse_timestamp_pair($+{timestamp_pair});
+            require Org::Element::TimestampPair;
+            $el = Org::Element::TimestampPair->new(
+                document=>$doc, raw=>$+{timestamp_pair});
         } elsif ($+{timestamp}) {
-            $self->_parse_timestamp($+{timestamp});
+            require Org::Element::Timestamp;
+            $el = Org::Element::Timestamp->new(
+                document=>$doc, raw=>$+{timestamp});
         } elsif ($+{schedule_timestamp_pair}) {
-            $self->_parse_schedule_timestamp_pair(
-                $+{schedule_timestamp_pair});
+            require Org::Element::ScheduleTimestampPair;
+            $el = Org::Element::ScheduleTimestampPair->new(
+                document=>$doc, raw=>$+{schedule_timestamp_pair});
         } elsif ($+{schedule_timestamp}) {
-            $self->_parse_schedule_timestamp($+{schedule_timestamp});
-        } elsif ($+{drawer}) {
-            $self->_parse_drawer($+{drawer});
+            require Org::Element::ScheduleTimestamp;
+            $el = Org::Element::ScheduleTimestamp->new(
+                document=>$doc, raw=>$+{schedule_timestamp});
         }
+        $el->parent($parent);
+        $parent->children([]) if !$parent->children;
+        push @{ $parent->children }, $el;
+        $self->handler->($self, "element", {element=>$el})
+            if $el && $self->handler;
+        $el = undef;
     }
 
     # remaining text
     if (@other) {
-        $self->_parse_text(join "", @other);
+        $self->_parse_text(join("", @other), $doc, $parent);
     }
     @other = ();
-}
 
-# XXX parse3? parse2? links, markups (*bold*, _underline_, /italic/, ~verbatim~,
-# =code=, +strike+)
+    $log->tracef('<- parse_inline()');
+}
 
 sub __parse_timestamp {
     require DateTime;
@@ -135,210 +203,49 @@ sub __parse_timestamp {
 }
 
 sub _parse_text {
-    my ($self, $raw) = @_;
-    $self->handler->($self, "element", {element=>"text", raw=>$raw});
-}
-
-sub _parse_timestamp_pair {
-    my ($self, $raw) = @_;
-    warn "Sorry, parsing timestamp pair ($raw) not yet implemented";
-}
-
-sub _parse_timestamp {
-    my ($self, $raw) = @_;
-    warn "Sorry, parsing timestamp ($raw) not yet implemented";
-}
-
-sub _parse_schedule_timestamp_pair {
-    my ($self, $raw) = @_;
-    warn "Sorry, parsing schedule timestamp pair ($raw) not yet implemented";
-}
-
-sub _parse_schedule_timestamp {
-    my ($self, $raw) = @_;
-    state $re = qr/^<(.+)>$/;
-    $raw =~ $re or die "Invalid syntax in timestamp: $raw";
-    my $args = {element => "schedule timestamp", raw=>$raw};
-    $args->{timestamp} = __parse_timestamp($1)
-        or die "Can't parse timestamp $1";
-    $self->handler->($self, "element", $args);
-}
-
-sub _parse_drawer {
-    my ($self, $raw) = @_;
-    $log->tracef("-> _parse_drawer(%s)", $raw);
-    state $re = qr/\A\s*:(\w+):\s*\R
-                   ((?:.|\R)*?)    # content
-                   [ \t]*:END:\z   # closing
-                  /x;
-    $raw =~ $re or die "Invalid syntax in drawer: $raw";
-    my ($d, $rc) = ($1, $2);
-    my $args = {element=>"drawer", drawer=>$d, raw=>$raw, raw_content=>$rc};
-    $d ~~ @{ $self->drawers } or die "Unknown drawer name $d: $raw";
-
-    if ($d eq 'PROPERTIES') {
-        $args->{properties} = {};
-        for (split /\R/, $rc) {
-            next unless /\S/;
-            die "Invalid line in PROPERTY drawer: $_"
-                unless /^\s*:(\w+):\s+(.+?)\s*$/;
-            $args->{properties}{$1} = $2;
-        }
-    }
-
-    $self->handler->($self, "element", $args);
+    require Org::Element::Text;
+    my ($self, $str, $doc, $parent) = @_;
+    $parent //= $self->_last_headline // $doc;
+    $log->tracef("-> _parse_text(%s)", $str);
+    my $el = Org::Element::Text->new(
+        raw => $str, document=>$doc, parent=>$parent);
+    $parent->children([]) if !$parent->children;
+    push @{$parent->children}, $el;
+    $self->handler->($self, "element", {element=>$el}) if $self->handler;
 }
 
 sub __split_tags {
     [$_[0] =~ /:([^:]+)/g];
 }
 
-sub _parse_setting {
-    my ($self, $raw) = @_;
-    $log->tracef("-> _parse_setting(%s)", $raw);
-    # XXX what's the syntax for several settings in a single line? for now we
-    # assume one setting per line
-    state $re = qr/\A\#\+(\w+): \s+ (.+?) \s* \R?\z/x;
-    $raw =~ $re or die "Invalid setting syntax: $raw";
-    my ($setting, $raw_arg) = ($1, $2);
-    my $args = {element=>'setting', setting=>$setting,
-                raw_arg=>$raw_arg, raw=>$raw};
-    if      ($setting eq 'ARCHIVE') {
-    } elsif ($setting eq 'AUTHOR') {
-    } elsif ($setting eq 'CAPTION') {
-    } elsif ($setting eq 'BIND') {
-    } elsif ($setting eq 'CATEGORY') {
-    } elsif ($setting eq 'COLUMNS') {
-    } elsif ($setting eq 'CONSTANTS') {
-    } elsif ($setting eq 'DATE') {
-    } elsif ($setting eq 'DESCRIPTION') {
-    } elsif ($setting eq 'DRAWERS') {
-        my $d = [split /\s+/, $raw_arg];
-        $args->{drawers} = $d;
-        for (@$d) {
-            push @{ $self->drawers }, $_ unless $_ ~~ @{ $self->drawers };
-        }
-    } elsif ($setting eq 'EMAIL') {
-    } elsif ($setting eq 'EXPORT_EXCLUDE_TAGS') {
-    } elsif ($setting eq 'EXPORT_SELECT_TAGS') {
-    } elsif ($setting eq 'FILETAGS') {
-        $raw_arg =~ /^$tags_re$/ or
-            die "Invalid argument syntax for FILEARGS: $raw";
-        $args->{tags} = __split_tags($raw_arg);
-    } elsif ($setting eq 'INCLUDE') {
-    } elsif ($setting eq 'INDEX') {
-    } elsif ($setting eq 'KEYWORDS') {
-    } elsif ($setting eq 'LABEL') {
-    } elsif ($setting eq 'LANGUAGE') {
-    } elsif ($setting eq 'LATEX_HEADER') {
-    } elsif ($setting eq 'LINK') {
-    } elsif ($setting eq 'LINK_HOME') {
-    } elsif ($setting eq 'LINK_UP') {
-    } elsif ($setting eq 'OPTIONS') {
-    } elsif ($setting eq 'PRIORITIES') {
-        my $p = [split /\s+/, $raw_arg];
-        $args->{priorities} = $p;
-        $self->priorities($p);
-    } elsif ($setting eq 'PROPERTY') {
-    } elsif ($setting =~ /^(SEQ_TODO|TODO|TYP_TODO)$/) {
-        my $done;
-        my @args = split /\s+/, $raw_arg;
-        $args->{states} = \@args;
-        for (my $i=0; $i<@args; $i++) {
-            my $arg = $args[$i];
-            if ($arg eq '|') { $done++; next }
-            $done++ if !$done && @args > 1 && $i == @args-1;
-            my $ary = $done ? $self->done_states : $self->todo_states;
-            push @$ary, $arg unless $arg ~~ @$ary;
-        }
-    } elsif ($setting eq 'SETUPFILE') {
-    } elsif ($setting eq 'STARTUP') {
-    } elsif ($setting eq 'STYLE') {
-    } elsif ($setting eq 'TAGS') {
-    } elsif ($setting eq 'TBLFM') {
-    } elsif ($setting eq 'TEXT') {
-    } elsif ($setting eq 'TITLE') {
-    } elsif ($setting eq 'XSLT') {
-    } else {
-        die "Unknown setting $setting: $raw";
-    }
-    $self->handler->($self, "element", $args);
-}
-
-sub _parse_block {
-    my ($self, $raw) = @_;
-    $log->tracef("-> _parse_block(%s)", $raw);
-    state $re = qr/\A\#\+(?:BEGIN_(CENTER|COMMENT|EXAMPLE|QUOTE|SRC|VERSE))
-                   (?:\s+(\S.*))\R # arg
-                   ((?:.|\R)*)     # content
-                   \#\+\w+\R?\z    # closing
-                  /x;
-    $raw =~ $re or die "Invalid/unknown block: $raw";
-    $self->handler->($self, "element", {
-        element=>"block", block=>$1,
-        raw_arg=>$2//"", raw_content=>$3,
-        raw=>$raw});
-}
-
-sub _parse_headline {
-    my ($self, $raw) = @_;
-    $log->tracef("-> _parse_headline(%s)", $raw);
-    state $re = qr/\A(\*+)\s+(.*?)(?:\s+($tags_re))?\s*\R?\z/x;
-    $raw =~ $re or die "Invalid headline syntax: $raw";
-    my ($bullet, $title, $tags) = ($1, $2, $3);
-    my $args = {element=>"headline", raw=>$raw, level=>length($bullet)};
-    $args->{tags} = __split_tags($tags) if $tags;
-
-    # XXX cache re
-    my $todo_kw_re = "(?:".
-        join("|", map {quotemeta}
-                 @{$self->todo_states}, @{$self->done_states}) . ")";
-    if ($title =~ s/^($todo_kw_re)\s+//) {
-        my $state = $1;
-        $args->{is_todo} = 1;
-        $args->{todo_state} = $state;
-        $args->{is_done} = 1 if $state ~~ @{ $self->done_states };
-        # XXX cache re
-        my $prio_re = "(?:".
-            join("|", map {quotemeta} @{$self->priorities}) . ")";
-        if ($title =~ s/\[#($prio_re)\]\s*//) {
-            $args->{todo_priority} = $1;
-        }
-    }
-
-    $args->{title} = $title;
-    $self->handler->($self, "element", $args);
-}
-
 sub parse {
     my ($self, $arg) = @_;
     die "Please specify a defined argument to parse()\n" unless defined($arg);
 
-    if (my $r = ref($arg)) {
-        if ($r eq 'ARRAY') {
-            $self->raw(join "", @$arg);
-        } elsif ($r eq 'GLOB' || blessed($arg) && $arg->isa('IO::Handle')) {
-            $self->raw(join "", <$arg>);
-        } elsif ($r eq 'CODE') {
-            my @chunks;
-            while (defined(my $chunk = $arg->())) {
-                push @chunks, $chunk;
-            }
-            $self->raw(join "", @chunks);
-        } else {
-            die "Invalid argument, please supply a ".
-                "string|arrayref|coderef|filehandle\n";
+    my $str;
+    my $r = ref($arg);
+    if (!$r) {
+        $str = $arg;
+    } elsif ($r eq 'ARRAY') {
+        $str = join "", @$arg;
+    } elsif ($r eq 'GLOB' || blessed($arg) && $arg->isa('IO::Handle')) {
+        $str = join "", <$arg>;
+    } elsif ($r eq 'CODE') {
+        my @chunks;
+        while (defined(my $chunk = $arg->())) {
+            push @chunks, $chunk;
         }
+        $str = join "", @chunks;
     } else {
-        $self->raw($arg);
+        die "Invalid argument, please supply a ".
+            "string|arrayref|coderef|filehandle\n";
     }
-    $self->_parse;
+    $self->_parse($str);
 }
 
 sub parse_file {
     my ($self, $filename) = @_;
-    $self->raw(scalar read_file($filename));
-    $self->_parse;
+    $self->_parse(scalar read_file($filename));
 }
 
 1;
@@ -352,68 +259,40 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-version 0.01
+version 0.02
 
 =head1 SYNOPSIS
 
  use 5.010;
  use Org::Parser;
- use Data::Dump::OneLine qw(dump1);
  my $orgp = Org::Parser->new();
- $op->handler(sub {
-     my ($orgp, $ev, $args) = @_;
-     say "\$ev=$ev, $args=", dump1($args);
+
+ # parse into a document object
+ my $doc  = $orgp->parse_file("$ENV{HOME}/todo.org");
+
+ # print out elements while parsing
+ $orgp->handler(sub {
+     my ($orgp, $event, @args) = @_;
+     next unless $event eq 'element';
+     my $el = shift @args;
+     next unless $el->isa('Org::Element::Headline') &&
+         $el->is_todo && !$el->is_done;
+     say "found todo item: ", $el->title->as_string;
  });
- $op->parse(<<EOF);
- #+FILETAGS: :tag1:tag2:tag3:
- text1 ...
- * h1 1  :tag1:tag2:
- ** TODO h2 1
- ** DONE h2 2
- * h1 2
- text2 *bold* ...
- | a | b |
- |---+---|
- | 1 | 2 |
- | 3 | 4 |
- [[link][description]]
- - unordered
- - list
-   1. ordered
-   2. list
-     * term1 :: description1
-     * term2 :: description2
-   3. back to ordered list
- - back to unordered list
+ $orgp->parse(<<EOF);
+ * heading1a
+ ** TODO heading2a
+ ** DONE heading2b
+ * TODO heading1b
+ * heading1c
  EOF
 
-Will output something like:
+will print something like:
 
- $ev:element, $args={element=>'setting', setting=>'FILETAGS', raw_arg=>':tag1:tag2:tag3', tags=>[qw/tag1 tag2 tag3/], raw=>"#+FILETAGS :tag1:tag2:tag3:\n"}
- $ev:element, $args={element=>'text', text=>"text1 ...\n", raw=>"text1 ...\n"}
- $ev:element, $args={element=>'headline', level=>1, title=>'h1 1', tags=>['tag1', 'tag2'], raw=>"* h1 1  :tag1:tag2:\n"}
- $ev:element, $args={element=>'headline', level=>2, title=>'h2 1', is_todo=>1, todo_state=>'TODO', raw=>"** TODO h2 1\n"}
- $ev:element, $args={element=>'headline', level=>2, title=>'h2 1', is_todo=>1, is_done=>1, todo_state=>'DONE', raw=>"** DONE h2 2\n"}
- $ev:element, $args={element=>'headline', level=>1, title=>'h1 2', raw=>"* h1 2\n"}
- $ev:element, $args={element=>'text', text=>'text2 ', raw=>"text2 "}
- $ev:element, $args={element=>'text', is_bold=>1, text=>"bold", raw=>"*bold*"}
- $ev:element, $args={element=>'text', text=>"...\n", raw=>"...\n"
- $ev:element, $args={element=>'table', table=>[['a', 'b'], '--', [1, 2], [3, 4]], raw=>"| a | b |\n|---+---|\n| 1 | 2 |\n| 3 | 4 |\n"}
- $ev:element, $args={element=>'link', target=>'link', description=>'description', raw=>'[[link][description]]'}
- $ev:element, $args={element=>'text', text=>"\n", raw=>"\n"}
- $ev:element, $args={element=>'list item', type=>'unordered',   level=>1, bullet=>'-',  seq=>1, item=>'unordered', raw=>"- unordered\n"}
- $ev:element, $args={element=>'list item', type=>'unordered',   level=>1, bullet=>'-',  seq=>2, item=>'list', raw=>"- list\n"}
- $ev:element, $args={element=>'list item', type=>'ordered',     level=>2, bullet=>'1.', seq=>1, item=>'ordered', raw=>"  1. ordered\n"}
- $ev:element, $args={element=>'list item', type=>'ordered',     level=>2, bullet=>'2.', seq=>2, item=>'list', raw=>"  2. list\n"}
- $ev:element, $args={element=>'list item', type=>'description', level=>3, bullet=>'*',  seq=>1, term=>'term1', description=>'description1', raw=>"    * term1 :: description1\n"}
- $ev:element, $args={element=>'list item', type=>'description', level=>3, bullet=>'*',  seq=>2, term=>'term2', description=>'description2', raw=>"    * term2 :: description2\n"}
- $ev:element, $args={element=>'list item', type=>'ordered',     level=>2, bullet=>'3.', seq=>3, item=>'back to ordered list', raw=>"  3. back to ordered list\n"}
- $ev:element, $args={element=>'list item', type=>'unordered',   level=>1, bullet=>'-',  seq=>3, item=>'back to unordered list', raw=>"- back to unordered list\n"}
+ found todo item: heading2a
+ found todo item: heading1b
 
 =head1 DESCRIPTION
-
-B<NOTE: This module is in alpha stage. See L</"BUGS/TODO/LIMITATIONS"> for the
-list of stuffs not yet implemented.>
 
 This module parses Org documents. See http://orgmode.org/ for more details on
 Org documents.
@@ -422,20 +301,52 @@ This module uses L<Log::Any> logging framework.
 
 This module uses L<Moo> object system.
 
+B<NOTE: This module is in alpha stage. See L</"BUGS/TODO/LIMITATIONS"> for the
+list of stuffs not yet implemented.>
+
+Already implemented/parsed:
+
+=over 4
+
+=item * in-buffer settings
+
+=item * blocks
+
+=item * headlines & TODO items
+
+Including custom TODO keywords, custom priorities
+
+=item * schedule timestamps (subset of)
+
+=item * drawers & properties
+
+=back
+
+=head2 $orgp->parse_inline($str, $doc[, $parent])
+
+Inline elements are elements that can be put under a heading, table cell,
+heading title, etc. these include normal text (and text with markups),
+timestamps, links, etc.
+
+Found elements will be added into $parent's children. If $parent is not
+specified, it will be set to $orgp->_last_headline (or, if undef, $doc).
+
 =head1 ATTRIBUTES
 
-=head2 handler => CODEREF
+=head2 handler => CODEREF (default undef)
 
-The handler which will be called repeatedly by the parser during parsing. The
-default handler will do nothing ('sub{1}').
+If set, the handler which will be called repeatedly by the parser during
+parsing. This can be used to quickly filter/extract wanted elements (e.g.
+headlines, timestamps, etc) from an Org document.
 
 Handler will be passed these arguments:
 
- $orgp, $ev, \%args
+ $orgp, $event, $args
 
-$orgp is the parser instance, $ev is the type of event (currently only
-'element') and %args are extra information depending on $ev and type of
-elements. See the SYNOPSIS for the various content of %args.
+$orgp is the parser instance, $event is the type of event (currently only
+'element', triggered after the parser parses an element) and $args is a hashref
+containing extra information depending on $event and type of elements. For
+$event == 'element', $args->{element} will be set to the element object.
 
 =head1 METHODS
 
@@ -443,18 +354,20 @@ elements. See the SYNOPSIS for the various content of %args.
 
 Create a new parser instance.
 
-=head2 $orgp->parse($str | $arrayref | $coderef | $filehandle)
+=head2 $orgp->parse($str | $arrayref | $coderef | $filehandle) => $doc
 
 Parse document (which can be contained in a scalar $str, an array of lines
 $arrayref, a subroutine which will be called for chunks until it returns undef,
-or a filehandle.
+or a filehandle).
 
-Will call handler (specified in 'handler' attribute) for each element being
-parsed. See documentation for 'handler' attribute for more details.
+Returns L<Org::Document> object.
+
+If 'handler' attribute is specified, will call handler repeatedly during
+parsing. See the 'handler' attribute for more details.
 
 Will die if there are syntax errors in documents.
 
-=head2 $orgp->parse_file($filename)
+=head2 $orgp->parse_file($filename) => $doc
 
 Just like parse(), but will load document from file instead.
 
@@ -493,21 +406,35 @@ Currently we assume it to be the same as the other two.
 
 =item * Parse repeats in schedule timestamps
 
-=item * Parse tables
+=item * Set table's caption, etc from settings
+
+ #+CAPTION: A long table
+ #+LABEL: tbl:long
+ |...|...|
+ |...|...|
+
+Question: is this still valid caption?
+
+ #+CAPTION: A long table
+ some text
+ #+LABEL: tbl:long
+ some more text
+ |...|...|
+ |...|...|
 
 =item * Parse text markups
 
-=item * Parse headline percentageS
+=item * Parse headline percentages
 
 =item * Parse {unordered,ordered,description,check) lists
 
 =item * Process includes (#+INCLUDE)
 
+=item * Parse buffer-wide header arguments (#+BABEL, 14.8.1)
+
 =back
 
 =head1 SEE ALSO
-
-L<Org::Document>
 
 =head1 AUTHOR
 
