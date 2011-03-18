@@ -1,6 +1,6 @@
 package Org::Element::TodoItem;
 BEGIN {
-  $Org::Element::TodoItem::VERSION = '0.02';
+  $Org::Element::TodoItem::VERSION = '0.03';
 }
 # ABSTRACT: Represent an Org TODO item
 
@@ -22,7 +22,7 @@ Org::Element::TodoItem - Represent an Org TODO item
 
 =head1 VERSION
 
-version 0.02
+version 0.03
 
 =head1 DESCRIPTION
 

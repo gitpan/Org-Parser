@@ -1,6 +1,6 @@
 package Org::Element::Headline;
 BEGIN {
-  $Org::Element::Headline::VERSION = '0.02';
+  $Org::Element::Headline::VERSION = '0.03';
 }
 # ABSTRACT: Represent Org headline
 
@@ -52,8 +52,9 @@ sub BUILD {
         my $todo_kw_re = "(?:".
             join("|", map {quotemeta}
                      @{$doc->todo_states}, @{$doc->done_states}) . ")";
-        if ($title =~ s/^($todo_kw_re)\s+//) {
+        if ($title =~ s/^($todo_kw_re)(\s+|\W)/$2/) {
             my $state = $1;
+            $title =~ s/^\s+//;
             $self->is_todo(1);
             $self->todo_state($state);
             $self->is_done(1) if $state ~~ @{ $doc->done_states };
@@ -102,7 +103,7 @@ Org::Element::Headline - Represent Org headline
 
 =head1 VERSION
 
-version 0.02
+version 0.03
 
 =head1 DESCRIPTION
 

@@ -2,7 +2,7 @@ NAME
     Org::Parser - Parse Org documents
 
 VERSION
-    version 0.02
+    version 0.03
 
 SYNOPSIS
      use 5.010;
@@ -47,6 +47,8 @@ DESCRIPTION
 
     Already implemented/parsed:
 
+    *   text & markups (bold, italic, etc)
+
     *   in-buffer settings
 
     *   blocks
@@ -58,6 +60,8 @@ DESCRIPTION
     *   schedule timestamps (subset of)
 
     *   drawers & properties
+
+    *   tables
 
   $orgp->parse_inline($str, $doc[, $parent])
     Inline elements are elements that can be put under a heading, table
@@ -150,8 +154,6 @@ BUGS/TODO/LIMITATIONS
          some more text
          |...|...|
          |...|...|
-
-    *   Parse text markups
 
     *   Parse headline percentages
 

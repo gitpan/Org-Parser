@@ -1,6 +1,6 @@
 package Org::Document;
 BEGIN {
-  $Org::Document::VERSION = '0.02';
+  $Org::Document::VERSION = '0.03';
 }
 # ABSTRACT: Represent an Org document
 
@@ -37,9 +37,12 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.02
+version 0.03
 
 =head1 DESCRIPTION
+
+Normally you would use L<Org::Parser> to create this object from an existing Org
+documents.
 
 Derived from Org::Element::Base.
 

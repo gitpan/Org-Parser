@@ -1,6 +1,6 @@
 package Org::Element::Properties;
 BEGIN {
-  $Org::Element::Properties::VERSION = '0.02';
+  $Org::Element::Properties::VERSION = '0.03';
 }
 # ABSTRACT: Represent Org properties
 
@@ -48,7 +48,7 @@ Org::Element::Properties - Represent Org properties
 
 =head1 VERSION
 
-version 0.02
+version 0.03
 
 =head1 DESCRIPTION
 

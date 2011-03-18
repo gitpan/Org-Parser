@@ -1,6 +1,6 @@
 package Org::Element::ScheduleTimestamp;
 BEGIN {
-  $Org::Element::ScheduleTimestamp::VERSION = '0.02';
+  $Org::Element::ScheduleTimestamp::VERSION = '0.03';
 }
 # ABSTRACT: Represent Org schedule timestamp
 
@@ -47,7 +47,7 @@ Org::Element::ScheduleTimestamp - Represent Org schedule timestamp
 
 =head1 VERSION
 
-version 0.02
+version 0.03
 
 =head1 DESCRIPTION
 

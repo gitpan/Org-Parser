@@ -1,6 +1,6 @@
 package Org::Element::TimestampPair;
 BEGIN {
-  $Org::Element::TimestampPair::VERSION = '0.02';
+  $Org::Element::TimestampPair::VERSION = '0.03';
 }
 # ABSTRACT: Represent Org timestamp pair
 
@@ -55,7 +55,7 @@ Org::Element::TimestampPair - Represent Org timestamp pair
 
 =head1 VERSION
 
-version 0.02
+version 0.03
 
 =head1 DESCRIPTION
 

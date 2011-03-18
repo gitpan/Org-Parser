@@ -35,4 +35,5 @@ t/release-pod-coverage.t
 t/release-pod-syntax.t
 t/table.t
 t/testlib.pl
+t/text.t
 t/timestamp.t
