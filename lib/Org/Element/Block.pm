@@ -1,6 +1,6 @@
 package Org::Element::Block;
 BEGIN {
-  $Org::Element::Block::VERSION = '0.03';
+  $Org::Element::Block::VERSION = '0.04';
 }
 # ABSTRACT: Represent Org block
 
@@ -12,41 +12,31 @@ extends 'Org::Element::Base';
 has name => (is => 'rw');
 
 
-has raw_arg => (is => 'rw');
+has args => (is => 'rw');
 
 
 has raw_content => (is => 'rw');
+
+my @known_blocks = qw(
+                         ASCII CENTER COMMENT EXAMPLE HTML
+                         LATEX QUOTE SRC VERSE
+                 );
 
 
 
 sub BUILD {
     my ($self, $args) = @_;
-    my $raw = $args->{raw};
-    if (defined $raw) {
-        my $doc = $self->document
-            or die "Please specify document when specifying raw";
-        state $re = qr/\A\#\+(?:BEGIN_(
-                               ASCII|CENTER|COMMENT|EXAMPLE|HTML|
-                               LATEX|QUOTE|SRC|VERSE
-                       ))
-                       (?:\s+(\S.*))\R # arg
-                       ((?:.|\R)*)     # content
-                       \#\+\w+\R?\z    # closing
-                      /xi;
-        $raw =~ $re or die "Unknown block or invalid syntax: $raw";
-        $self->_raw($raw);
-        $self->name(uc($1));
-        $self->raw_arg($2);
-        $self->raw_content($3);
-    }
+    $self->name(uc $self->name);
+    $self->name ~~ @known_blocks or die "Unknown block name: ".$self->name;
 }
 
 sub element_as_string {
     my ($self) = @_;
-    return $self->_raw if $self->_raw;
+    return $self->_str if defined $self->_str;
     join("",
          "#+BEGIN_".uc($self->name),
-         defined($self->raw_arg) ? " ".$self->raw_arg : "",
+         $self->args && @{$self->args} ?
+             " ".Org::Document::__format_args($self->args) : "",
          "\n",
          $self->raw_content,
          "#+END_".uc($self->name)."\n");
@@ -63,7 +53,7 @@ Org::Element::Block - Represent Org block
 
 =head1 VERSION
 
-version 0.03
+version 0.04
 
 =head1 DESCRIPTION
 
@@ -75,30 +65,13 @@ Derived from Org::Element::Base.
 
 Block name. For example, #+begin_src ... #+end_src is an 'SRC' block.
 
-=head2 raw_arg => STR
-
-Argument of block. For example:
-
- #+BEGIN_EXAMPLE -t -w40
- ...
- #+END_EXAMPLE
-
-will have '-t -w40' as the raw_arg value.
+=head2 args => ARRAY
 
 =head2 raw_content => STR
-
-Content of block. In the previous 'raw_arg' example, 'raw_content' is "...\n".
 
 =head1 METHODS
 
 =for Pod::Coverage element_as_string BUILD
-
-=head2 new(attr => val, ...)
-
-=head2 new(raw => STR, document => OBJ)
-
-Create a new headline item from parsing raw string. (You can also create
-directly by filling out priority, title, etc).
 
 =head1 AUTHOR
 

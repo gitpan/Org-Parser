@@ -1,15 +1,18 @@
-package Org::Element::Timestamp;
+package Org::Element::TimeRange;
 BEGIN {
-  $Org::Element::Timestamp::VERSION = '0.04';
+  $Org::Element::TimeRange::VERSION = '0.04';
 }
-# ABSTRACT: Represent Org timestamp
+# ABSTRACT: Represent Org time range (TS1--TS2)
 
 use 5.010;
 use Moo;
 extends 'Org::Element::Base';
 
 
-has datetime => (is => 'rw');
+has datetime1 => (is => 'rw');
+
+
+has datetime2 => (is => 'rw');
 
 
 has is_active => (is => 'rw');
@@ -21,7 +24,10 @@ sub as_string {
     return $self->_str if $self->_str;
     join("",
          $self->is_active ? "<" : "[",
-         $self->datetime->ymd, " ",
+         $self->datetime1->ymd, " ",
+         # XXX Thu 11:59
+         $self->is_active ? ">--<" : "]--[",
+         $self->datetime2->ymd, " ",
          # XXX Thu 11:59
          $self->is_active ? ">" : "]",
      );
@@ -34,7 +40,7 @@ sub as_string {
 
 =head1 NAME
 
-Org::Element::Timestamp - Represent Org timestamp
+Org::Element::TimeRange - Represent Org time range (TS1--TS2)
 
 =head1 VERSION
 
@@ -46,7 +52,9 @@ Derived from Org::Element::Base.
 
 =head1 ATTRIBUTES
 
-=head2 datetime => DATETIME_OBJ
+=head2 datetime1 => DATETIME_OBJ
+
+=head2 datetime2 => DATETIME_OBJ
 
 =head2 is_active => BOOL
 

@@ -1,6 +1,6 @@
 package Org::Element::Drawer;
 BEGIN {
-  $Org::Element::Drawer::VERSION = '0.03';
+  $Org::Element::Drawer::VERSION = '0.04';
 }
 # ABSTRACT: Represent Org drawer
 
@@ -12,40 +12,37 @@ extends 'Org::Element::Base';
 has name => (is => 'rw');
 
 
-has raw_content => (is => 'rw');
+has properties => (is => 'rw');
 
 
 
 sub BUILD {
     my ($self, $args) = @_;
-    my $raw = $args->{raw};
-    if (defined $raw) {
-        my $doc = $self->document
-            or die "Please specify document when specifying raw";
-        state $re = qr/\A\s*:(\w+):\s*\R
-                       ((?:.|\R)*?)    # content
-                       [ \t]*:END:\z   # closing
-                      /xi;
-        $raw =~ $re or die "Invalid syntax in drawer: $raw";
-        my ($d, $rc) = (uc($1), $2);
-        $d ~~ @{ $doc->drawers } or die "Unknown drawer name $d: $raw";
-        $self->name($d);
-        $self->raw_content($rc);
+    my $doc = $self->document;
+    my $pass = $args->{pass} // 1;
+
+    if ($pass == 2) {
+        die "Unknown drawer name: ".$self->name
+            unless $self->name ~~ @{$doc->drawer_names};
     }
 }
 
-sub element_as_string {
-    my ($self) = @_;
-    return $self->_raw if $self->_raw;
-    join("",
-         ":", uc($self->name), ":", "\n",
-         $self->children ? $self->children_as_string : $self->raw_content,
-         ":END:\n");
+sub _parse_properties {
+    my ($self, $raw_content) = @_;
+    $self->properties({}) unless $self->properties;
+    while ($raw_content =~ /^[ \t]*:(\w+):[ \t]+
+                            ($Org::Document::args_re)[ \t]*(?:\R|\z)/mxg) {
+        my $args = Org::Document::__parse_args($2);
+        $self->properties->{$1} = @$args == 1 ? $args->[0] : $args;
+    }
 }
 
 sub as_string {
     my ($self) = @_;
-    $self->element_as_string;
+    join("",
+         ":", $self->name, ":\n",
+         $self->children_as_string,
+         ":END:\n");
 }
 
 1;
@@ -59,7 +56,7 @@ Org::Element::Drawer - Represent Org drawer
 
 =head1 VERSION
 
-version 0.03
+version 0.04
 
 =head1 DESCRIPTION
 
@@ -71,18 +68,13 @@ Derived from Org::Element::Base.
 
 Drawer name.
 
-=head2 raw_content => STR
+=head2 properties => HASH
+
+Collected properties in the drawer.
 
 =head1 METHODS
 
-=for Pod::Coverage as_string element_as_string BUILD
-
-=head2 new(attr => val, ...)
-
-=head2 new(raw => STR, document => OBJ)
-
-Create a new headline item from parsing raw string. (You can also create
-directly by filling out priority, title, etc).
+=for Pod::Coverage BUILD as_string
 
 =head1 AUTHOR
 

@@ -1,31 +1,42 @@
-package Org::Element::TableRow;
+package Org::Element::RadioTarget;
 BEGIN {
-  $Org::Element::TableRow::VERSION = '0.04';
+  $Org::Element::RadioTarget::VERSION = '0.04';
 }
-# ABSTRACT: Represent Org table row
+# ABSTRACT: Represent Org radio target
 
 use 5.010;
 use Moo;
 extends 'Org::Element::Base';
 
 
-sub as_string {
-    my ($self) = @_;
-    return $self->_str if defined $self->_str;
+has target => (is => 'rw');
 
-    join("",
-         "|",
-         join("|", map {$_->as_string} @{$self->children}),
-         "\n");
+
+
+sub BUILD {
+    my ($self, $args) = @_;
+    my $pass = $args->{pass} // 1;
+    my $doc  = $self->document;
+    if ($pass == 1) {
+        push @{ $doc->radio_targets },
+            $self->target;
+    }
 }
 
+sub as_string {
+    my ($self) = @_;
+    join("",
+         "<<<", $self->target, ">>>");
+}
 
-__END__
+1;
+
+
 =pod
 
 =head1 NAME
 
-Org::Element::TableRow - Represent Org table row
+Org::Element::RadioTarget - Represent Org radio target
 
 =head1 VERSION
 
@@ -35,18 +46,13 @@ version 0.04
 
 Derived from Org::Element::Base.
 
-=head1 DESCRIPTION
-
-Must have L<Org::Element::TableCell> instances as its children.
-
 =head1 ATTRIBUTES
+
+=head2 target
 
 =head1 METHODS
 
-=for Pod::Coverage as_string
-
-1;
-__END__
+=for Pod::Coverage as_string BUILD
 
 =head1 AUTHOR
 
@@ -60,4 +66,7 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
+
+
+__END__
 

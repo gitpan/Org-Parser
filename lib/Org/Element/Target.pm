@@ -1,33 +1,22 @@
-package Org::Element::Text;
+package Org::Element::Target;
 BEGIN {
-  $Org::Element::Text::VERSION = '0.04';
+  $Org::Element::Target::VERSION = '0.04';
 }
-# ABSTRACT: Represent text
+# ABSTRACT: Represent Org target
 
 use 5.010;
 use Moo;
 extends 'Org::Element::Base';
 
 
-has text => (is => 'rw');
-
-
-has style => (is => 'rw');
-
-our %mu2style = (''=>'', '*'=>'B', '_'=>'U', '/'=>'I',
-                 '+'=>'S', '='=>'C', '~'=>'V');
-our %style2mu = reverse(%mu2style);
+has target => (is => 'rw');
 
 
 
 sub as_string {
     my ($self) = @_;
-    my $muchar = $style2mu{$self->style // ''} // '';
-
     join("",
-         $muchar,
-         $self->text // '', $self->children_as_string,
-         $muchar);
+         "<<", ($self->target // ""), ">>");
 }
 
 1;
@@ -37,7 +26,7 @@ sub as_string {
 
 =head1 NAME
 
-Org::Element::Text - Represent text
+Org::Element::Target - Represent Org target
 
 =head1 VERSION
 
@@ -49,12 +38,7 @@ Derived from Org::Element::Base.
 
 =head1 ATTRIBUTES
 
-=head2 text
-
-=head2 style
-
-''=normal, I=italic, B=bold, U=underline, S=strikethrough, V=verbatim,
-C=code
+=head2 target
 
 =head1 METHODS
 

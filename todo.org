@@ -1,0 +1,88 @@
+* todo
+** Element::Base
+*** TODO a method to walk elements
+option to do breadth-first or depth-first. this should be used for other walk
+methods, e.g. find_next_heading(), find_next_subheading()
+*** TODO headline()
+return the headline this element is in.
+*** TODO get_tags()
+return list of tags including inherited tags
+*** DONE get_property()
+return property, including inherited ones
+** TODO parse sexp entries?
+e.g.
+
+ ** Class 7:00pm-9:00pm
+    <%%(and (= 1 (calendar-day-of-week date)) (diary-block 2 16 2009 4 20 2009))>
+
+ * Monthly meeting
+  <%%(diary-float t 3 3)>
+
+** table
+*** TODO format()
+- this should undef/replace ._raw
+- align cell left/right according to whether it's a number
+- optional argument: compress
+ >|a|b|cdef
+ >|123|1|2
+versus
+ >|   a | b | cdef |
+ >| 123 | 1 |    2 |
+*** export to html
+- should perhaps be put in another dist, e.g. Org::Export::HTML
+- column groups
+*** TODO caption(), label(), etc
+Get it from settings:
+
+ #+CAPTION: A long table
+ #+LABEL: tbl:long
+ |...|...|
+ |...|...|
+
+Question: is this still valid caption?
+
+ #+CAPTION: A long table
+ some text
+ #+LABEL: tbl:long
+ some more text
+ |...|...|
+ |...|...|
+
+*** TODO column group (manual: 3.3)
+probably create Element::TableColGroup which is a special row that contains
+column group instruction. or we can just assume it's a normal row and only
+format() needs to worry about this (i prefer the latter).
+** footnote
+** link
+** target
+** radio target
+** timestamp & time range
+*** TODO parse time repeats
+** plain lists (ordered, unordered, description)
+** headline
+*** TODO what constitutes a valid tag?
+*** TODO Parse headline percentages
+*** TODO next_todo_state() & prev_todo_state()
+return undef if .document is undef.
+*** TODO cycle_todo_state($reverse // 0)
+*** TODO promoto_subtree() & demote_subtree()
+** drawer & properties
+** properties
+*** TODO check valid values of property (foo_ALL)
+** setting
+*** TODO process includes (#+INCLUDE)
+
+*** TODO parse buffer-wide header arguments (#+BABEL, 14.8.1)
+*** TODO What's the syntax for multiple in-buffer settings on a single line?
+
+Currently the parser assumes a single in-buffer settings per line
+
+*** TODO What's the difference between TYP_TODO and TODO/SEQ_TODO?
+
+Currently we assume it to be the same as the other two.
+
+*** TODO parse link abbreviation (#+LINK)
+into document's .link_abbrevs()
+*** TODO TAGS/FILETAGS: parse keyboard shortcuts
+ #+TAGS: OFFICE(o) COMPUTER(c) HOME(h) PROJECT(p) READING(r) DVD(d)
+the key should be discarded when checking for known tags

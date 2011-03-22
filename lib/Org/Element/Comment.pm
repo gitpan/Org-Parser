@@ -1,15 +1,13 @@
-package Org::Element::TodoItem;
+package Org::Element::Comment;
 BEGIN {
-  $Org::Element::TodoItem::VERSION = '0.03';
+  $Org::Element::Comment::VERSION = '0.04';
 }
-# ABSTRACT: Represent an Org TODO item
+# ABSTRACT: Represent Org comment
 
 use 5.010;
-use strict;
-use warnings;
-
 use Moo;
-extends 'Org::Element::Headline';
+extends 'Org::Element::Base';
+
 
 1;
 
@@ -18,15 +16,19 @@ extends 'Org::Element::Headline';
 
 =head1 NAME
 
-Org::Element::TodoItem - Represent an Org TODO item
+Org::Element::Comment - Represent Org comment
 
 =head1 VERSION
 
-version 0.03
+version 0.04
 
 =head1 DESCRIPTION
 
-Derived from Org::Element::Headline.
+Derived from Org::Element::Base.
+
+=head1 ATTRIBUTES
+
+=head1 METHODS
 
 =head1 AUTHOR
 

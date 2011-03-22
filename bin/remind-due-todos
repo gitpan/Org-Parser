@@ -5,7 +5,7 @@
 # workaround for dzil
 package remind_due_todos;
 BEGIN {
-  $remind_due_todos::VERSION = '0.03';
+  $remind_due_todos::VERSION = '0.04';
 }
 
 use 5.010;
@@ -49,7 +49,7 @@ sub get_due_todos {
                 my $el      = $args->{element};
                 my $is_hl   = $el->isa('Org::Element::Headline');
                 return unless $is_hl && $el->is_todo && !$el->is_done
-                    || $el->isa('Org::Element::ScheduleTimestamp');
+                    || $el->isa('Org::Element::Timestamp') && $el->is_active;
                 if ($is_hl && $el->is_todo) {
                     $curtodo = $el;
                 }
@@ -83,7 +83,7 @@ remind_due_todos
 
 =head1 VERSION
 
-version 0.03
+version 0.04
 
 =head1 AUTHOR
 

@@ -1,6 +1,6 @@
 package Org::Element::Table;
 BEGIN {
-  $Org::Element::Table::VERSION = '0.03';
+  $Org::Element::Table::VERSION = '0.04';
 }
 # ABSTRACT: Represent Org table
 
@@ -18,15 +18,19 @@ sub BUILD {
     require Org::Element::TableRow;
     require Org::Element::TableVLine;
     require Org::Element::TableCell;
-    require Org::Parser;
     my ($self, $args) = @_;
-    my $raw = $args->{raw};
-    if (defined $raw) {
-        my $doc = $self->document
-            or die "Please specify document when specifying raw";
-        my $orgp = $self->document->_parser // Org::Parser->new;
-        $self->_raw($raw);
-        my @rows0 = split /\R/, $raw;
+    my $pass = $args->{pass} // 1;
+
+    # parse _str into rows & cells
+    my $_str = $args->{_str};
+    if (defined $_str && !defined($self->children)) {
+
+        if (!defined($self->_str_include_children)) {
+            $self->_str_include_children(1);
+        }
+
+        my $doc = $self->document;
+        my @rows0 = split /\R/, $_str;
         $self->children([]);
         for my $row0 (@rows0) {
             $log->tracef("table line: %s", $row0);
@@ -41,7 +45,7 @@ sub BUILD {
                 for my $cell0 (split /\s*\|\s*/, $s) {
                     my $cell = Org::Element::TableCell->new(
                         parent => $row, children=>[]);
-                    $orgp->parse_inline($cell0, $doc, $cell);
+                    $doc->_add_text($cell0, $cell, $pass);
                     push @{ $row->children }, $cell;
                 }
             } else {
@@ -50,11 +54,6 @@ sub BUILD {
             push @{$self->children}, $row;
         }
     }
-}
-
-sub as_string {
-    my ($self) = @_;
-    $self->element_as_string;
 }
 
 1;
@@ -68,7 +67,7 @@ Org::Element::Table - Represent Org table
 
 =head1 VERSION
 
-version 0.03
+version 0.04
 
 =head1 DESCRIPTION
 
@@ -76,24 +75,14 @@ Derived from Org::Element::Base.
 
 =head1 DESCRIPTION
 
-Must have L<Org::Element::TableRow> instances as its children.
+Must have L<Org::Element::TableRow> or L<Org::Element::TableVLine> instances as
+its children.
 
 =head1 ATTRIBUTES
 
-# caption
-
-# label
-
 =head1 METHODS
 
-=for Pod::Coverage as_string BUILD
-
-=head2 new(attr => val, ...)
-
-=head2 new(raw => STR, document => OBJ)
-
-Create a new table from parsing raw string. (You can also create manually
-directly by filling out attributes).
+=for Pod::Coverage BUILD
 
 =head1 AUTHOR
 
