@@ -1,6 +1,6 @@
 package Org::Document;
 BEGIN {
-  $Org::Document::VERSION = '0.05';
+  $Org::Document::VERSION = '0.06';
 }
 # ABSTRACT: Represent an Org document
 
@@ -30,7 +30,7 @@ has properties              => (is => 'rw');
 
 has radio_targets           => (is => 'rw');
 
-our $tags_re      = qr/:(?:[^:]+:)+/;
+our $tags_re      = qr/:(?:[^:\n]+:)+/;
 my  $ls_re        = qr/(?:(?<=[\015\012])|\A)/;
 my  $le_re        = qr/(?:\R|\z)/;
 our $arg_re       = qr/(?: '(?<squote> [^']*)' |
@@ -43,10 +43,10 @@ my $act_tstamp_re = qr/(?:<\d{4}-\d{2}-\d{2} [ ] [^\n>]*>)/x;
 my $fn_name_re    = qr/(?:[^ \t\n:\]]+)/x;
 my $text_re       =
     qr(
-       (?<link>         \[\[(?<link_link> [^\]]+)\]
+       (?<link>         \[\[(?<link_link> [^\]\n]+)\]
                         (?:\[(?<link_desc> (?:[^\]]|\R)+)\])?\]) |
        (?<radio_target> <<<(?<rt_target> [^>\n]+)>>>) |
-       (?<target>       <<(?<t_target> [^>]+)>>) |
+       (?<target>       <<(?<t_target> [^>\n]+)>>) |
 
        # timestamp & time range
        (?<trange>       (?<trange_ts1> $tstamp_re)--
@@ -71,7 +71,7 @@ my $text_re       =
                         # actually emacs doesn't allow ! after markup
                         (?:(?=[ \t\n:;"',.!?\)*-])|\z)) |
 
-       (?<plain_text>   (?:[^\[<*/+=~_]+|.+?))
+       (?<plain_text>   (?:[^\[<*/+=~_\n]+|.+?))
        #(?<plain_text>   .+?) # too dispersy
       )sxi;
 my $block_elems_re = # top level elements
@@ -697,7 +697,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.05
+version 0.06
 
 =head1 SYNOPSIS
 

@@ -38,6 +38,7 @@ t/block_and_setting.t
 t/comment.t
 t/data/custom_todo_kw.org
 t/data/listitem.org
+t/data/various.org
 t/drawer.t
 t/footnote.t
 t/headline.t
@@ -52,4 +53,5 @@ t/testlib.pl
 t/text.t
 t/timerange.t
 t/timestamp.t
+t/various.t
 todo.org

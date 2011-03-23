@@ -1,6 +1,6 @@
 package Org::Dump;
 BEGIN {
-  $Org::Dump::VERSION = '0.05';
+  $Org::Dump::VERSION = '0.06';
 }
 #ABSTRACT: Show Org document/element object in a human-friendly format
 
@@ -24,7 +24,8 @@ sub dump_element {
     # per-element important info
     if ($type eq 'Headline') {
         $line .= " l=".$el->level;
-        $line .= ",todo=".$el->todo_state if $el->todo_state;
+        $line .= " tags ".join(",", @{$el->tags}) if $el->tags;
+        $line .= " todo=".$el->todo_state if $el->todo_state;
     } elsif ($type eq 'Footnote') {
         $line .= " name=".($el->name // "");
     } elsif ($type eq 'List') {
@@ -48,9 +49,9 @@ sub dump_element {
             if $el->name eq 'PROPERTIES' && $el->properties;
     }
     unless ($el->children) {
-        $line .= " \"". printable($el->_str // $el->as_string)."\"";
+        $line .= " \"".
+            printable(elide(($el->_str // $el->as_string), 50))."\"";
     }
-    $line = elide($line, 80);
     push @res, $line, "\n";
 
     if ($type eq 'Headline') {
@@ -105,7 +106,7 @@ Org::Dump - Show Org document/element object in a human-friendly format
 
 =head1 VERSION
 
-version 0.05
+version 0.06
 
 =head1 FUNCTIONS
 

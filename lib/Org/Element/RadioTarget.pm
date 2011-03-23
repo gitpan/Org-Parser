@@ -1,6 +1,6 @@
 package Org::Element::RadioTarget;
 BEGIN {
-  $Org::Element::RadioTarget::VERSION = '0.05';
+  $Org::Element::RadioTarget::VERSION = '0.06';
 }
 # ABSTRACT: Represent Org radio target
 
@@ -40,7 +40,7 @@ Org::Element::RadioTarget - Represent Org radio target
 
 =head1 VERSION
 
-version 0.05
+version 0.06
 
 =head1 DESCRIPTION
 
