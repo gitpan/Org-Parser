@@ -1,6 +1,6 @@
 package Org::Element::Headline;
 BEGIN {
-  $Org::Element::Headline::VERSION = '0.06';
+  $Org::Element::Headline::VERSION = '0.07';
 }
 # ABSTRACT: Represent Org headline
 
@@ -53,6 +53,27 @@ sub as_string {
     $self->header_as_string . $self->children_as_string;
 }
 
+
+sub get_tags {
+    my ($self, $name, $search_parent) = @_;
+    my @res = @{ $self->tags // [] };
+    $self->walk_parents(
+        sub {
+            my ($el, $parent) = @_;
+            return 1 unless $parent->isa('Org::Element::Headline');
+            if ($parent->tags) {
+                for (@{ $parent->tags }) {
+                    push @res, $_ unless $_ ~~ @res;
+                }
+            }
+            1;
+        });
+    for (@{ $self->document->tags }) {
+        push @res, $_ unless $_ ~~ @res;
+    }
+    @res;
+}
+
 1;
 
 
@@ -64,7 +85,7 @@ Org::Element::Headline - Represent Org headline
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 DESCRIPTION
 
@@ -108,6 +129,11 @@ Progress.
 =head1 METHODS
 
 =for Pod::Coverage header_as_string as_string
+
+=head2 $el->get_tags() => ARRAY
+
+Get tags for this headline. A headline can define tags or inherit tags from its
+parent headline (or from document).
 
 =head1 AUTHOR
 

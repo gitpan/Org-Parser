@@ -5,7 +5,7 @@
 # workaround for dzil
 package remind_due_todos;
 BEGIN {
-  $remind_due_todos::VERSION = '0.06';
+  $remind_due_todos::VERSION = '0.07';
 }
 
 use 5.010;
@@ -83,7 +83,7 @@ remind_due_todos
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 AUTHOR
 

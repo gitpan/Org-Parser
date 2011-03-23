@@ -1,6 +1,6 @@
 package Org::Element::Drawer;
 BEGIN {
-  $Org::Element::Drawer::VERSION = '0.06';
+  $Org::Element::Drawer::VERSION = '0.07';
 }
 # ABSTRACT: Represent Org drawer
 
@@ -56,7 +56,7 @@ Org::Element::Drawer - Represent Org drawer
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 DESCRIPTION
 

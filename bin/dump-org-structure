@@ -5,7 +5,7 @@
 # workaround for dzil
 package dump_org_structure;
 BEGIN {
-  $dump_org_structure::VERSION = '0.06';
+  $dump_org_structure::VERSION = '0.07';
 }
 
 use 5.010;
@@ -29,7 +29,7 @@ dump_org_structure
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 AUTHOR
 

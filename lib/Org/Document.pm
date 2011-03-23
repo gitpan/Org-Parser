@@ -1,6 +1,6 @@
 package Org::Document;
 BEGIN {
-  $Org::Document::VERSION = '0.06';
+  $Org::Document::VERSION = '0.07';
 }
 # ABSTRACT: Represent an Org document
 
@@ -409,8 +409,13 @@ sub _add_text {
             require Org::Element::Link;
             $el = Org::Element::Link->new(
                 document => $self, parent => $parent,
-                link=>$+{link_link}, description=>$+{link_desc},
+                link=>$+{link_link},
             );
+            if (defined($+{link_desc}) && length($+{link_desc})) {
+                $el->description(
+                    $self->_add_text_container($+{link_desc},
+                                               $el, $pass));
+            }
         } elsif ($+{radio_target}) {
             require Org::Element::RadioTarget;
             $el = Org::Element::RadioTarget->new(
@@ -697,7 +702,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 SYNOPSIS
 
