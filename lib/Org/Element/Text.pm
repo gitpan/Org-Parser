@@ -1,6 +1,6 @@
 package Org::Element::Text;
 BEGIN {
-  $Org::Element::Text::VERSION = '0.07';
+  $Org::Element::Text::VERSION = '0.08';
 }
 # ABSTRACT: Represent text
 
@@ -41,7 +41,7 @@ Org::Element::Text - Represent text
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 DESCRIPTION
 

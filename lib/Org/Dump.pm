@@ -1,6 +1,6 @@
 package Org::Dump;
 BEGIN {
-  $Org::Dump::VERSION = '0.07';
+  $Org::Dump::VERSION = '0.08';
 }
 #ABSTRACT: Show Org document/element object in a human-friendly format
 
@@ -106,7 +106,7 @@ Org::Dump - Show Org document/element object in a human-friendly format
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 FUNCTIONS
 

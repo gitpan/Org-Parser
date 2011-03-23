@@ -1,6 +1,6 @@
 package Org::Element::TimeRange;
 BEGIN {
-  $Org::Element::TimeRange::VERSION = '0.07';
+  $Org::Element::TimeRange::VERSION = '0.08';
 }
 # ABSTRACT: Represent Org time range (TS1--TS2)
 
@@ -37,7 +37,7 @@ Org::Element::TimeRange - Represent Org time range (TS1--TS2)
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 DESCRIPTION
 

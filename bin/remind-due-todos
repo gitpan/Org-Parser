@@ -5,7 +5,7 @@
 # workaround for dzil
 package remind_due_todos;
 BEGIN {
-  $remind_due_todos::VERSION = '0.07';
+  $remind_due_todos::VERSION = '0.08';
 }
 
 use 5.010;
@@ -42,11 +42,10 @@ sub get_due_todos {
         $log->debug("Parsing $file ...");
         my $orgp = Org::Parser->new;
         my $curtodo;
-        $orgp->handler(
+        my $doc = $orgp->parse_file($file);
+        $doc->walk(
             sub {
-                my ($orgp, $ev, $args) = @_;
-                return unless $ev eq 'element';
-                my $el      = $args->{element};
+                my ($el) = @_;
                 my $is_hl   = $el->isa('Org::Element::Headline');
                 return unless $is_hl && $el->is_todo && !$el->is_done
                     || $el->isa('Org::Element::Timestamp') && $el->is_active;
@@ -67,7 +66,6 @@ sub get_due_todos {
                 }
                 $curtodo = undef;
             });
-        $orgp->parse_file($file);
     }
     [200, "OK", \@res];
 }
@@ -83,7 +81,7 @@ remind_due_todos
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 AUTHOR
 
