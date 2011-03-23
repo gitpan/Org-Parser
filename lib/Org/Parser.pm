@@ -1,6 +1,6 @@
 package Org::Parser;
 BEGIN {
-  $Org::Parser::VERSION = '0.04';
+  $Org::Parser::VERSION = '0.05';
 }
 # ABSTRACT: Parse Org documents
 
@@ -52,7 +52,7 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 SYNOPSIS
 

@@ -17,13 +17,14 @@ my %module_build_args = (
     'Steven Haryanto <stevenharyanto@gmail.com>'
   ],
   'dist_name' => 'Org-Parser',
-  'dist_version' => '0.04',
+  'dist_version' => '0.05',
   'license' => 'perl',
   'module_name' => 'Org::Parser',
   'recommends' => {},
   'recursive_test_files' => 1,
   'requires' => {
     'DateTime' => '0',
+    'DateTime::Event::Recurrence' => '0',
     'File::Slurp' => '0',
     'Log::Any' => '0',
     'Moo' => '0',

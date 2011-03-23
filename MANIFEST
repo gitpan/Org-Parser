@@ -50,5 +50,6 @@ t/setting-todo.t
 t/table.t
 t/testlib.pl
 t/text.t
+t/timerange.t
 t/timestamp.t
 todo.org

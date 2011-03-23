@@ -1,6 +1,6 @@
 package Org::Element::Table;
 BEGIN {
-  $Org::Element::Table::VERSION = '0.04';
+  $Org::Element::Table::VERSION = '0.05';
 }
 # ABSTRACT: Represent Org table
 
@@ -67,7 +67,7 @@ Org::Element::Table - Represent Org table
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 DESCRIPTION
 

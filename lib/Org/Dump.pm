@@ -1,7 +1,8 @@
 package Org::Dump;
 BEGIN {
-  $Org::Dump::VERSION = '0.04';
+  $Org::Dump::VERSION = '0.05';
 }
+#ABSTRACT: Show Org document/element object in a human-friendly format
 
 use 5.010;
 use strict;
@@ -41,9 +42,6 @@ sub dump_element {
         $line .= " A" if $el->is_active;
         $line .= " dt=".$el->datetime;
     } elsif ($type eq 'TimeRange') {
-        $line .= " A" if $el->is_active;
-        $line .= " dt1=".$el->datetime1;
-        $line .= " dt2=".$el->datetime2;
     } elsif ($type eq 'Drawer') {
         $line .= " ".$el->name;
         $line .= " "._format_properties($el->properties)
@@ -103,11 +101,11 @@ __END__
 
 =head1 NAME
 
-Org::Dump
+Org::Dump - Show Org document/element object in a human-friendly format
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 FUNCTIONS
 

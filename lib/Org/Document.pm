@@ -1,6 +1,6 @@
 package Org::Document;
 BEGIN {
-  $Org::Document::VERSION = '0.04';
+  $Org::Document::VERSION = '0.05';
 }
 # ABSTRACT: Represent an Org document
 
@@ -38,8 +38,8 @@ our $arg_re       = qr/(?: '(?<squote> [^']*)' |
                             (?<bare> \S+) )
                       /x;
 our $args_re      = qr/(?: $arg_re (?:[ \t]+ $arg_re)*)/x;
-my $tstamp_re     = qr/(?:\[\d{4}-\d{2}-\d{2} \s+ [^\]]*\])/x;
-my $act_tstamp_re = qr/(?:<\d{4}-\d{2}-\d{2} \s+ [^>]*>)/x;
+my $tstamp_re     = qr/(?:\[\d{4}-\d{2}-\d{2} [ ] [^\n\]]*\])/x;
+my $act_tstamp_re = qr/(?:<\d{4}-\d{2}-\d{2} [ ] [^\n>]*>)/x;
 my $fn_name_re    = qr/(?:[^ \t\n:\]]+)/x;
 my $text_re       =
     qr(
@@ -452,36 +452,44 @@ sub _add_text {
                                                     $parent, $pass) : undef);
         } elsif ($+{trange}) {
             require Org::Element::TimeRange;
+            require Org::Element::Timestamp;
             $el = Org::Element::TimeRange->new(
-                _str => $+{trange},
                 document => $self, parent => $parent,
-                datetime1 => __parse_timestamp($+{trange_ts1}),
-                datetime2 => __parse_timestamp($+{trange_ts2}),
             );
+            my $opts = {allow_event_duration=>0, allow_repeater=>0};
+            $el->ts1(Org::Element::Timestamp->new(
+                document=>$self, parent=>$parent));
+            $el->ts1->_parse_timestamp($+{trange_ts1}, $opts);
+            $el->ts2(Org::Element::Timestamp->new(
+                document=>$self, parent=>$parent));
+            $el->ts2->_parse_timestamp($+{trange_ts2}, $opts);
+            $el->children([$el->ts1, $el->ts2]);
         } elsif ($+{tstamp}) {
             require Org::Element::Timestamp;
             $el = Org::Element::Timestamp->new(
-                _str=>$+{tstamp},
                 document => $self, parent => $parent,
-                datetime => __parse_timestamp($+{tstamp}),
             );
+            $el->_parse_timestamp($+{tstamp});
         } elsif ($+{act_trange}) {
             require Org::Element::TimeRange;
+            require Org::Element::Timestamp;
             $el = Org::Element::TimeRange->new(
-                _str=>$+{act_trange},
                 document => $self, parent => $parent,
-                is_active => 1,
-                datetime1 => __parse_timestamp($+{act_tstamp_ts1}),
-                datetime2 => __parse_timestamp($+{act_tstamp_ts2}),
             );
+            my $opts = {allow_event_duration=>0, allow_repeater=>0};
+            $el->ts1(Org::Element::Timestamp->new(
+                document=>$self, parent=>$parent));
+            $el->ts1->_parse_timestamp($+{act_trange_ts1}, $opts);
+            $el->ts2(Org::Element::Timestamp->new(
+                document=>$self, parent=>$parent));
+            $el->ts2->_parse_timestamp($+{act_trange_ts2}, $opts);
+            $el->children([$el->ts1, $el->ts2]);
         } elsif ($+{act_tstamp}) {
             require Org::Element::Timestamp;
             $el = Org::Element::Timestamp->new(
-                _str=>$+{act_tstamp},
                 document => $self, parent => $parent,
-                is_active => 1,
-                datetime  => __parse_timestamp($+{act_tstamp}),
             );
+            $el->_parse_timestamp($+{act_tstamp});
         } elsif ($+{markup_start}) {
             require Org::Element::Text;
             $el = Org::Element::Text->new(
@@ -674,23 +682,6 @@ sub _add_plain_text {
     push @{ $parent->children }, $el;
 }
 
-# temporary place
-sub __parse_timestamp {
-    require DateTime;
-    my ($ts) = @_;
-    $ts =~ /^(?:\[|<)?(\d{4})-(\d{2})-(\d{2}) \s
-            (?:\w{2,3}
-                (?:\s (\d{2}):(\d{2}))?)?
-            (?:\]|>)?
-            $/x
-        or die "Can't parse timestamp string: $ts";
-    my %dt_args = (year => $1, month=>$2, day=>$3);
-    if (defined($4)) { $dt_args{hour} = $4; $dt_args{minute} = $5 }
-    my $res = DateTime->new(%dt_args);
-    $res or die "Invalid date: $ts";
-    $res;
-}
-
 sub __split_tags {
     [$_[0] =~ /:([^:]+)/g];
 }
@@ -706,7 +697,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 SYNOPSIS
 

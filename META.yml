@@ -15,6 +15,7 @@ meta-spec:
 name: Org-Parser
 requires:
   DateTime: 0
+  DateTime::Event::Recurrence: 0
   File::Slurp: 0
   Log::Any: 0
   Moo: 0
@@ -25,4 +26,4 @@ requires:
 resources:
   homepage: http://search.cpan.org/dist/Org-Parser/
   repository: http://github.com/sharyanto/perl-Org-Parser
-version: 0.04
+version: 0.05

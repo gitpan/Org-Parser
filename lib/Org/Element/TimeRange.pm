@@ -1,6 +1,6 @@
 package Org::Element::TimeRange;
 BEGIN {
-  $Org::Element::TimeRange::VERSION = '0.04';
+  $Org::Element::TimeRange::VERSION = '0.05';
 }
 # ABSTRACT: Represent Org time range (TS1--TS2)
 
@@ -9,13 +9,10 @@ use Moo;
 extends 'Org::Element::Base';
 
 
-has datetime1 => (is => 'rw');
+has ts1 => (is => 'rw');
 
 
-has datetime2 => (is => 'rw');
-
-
-has is_active => (is => 'rw');
+has ts2 => (is => 'rw');
 
 
 
@@ -23,13 +20,9 @@ sub as_string {
     my ($self) = @_;
     return $self->_str if $self->_str;
     join("",
-         $self->is_active ? "<" : "[",
-         $self->datetime1->ymd, " ",
-         # XXX Thu 11:59
-         $self->is_active ? ">--<" : "]--[",
-         $self->datetime2->ymd, " ",
-         # XXX Thu 11:59
-         $self->is_active ? ">" : "]",
+         $self->ts1->as_string,
+         "--",
+         $self->ts2->as_string
      );
 }
 
@@ -44,7 +37,7 @@ Org::Element::TimeRange - Represent Org time range (TS1--TS2)
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 DESCRIPTION
 
@@ -52,11 +45,9 @@ Derived from Org::Element::Base.
 
 =head1 ATTRIBUTES
 
-=head2 datetime1 => DATETIME_OBJ
+=head2 ts1 => TIMESTAMP ELEMENT
 
-=head2 datetime2 => DATETIME_OBJ
-
-=head2 is_active => BOOL
+=head2 ts2 => TIMESTAMP ELEMENT
 
 =head1 METHODS
 

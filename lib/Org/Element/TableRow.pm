@@ -1,6 +1,6 @@
 package Org::Element::TableRow;
 BEGIN {
-  $Org::Element::TableRow::VERSION = '0.04';
+  $Org::Element::TableRow::VERSION = '0.05';
 }
 # ABSTRACT: Represent Org table row
 
@@ -19,8 +19,9 @@ sub as_string {
          "\n");
 }
 
+1;
 
-__END__
+
 =pod
 
 =head1 NAME
@@ -29,7 +30,7 @@ Org::Element::TableRow - Represent Org table row
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 DESCRIPTION
 
@@ -45,9 +46,6 @@ Must have L<Org::Element::TableCell> instances as its children.
 
 =for Pod::Coverage as_string
 
-1;
-__END__
-
 =head1 AUTHOR
 
 Steven Haryanto <stevenharyanto@gmail.com>
@@ -60,4 +58,7 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
+
+
+__END__
 
