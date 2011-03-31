@@ -1,6 +1,6 @@
 package Org::Element::Base;
 BEGIN {
-  $Org::Element::Base::VERSION = '0.08';
+  $Org::Element::Base::VERSION = '0.09';
 }
 # ABSTRACT: Base class for element of Org document
 
@@ -167,7 +167,7 @@ Org::Element::Base - Base class for element of Org document
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 ATTRIBUTES
 

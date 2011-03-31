@@ -1,6 +1,6 @@
 package Org::Parser;
 BEGIN {
-  $Org::Parser::VERSION = '0.08';
+  $Org::Parser::VERSION = '0.09';
 }
 # ABSTRACT: Parse Org documents
 
@@ -52,7 +52,7 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 
@@ -64,18 +64,32 @@ version 0.08
  my $doc = $orgp->parse_file("$ENV{HOME}/todo.org");
 
  # parse a string
- $orgp->parse(<<EOF);
+ $doc = $orgp->parse(<<EOF);
+ #+TODO: TODO | DONE CANCELLED
+ <<<radio target>>>
  * heading1a
  ** TODO heading2a
+ SCHEDULED: <2011-03-31 Thu>
+ [[some][link]]
  ** DONE heading2b
- * TODO heading1b
- * heading1c
+ [2011-03-18 ]
+ this will become a link: radio target
+ * TODO heading1b *bold*
+ - some
+ - plain
+ - list
+ - [ ] with /checkbox/
+   * and
+   * sublist
+ * CANCELLED heading1c
+ + definition :: list
+ + another :: def
  EOF
 
  # walk the document tree
- $orgp->walk(sub {
+ $doc->walk(sub {
      my ($el) = @_;
-     next unless $el->isa('Org::Element::Headline');
+     return unless $el->isa('Org::Element::Headline');
      say "heading level ", $el->level, ": ", $el->title->as_string;
  });
 
@@ -86,6 +100,24 @@ will print something like:
  heading level 2: heading2b
  heading level 1: heading1b
  heading level 1: heading1c
+
+A command-line utility is provided for debugging:
+
+ % dump-org-structure ~/todo.org
+ Document:
+   Setting: "#+TODO: TODO | DONE CANCELLED\n"
+   RadioTarget: "<<<radio target>>>"
+   Text: "\n"
+   Headline: l=1
+     (title)
+     Text: "heading1a"
+     (children)
+     Headline: l=2 todo=TODO
+       (title)
+       Text: "heading2a"
+       (children)
+       Text: "SCHEDULED: "
+ ...
 
 =head1 DESCRIPTION
 

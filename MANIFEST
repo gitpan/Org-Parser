@@ -5,9 +5,11 @@ MANIFEST
 MANIFEST.SKIP
 META.yml
 README
+as_string
 bin/dump-org-structure
 bin/remind-due-todos
 dist.ini
+level,
 lib/Org/Document.pm
 lib/Org/Dump.pm
 lib/Org/Element/Base.pm
@@ -54,4 +56,5 @@ t/text.t
 t/timerange.t
 t/timestamp.t
 t/various.t
+title-
 todo.org

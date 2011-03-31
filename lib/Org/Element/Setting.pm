@@ -1,6 +1,6 @@
 package Org::Element::Setting;
 BEGIN {
-  $Org::Element::Setting::VERSION = '0.08';
+  $Org::Element::Setting::VERSION = '0.09';
 }
 # ABSTRACT: Represent Org in-buffer settings
 
@@ -125,7 +125,7 @@ Org::Element::Setting - Represent Org in-buffer settings
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 DESCRIPTION
 

@@ -1,6 +1,6 @@
 package Org::Element::TableRow;
 BEGIN {
-  $Org::Element::TableRow::VERSION = '0.08';
+  $Org::Element::TableRow::VERSION = '0.09';
 }
 # ABSTRACT: Represent Org table row
 
@@ -30,7 +30,7 @@ Org::Element::TableRow - Represent Org table row
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 DESCRIPTION
 

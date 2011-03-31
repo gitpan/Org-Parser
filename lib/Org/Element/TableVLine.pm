@@ -1,6 +1,6 @@
 package Org::Element::TableVLine;
 BEGIN {
-  $Org::Element::TableVLine::VERSION = '0.08';
+  $Org::Element::TableVLine::VERSION = '0.09';
 }
 # ABSTRACT: Represent Org table vertical line
 
@@ -26,7 +26,7 @@ Org::Element::TableVLine - Represent Org table vertical line
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 DESCRIPTION
 

@@ -1,6 +1,6 @@
 package Org::Element::Block;
 BEGIN {
-  $Org::Element::Block::VERSION = '0.08';
+  $Org::Element::Block::VERSION = '0.09';
 }
 # ABSTRACT: Represent Org block
 
@@ -53,7 +53,7 @@ Org::Element::Block - Represent Org block
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 DESCRIPTION
 
