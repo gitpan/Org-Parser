@@ -1,6 +1,6 @@
 package Org::Element::Target;
 BEGIN {
-  $Org::Element::Target::VERSION = '0.09';
+  $Org::Element::Target::VERSION = '0.10';
 }
 # ABSTRACT: Represent Org target
 
@@ -30,11 +30,11 @@ Org::Element::Target - Represent Org target
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 DESCRIPTION
 
-Derived from Org::Element::Base.
+Derived from L<Org::Element::Base>.
 
 =head1 ATTRIBUTES
 

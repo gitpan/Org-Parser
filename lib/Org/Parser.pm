@@ -1,6 +1,6 @@
 package Org::Parser;
 BEGIN {
-  $Org::Parser::VERSION = '0.09';
+  $Org::Parser::VERSION = '0.10';
 }
 # ABSTRACT: Parse Org documents
 
@@ -52,7 +52,7 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 
@@ -97,7 +97,7 @@ will print something like:
 
  heading level 1: heading1a
  heading level 2: heading2a
- heading level 2: heading2b
+ heading level 2: heading2b *bold*
  heading level 1: heading1b
  heading level 1: heading1c
 
@@ -129,7 +129,7 @@ This module uses L<Log::Any> logging framework.
 This module uses L<Moo> object system.
 
 See C<todo.org> in the distribution for the list of already- and not yet
-implemented stuffs,
+implemented stuffs.
 
 =head1 ATTRIBUTES
 

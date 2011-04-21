@@ -1,6 +1,6 @@
 package Org::Element::Link;
 BEGIN {
-  $Org::Element::Link::VERSION = '0.09';
+  $Org::Element::Link::VERSION = '0.10';
 }
 # ABSTRACT: Represent Org hyperlink
 
@@ -41,11 +41,11 @@ Org::Element::Link - Represent Org hyperlink
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 DESCRIPTION
 
-Derived from Org::Element::Base.
+Derived from L<Org::Element::Base>.
 
 =head1 ATTRIBUTES
 

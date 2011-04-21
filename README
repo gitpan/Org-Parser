@@ -2,7 +2,7 @@ NAME
     Org::Parser - Parse Org documents
 
 VERSION
-    version 0.09
+    version 0.10
 
 SYNOPSIS
      use 5.010;
@@ -46,7 +46,7 @@ SYNOPSIS
 
      heading level 1: heading1a
      heading level 2: heading2a
-     heading level 2: heading2b
+     heading level 2: heading2b *bold*
      heading level 1: heading1b
      heading level 1: heading1c
 
@@ -77,7 +77,7 @@ DESCRIPTION
     This module uses Moo object system.
 
     See "todo.org" in the distribution for the list of already- and not yet
-    implemented stuffs,
+    implemented stuffs.
 
 ATTRIBUTES
 METHODS

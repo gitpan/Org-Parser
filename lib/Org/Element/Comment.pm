@@ -1,6 +1,6 @@
 package Org::Element::Comment;
 BEGIN {
-  $Org::Element::Comment::VERSION = '0.09';
+  $Org::Element::Comment::VERSION = '0.10';
 }
 # ABSTRACT: Represent Org comment
 
@@ -20,11 +20,11 @@ Org::Element::Comment - Represent Org comment
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 DESCRIPTION
 
-Derived from Org::Element::Base.
+Derived from L<Org::Element::Base>.
 
 =head1 ATTRIBUTES
 

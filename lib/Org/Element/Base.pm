@@ -1,6 +1,6 @@
 package Org::Element::Base;
 BEGIN {
-  $Org::Element::Base::VERSION = '0.09';
+  $Org::Element::Base::VERSION = '0.10';
 }
 # ABSTRACT: Base class for element of Org document
 
@@ -167,7 +167,7 @@ Org::Element::Base - Base class for element of Org document
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 ATTRIBUTES
 
@@ -215,7 +215,8 @@ property is not found in nearest properties drawer.
 
 =head2 walk(CODEREF)
 
-Call CODEREF for node and all descendent nodes, depth-first.
+Call CODEREF for node and all descendent nodes, depth-first. Code will be given
+the element object as argument.
 
 =head2 find(CRITERIA) -> ELEMENTS
 

@@ -1,6 +1,6 @@
 package Org::Element::List;
 BEGIN {
-  $Org::Element::List::VERSION = '0.09';
+  $Org::Element::List::VERSION = '0.10';
 }
 # ABSTRACT: Represent Org list
 
@@ -29,13 +29,13 @@ Org::Element::List - Represent Org list
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 DESCRIPTION
 
 Must have L<Org::Element::ListItem> (or another ::List) as children.
 
-Derived from Org::Element::Base.
+Derived from L<Org::Element::Base>.
 
 =head1 ATTRIBUTES
 

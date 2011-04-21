@@ -1,6 +1,6 @@
 package Org::Document;
 BEGIN {
-  $Org::Document::VERSION = '0.09';
+  $Org::Document::VERSION = '0.10';
 }
 # ABSTRACT: Represent an Org document
 
@@ -30,7 +30,7 @@ has properties              => (is => 'rw');
 
 has radio_targets           => (is => 'rw');
 
-our $tags_re      = qr/:(?:[^:\n]+:)+/;
+our $tags_re      = qr/:(?:[A-Za-z0-9_@#%]+:)+/;
 my  $ls_re        = qr/(?:(?<=[\015\012])|\A)/;
 my  $le_re        = qr/(?:\R|\z)/;
 our $arg_re       = qr/(?: '(?<squote> [^']*)' |
@@ -702,12 +702,13 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 
  use Org::Document;
 
+ # create a new Org document tree from string
  my $org = Org::Document->new(from_string => <<EOF);
  * heading 1a
  some text
@@ -717,7 +718,7 @@ version 0.09
 
 =head1 DESCRIPTION
 
-Derived from Org::Element::Base.
+Derived from L<Org::Element::Base>.
 
 =head1 ATTRIBUTES
 

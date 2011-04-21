@@ -13,7 +13,8 @@ Get it from settings:
  |...|...|
  |...|...|
 
-Question: is this still valid caption?
+note: the setting can be interspersed with other lines/elements, they will be
+apply to the next thing (table) that wants it, e.g.:
 
  #+CAPTION: A long table
  some text
@@ -44,29 +45,35 @@ e.g.
 ** headline
 *** DONE get_tags()
 return list of tags including inherited tags
-*** TODO what constitutes a valid tag?
 *** TODO Parse headline percentages
 *** TODO next_todo_state() & prev_todo_state()
 return undef if .document is undef.
 *** TODO cycle_todo_state($reverse // 0)
 *** TODO promoto_subtree() & demote_subtree()
 ** drawer & properties
-** properties
 *** TODO check valid values of property (foo_ALL)
 ** setting
+*** TODO [low] differentiate between TYP_TODO and TODO/SEQ_TODO
+"TODO and SEQ_TODO are the same. TYP_TODO is slightly different in operation.
+When you press C-c C-t in a line with the keyword defined by TYP_TODO, the task
+will immediately switch to DONE, instead of to the next state in the sequence. I
+do believe the manual explains this quite well, but I don't believe many people
+use this." -- carsten
+
+this is probably useful if we already have next_todo_state() et al. We'll need
+to note which todo keywords belong to TYP_TODO.
 *** TODO process includes (#+INCLUDE)
 
 *** TODO parse buffer-wide header arguments (#+BABEL, 14.8.1)
-*** TODO What's the syntax for multiple in-buffer settings on a single line?
-
-Currently the parser assumes a single in-buffer settings per line
-
-*** TODO What's the difference between TYP_TODO and TODO/SEQ_TODO?
-
-Currently we assume it to be the same as the other two.
-
 *** TODO parse link abbreviation (#+LINK)
 into document's .link_abbrevs()
+*** TODO check tags in document against TAGS
+"TAGS defines tags that will be used in the buffer and defines fast keyboard
+shortcuts for them. Though you are allowed to also use tags that are not in tis
+list." -- carsten
+
+we can introduce a strict mode, for example, where all tags must belong to the
+list specified in TAGS.
 *** TODO TAGS/FILETAGS: parse keyboard shortcuts
  #+TAGS: OFFICE(o) COMPUTER(c) HOME(h) PROJECT(p) READING(r) DVD(d)
 the key should be discarded when checking for known tags
