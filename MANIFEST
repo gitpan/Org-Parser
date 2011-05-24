@@ -21,6 +21,7 @@ lib/Org/Element/List.pm
 lib/Org/Element/ListItem.pm
 lib/Org/Element/RadioTarget.pm
 lib/Org/Element/Setting.pm
+lib/Org/Element/ShortExample.pm
 lib/Org/Element/Table.pm
 lib/Org/Element/TableCell.pm
 lib/Org/Element/TableRow.pm
@@ -34,7 +35,7 @@ t/00-compile.t
 t/01-basics.t
 t/base_element-get_property.t
 t/base_element.t
-t/block_and_setting.t
+t/block.t
 t/comment.t
 t/data/custom_todo_kw.org
 t/data/listitem.org
@@ -48,6 +49,8 @@ t/radio_target.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t
 t/setting-todo.t
+t/setting.t
+t/short_example.t
 t/table.t
 t/testlib.pl
 t/text.t

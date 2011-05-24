@@ -1,6 +1,6 @@
 package Org::Element::TableCell;
 BEGIN {
-  $Org::Element::TableCell::VERSION = '0.10';
+  $Org::Element::TableCell::VERSION = '0.11';
 }
 # ABSTRACT: Represent Org table cell
 
@@ -20,7 +20,7 @@ Org::Element::TableCell - Represent Org table cell
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 DESCRIPTION
 

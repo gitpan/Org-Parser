@@ -1,6 +1,6 @@
 package Org::Dump;
 BEGIN {
-  $Org::Dump::VERSION = '0.10';
+  $Org::Dump::VERSION = '0.11';
 }
 #ABSTRACT: Show Org document/element object in a human-friendly format
 
@@ -27,6 +27,8 @@ sub dump_element {
         $line .= " tags ".join(",", @{$el->tags}) if $el->tags;
         $line .= " todo=".$el->todo_state if $el->todo_state;
     } elsif ($type eq 'Footnote') {
+        $line .= " name=".($el->name // "");
+    } elsif ($type eq 'Block') {
         $line .= " name=".($el->name // "");
     } elsif ($type eq 'List') {
         $line .= " ".$el->type;
@@ -106,7 +108,7 @@ Org::Dump - Show Org document/element object in a human-friendly format
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 FUNCTIONS
 

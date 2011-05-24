@@ -1,6 +1,6 @@
 package Org::Element::Block;
 BEGIN {
-  $Org::Element::Block::VERSION = '0.10';
+  $Org::Element::Block::VERSION = '0.11';
 }
 # ABSTRACT: Represent Org block
 
@@ -16,6 +16,12 @@ has args => (is => 'rw');
 
 
 has raw_content => (is => 'rw');
+
+
+has begin_indent => (is => 'rw');
+
+
+has end_indent => (is => 'rw');
 
 my @known_blocks = qw(
                          ASCII CENTER COMMENT EXAMPLE HTML
@@ -34,11 +40,13 @@ sub element_as_string {
     my ($self) = @_;
     return $self->_str if defined $self->_str;
     join("",
+         $self->begin_indent // "",
          "#+BEGIN_".uc($self->name),
          $self->args && @{$self->args} ?
              " ".Org::Document::__format_args($self->args) : "",
          "\n",
          $self->raw_content,
+         $self->end_indent // "",
          "#+END_".uc($self->name)."\n");
 }
 
@@ -53,7 +61,7 @@ Org::Element::Block - Represent Org block
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 DESCRIPTION
 
@@ -68,6 +76,14 @@ Block name. For example, #+begin_src ... #+end_src is an 'SRC' block.
 =head2 args => ARRAY
 
 =head2 raw_content => STR
+
+=head2 begin_indent => STR
+
+Indentation on begin line (before C<#+BEGIN>), or empty string if none.
+
+=head2 end_indent => STR
+
+Indentation on end line (before C<#+END>), or empty string if none.
 
 =head1 METHODS
 

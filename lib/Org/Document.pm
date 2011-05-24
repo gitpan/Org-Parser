@@ -1,6 +1,6 @@
 package Org::Document;
 BEGIN {
-  $Org::Document::VERSION = '0.10';
+  $Org::Document::VERSION = '0.11';
 }
 # ABSTRACT: Represent an Org document
 
@@ -75,13 +75,17 @@ my $text_re       =
        #(?<plain_text>   .+?) # too dispersy
       )sxi;
 my $block_elems_re = # top level elements
-    qr/(?<block>     $ls_re \#\+BEGIN_(?<block_name>\w+)
+    qr/(?<block>     $ls_re (?<block_begin_indent>[ \t]*)
+                     \#\+BEGIN_(?<block_name>\w+)
                      (?:[ \t]+(?<block_raw_arg>[^\n]*))?\R
                      (?<block_content>(?:.|\R)*?)
-                     \R\#\+END_\k<block_name> $le_re) |
-       (?<setting>   $ls_re \#\+
+                     \R(?<block_end_indent>[ \t]*)
+                     \#\+END_\k<block_name> $le_re) |
+       (?<setting>   $ls_re (?<setting_indent>[ \t]*) \#\+
                      (?<setting_name> \w+): [ \t]+
                      (?<setting_raw_arg> [^\n]+) $le_re) |
+       (?<shortex>   $ls_re (?<shortex_indent>[ \t]*) :[ ]
+                     (?<shortex_example> [^\n]*) $le_re) |
        (?<comment>   $ls_re \#[^\n]*(?:\R\#[^\n]*)* (?:\R|\z)) |
        (?<headline>  $ls_re (?<h_bullet>\*+) [ \t]
                      (?<h_title>.*?)
@@ -210,6 +214,8 @@ sub _parse {
             $el = Org::Element::Block->new(
                 _str=>$+{block},
                 document=>$self, parent=>$parent,
+                begin_indent=>$+{block_begin_indent},
+                end_indent=>$+{block_end_indent},
                 name=>$+{block_name}, args=>__parse_args($+{block_raw_arg}),
                 raw_content=>$+{block_content},
             );
@@ -217,12 +223,31 @@ sub _parse {
         } elsif ($+{setting}) {
 
             require Org::Element::Setting;
-            $el = Org::Element::Setting->new(
+            if ($+{setting_indent} &&
+                    !(uc($+{setting_name}) ~~
+                          @{Org::Element::Setting->indentable_settings})) {
+                push @text, $+{setting};
+                next;
+            } else {
+                $el = Org::Element::Setting->new(
+                    pass => $pass,
+                    _str=>$+{setting},
+                    document=>$self, parent=>$parent,
+                    indent => $+{setting_indent},
+                    name=>$+{setting_name},
+                    args=>__parse_args($+{setting_raw_arg}),
+                );
+            }
+
+        } elsif ($+{shortex}) {
+
+            require Org::Element::ShortExample;
+            $el = Org::Element::ShortExample->new(
                 pass => $pass,
-                _str=>$+{setting},
+                _str=>$+{shortex},
                 document=>$self, parent=>$parent,
-                name=>$+{setting_name},
-                args=>__parse_args($+{setting_raw_arg}),
+                indent => $+{shortex_indent},
+                example=>$+{shortex_example},
             );
 
         } elsif ($+{comment}) {
@@ -702,7 +727,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 

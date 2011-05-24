@@ -1,6 +1,6 @@
 package Org::Element::Timestamp;
 BEGIN {
-  $Org::Element::Timestamp::VERSION = '0.10';
+  $Org::Element::Timestamp::VERSION = '0.11';
 }
 # ABSTRACT: Represent Org timestamp
 
@@ -147,7 +147,7 @@ Org::Element::Timestamp - Represent Org timestamp
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 DESCRIPTION
 

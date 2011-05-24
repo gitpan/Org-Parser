@@ -30,7 +30,7 @@ _
 );
 
 test_parse(
-    name => 'setting: syntax error (missing colon, becomes comment)',
+    name => 'syntax error (missing colon, becomes comment)',
     filter_elements => 'Org::Element::Setting',
     doc  => <<'_',
 #+TODO A B | C
@@ -49,7 +49,7 @@ _
 );
 
 test_parse(
-    name => 'setting: filetags: argument syntax error',
+    name => 'FILETAGS: argument syntax error',
     filter_elements => 'Org::Element::Setting',
     doc  => <<'_',
 #+FILETAGS: a:
@@ -58,7 +58,7 @@ _
 );
 
 test_parse(
-    name => 'setting: filetags',
+    name => 'FILETAGS: basic tests',
     filter_elements => 'Org::Element::Setting',
     doc  => <<'_',
 #+FILETAGS:  :tag1:tag2:tag3:
@@ -74,7 +74,7 @@ _
 );
 
 test_parse(
-    name => 'setting: priorities',
+    name => 'PRIORITIES: basic tests',
     filter_elements => 'Org::Element::Setting',
     doc  => <<'_',
 #+PRIORITIES: A1 A2 B1 B2 C1 C2
@@ -93,7 +93,7 @@ _
 );
 
 test_parse(
-    name => 'setting: drawers',
+    name => 'DRAWERS: basic tests',
     filter_elements => 'Org::Element::Setting',
     doc  => <<'_',
 #+DRAWERS: D1 D2
@@ -104,61 +104,52 @@ _
         my $doc = $args{result};
         my $elems = $args{elements};
         is($elems->[0]->name, "DRAWERS", "name");
-        ok("D1"    ~~ @{$doc->drawer_names}, "D1 added to list of known drawers");
-        ok("D2"    ~~ @{$doc->drawer_names}, "D2 added to list of known drawers");
-        ok("CLOCK" ~~ @{$doc->drawer_names}, "default drawers still known");
+        ok("D1"    ~~ @{$doc->drawer_names},
+           "D1 added to list of known drawers");
+        ok("D2"    ~~ @{$doc->drawer_names},
+           "D2 added to list of known drawers");
+        ok("CLOCK" ~~ @{$doc->drawer_names},
+           "default drawers still known");
     },
 );
 
-#
-# block
-#
-
 test_parse(
-    name => 'unknown block',
-    filter_elements => 'Org::Element::Block',
-    doc  => <<'_',
-#+BEGIN_FOO
-bar
-#+END_FOO
+    name => 'indentable_elements (not indentable)',
+    filter_elements => 'Org::Element::Setting',
+    doc => <<'_',
+#+TODO: A | B C
+ #+TODO: D E | F
 _
-    dies => 1,
+    num => 1,
 );
-
 test_parse(
-    name => 'block: EXAMPLE: undetected (no END, becomes comment)',
-    filter_elements => 'Org::Element::Block',
-    doc  => <<'_',
-#+BEGIN_EXAMPLE
-1
-2
-#+xEND_EXAMPLE
+    name => 'indentable_elements (not indentable, test text)',
+    filter_elements => 'Org::Element::Text',
+    doc => <<'_',
+#+TODO: A | B C
+ #+TODO: D E | F
 _
-    dies => 0,
-    num => 0,
-);
-
-# also checks case-sensitiveness
-test_parse(
-    name => 'block: EXAMPLE basic tests',
-    filter_elements => 'Org::Element::Block',
-    doc  => <<'_',
-#+BEGIN_EXAMPLE -t -w 40
-#+INSIDE
-line 2
-#+end_EXAMPLE
-_
-    num  => 1,
+    num => 1,
     test_after_parse => sub {
-        my %args = @_;
-        my $doc = $args{result};
+        my (%args) = @_;
         my $elems = $args{elements};
-        my $bl = $elems->[0];
-        is($bl->name, "EXAMPLE", "name");
-        is_deeply($bl->args, ["-t", "-w", 40], "args");
-        is($bl->raw_content, "#+INSIDE\nline 2", "raw_content");
+        is($elems->[0]->as_string, " #+TODO: D E | F\n", "text");
+    },
+);
+
+test_parse(
+    name => 'indentable_elements (indentable)',
+    filter_elements => 'Org::Element::Setting',
+    doc => <<'_',
+#+TBLFM: @2$1=@1$1
+ #+tblfm: @3$1=@1$1
+_
+    num => 2,
+    test_after_parse => sub {
+        my (%args) = @_;
+        my $elems = $args{elements};
+        is($elems->[1]->indent, " ", "indent attribute");
     },
 );
 
 done_testing();
-

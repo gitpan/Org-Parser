@@ -1,6 +1,6 @@
 package Org::Element::Footnote;
 BEGIN {
-  $Org::Element::Footnote::VERSION = '0.10';
+  $Org::Element::Footnote::VERSION = '0.11';
 }
 # ABSTRACT: Represent Org footnote reference and/or definition
 
@@ -45,7 +45,7 @@ Org::Element::Footnote - Represent Org footnote reference and/or definition
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 DESCRIPTION
 
