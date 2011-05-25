@@ -1,6 +1,6 @@
 package Org::Parser;
 BEGIN {
-  $Org::Parser::VERSION = '0.11';
+  $Org::Parser::VERSION = '0.12';
 }
 # ABSTRACT: Parse Org documents
 
@@ -52,7 +52,7 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-version 0.11
+version 0.12
 
 =head1 SYNOPSIS
 
@@ -158,7 +158,7 @@ Just like parse(), but will load document from file instead.
 
 =head1 SEE ALSO
 
-Org::Document
+L<Org::Document>
 
 =head1 AUTHOR
 

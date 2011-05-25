@@ -1,10 +1,11 @@
 package Org::Element::Link;
 BEGIN {
-  $Org::Element::Link::VERSION = '0.11';
+  $Org::Element::Link::VERSION = '0.12';
 }
 # ABSTRACT: Represent Org hyperlink
 
 use 5.010;
+use locale;
 use Moo;
 extends 'Org::Element::Base';
 
@@ -41,7 +42,7 @@ Org::Element::Link - Represent Org hyperlink
 
 =head1 VERSION
 
-version 0.11
+version 0.12
 
 =head1 DESCRIPTION
 

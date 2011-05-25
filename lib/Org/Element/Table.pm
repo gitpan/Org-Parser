@@ -1,10 +1,11 @@
 package Org::Element::Table;
 BEGIN {
-  $Org::Element::Table::VERSION = '0.11';
+  $Org::Element::Table::VERSION = '0.12';
 }
 # ABSTRACT: Represent Org table
 
 use 5.010;
+use locale;
 use Log::Any '$log';
 use Moo;
 extends 'Org::Element::Base';
@@ -67,7 +68,7 @@ Org::Element::Table - Represent Org table
 
 =head1 VERSION
 
-version 0.11
+version 0.12
 
 =head1 DESCRIPTION
 

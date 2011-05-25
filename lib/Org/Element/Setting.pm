@@ -1,10 +1,11 @@
 package Org::Element::Setting;
 BEGIN {
-  $Org::Element::Setting::VERSION = '0.11';
+  $Org::Element::Setting::VERSION = '0.12';
 }
 # ABSTRACT: Represent Org in-buffer settings
 
 use 5.010;
+use locale;
 use Moo;
 extends 'Org::Element::Base';
 
@@ -136,7 +137,7 @@ Org::Element::Setting - Represent Org in-buffer settings
 
 =head1 VERSION
 
-version 0.11
+version 0.12
 
 =head1 DESCRIPTION
 

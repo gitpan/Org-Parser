@@ -1,10 +1,11 @@
 package Org::Element::Drawer;
 BEGIN {
-  $Org::Element::Drawer::VERSION = '0.11';
+  $Org::Element::Drawer::VERSION = '0.12';
 }
 # ABSTRACT: Represent Org drawer
 
 use 5.010;
+use locale;
 use Moo;
 extends 'Org::Element::Base';
 
@@ -56,7 +57,7 @@ Org::Element::Drawer - Represent Org drawer
 
 =head1 VERSION
 
-version 0.11
+version 0.12
 
 =head1 DESCRIPTION
 

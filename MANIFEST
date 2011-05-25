@@ -46,6 +46,7 @@ t/headline.t
 t/link_and_target.t
 t/list.t
 t/radio_target.t
+t/regression-rt68443.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t
 t/setting-todo.t

@@ -1,10 +1,11 @@
 package Org::Element::TableRow;
 BEGIN {
-  $Org::Element::TableRow::VERSION = '0.11';
+  $Org::Element::TableRow::VERSION = '0.12';
 }
 # ABSTRACT: Represent Org table row
 
 use 5.010;
+use locale;
 use Moo;
 extends 'Org::Element::Base';
 
@@ -30,7 +31,7 @@ Org::Element::TableRow - Represent Org table row
 
 =head1 VERSION
 
-version 0.11
+version 0.12
 
 =head1 DESCRIPTION
 

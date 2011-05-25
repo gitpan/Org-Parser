@@ -1,10 +1,11 @@
 package Org::Element::Base;
 BEGIN {
-  $Org::Element::Base::VERSION = '0.11';
+  $Org::Element::Base::VERSION = '0.12';
 }
 # ABSTRACT: Base class for element of Org document
 
 use 5.010;
+use locale;
 use Log::Any '$log';
 use Moo;
 use Scalar::Util qw(refaddr);
@@ -167,7 +168,7 @@ Org::Element::Base - Base class for element of Org document
 
 =head1 VERSION
 
-version 0.11
+version 0.12
 
 =head1 ATTRIBUTES
 

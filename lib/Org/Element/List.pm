@@ -1,10 +1,11 @@
 package Org::Element::List;
 BEGIN {
-  $Org::Element::List::VERSION = '0.11';
+  $Org::Element::List::VERSION = '0.12';
 }
 # ABSTRACT: Represent Org list
 
 use 5.010;
+use locale;
 use Moo;
 extends 'Org::Element::Base';
 
@@ -29,7 +30,7 @@ Org::Element::List - Represent Org list
 
 =head1 VERSION
 
-version 0.11
+version 0.12
 
 =head1 DESCRIPTION
 

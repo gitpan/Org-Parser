@@ -1,10 +1,11 @@
 package Org::Element::Timestamp;
 BEGIN {
-  $Org::Element::Timestamp::VERSION = '0.11';
+  $Org::Element::Timestamp::VERSION = '0.12';
 }
 # ABSTRACT: Represent Org timestamp
 
 use 5.010;
+use locale;
 use Moo;
 extends 'Org::Element::Base';
 
@@ -20,6 +21,7 @@ has event_duration => (is => 'rw');
 
 has recurrence => (is => 'rw');
 has _repeater => (is => 'rw'); # stores the raw repeater spec
+has _warning_period => (is => 'rw'); # stores the raw warning period spec
 
 
 has is_active => (is => 'rw');
@@ -54,8 +56,12 @@ sub as_string {
                  sprintf("%02d:%02d", $hour2, $min2),
              ) : (),
              $self->_repeater ? (
-                 " +",
+                 " ",
                  $self->_repeater,
+             ) : (),
+             $self->_warning_period ? (
+                 " ",
+                 $self->_warning_period,
              ) : (),
          ) : (),
          $self->is_active ? ">" : "]",
@@ -81,16 +87,27 @@ sub _parse_timestamp {
                              (?<hour2> \d{2}):(?<min2> \d{2}))
                      )?
                  )?
-                 (?:\s\+
-                     (?<repeater>
+                 (?:\s(?<repeater>
+                         (?<repeater_prefix> \+\+|\.\+|\+)
                          (?<repeater_interval> \d+)
                          (?<repeater_unit> [dwmy])
+                     )
+                 )?
+                 (?:\s(?<warning_period>
+                         -
+                         (?<warning_period_interval> \d+)
+                         (?<warning_period_unit> [dwmy])
                      )
                  )?
              )?
              (?<close_bracket> \]|>)
              $/x
                  or die "Can't parse timestamp string: $str";
+    # just for sanity. usually doesn't happen though because Document gives us
+    # either "[...]" or "<...>"
+    die "Mismatch open/close brackets in timestamp: $str"
+        if $+{open_bracket} eq '<' && $+{close_bracket} eq ']' ||
+            $+{open_bracket} eq '[' && $+{close_bracket} eq '>';
     die "Duration not allowed in timestamp: $str"
         if !$opts->{allow_event_duration} && $+{event_duration};
     die "Repeater ($+{repeater}) not allowed in timestamp: $str"
@@ -125,6 +142,19 @@ sub _parse_timestamp {
         $self->_repeater($+{repeater});
     }
 
+    if ($+{warning_period}) {
+        my $i = $+{warning_period_interval};
+        my $u = $+{warning_period_unit};
+        if ($u eq 'd') {
+        } elsif ($u eq 'w') {
+        } elsif ($u eq 'm') {
+        } elsif ($u eq 'y') {
+        } else {
+            die "BUG: Unknown warning period unit $u in timestamp $str";
+        }
+        $self->_warning_period($+{warning_period});
+    }
+
     my %dt_args = (year => $+{year}, month=>$+{mon}, day=>$+{day});
     if (defined($+{hour})) {
         $dt_args{hour}   = $+{hour};
@@ -147,7 +177,7 @@ Org::Element::Timestamp - Represent Org timestamp
 
 =head1 VERSION
 
-version 0.11
+version 0.12
 
 =head1 DESCRIPTION
 
