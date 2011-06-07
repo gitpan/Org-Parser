@@ -1,6 +1,6 @@
 package Org::Element::Headline;
 BEGIN {
-  $Org::Element::Headline::VERSION = '0.12';
+  $Org::Element::Headline::VERSION = '0.13';
 }
 # ABSTRACT: Represent Org headline
 
@@ -86,7 +86,7 @@ Org::Element::Headline - Represent Org headline
 
 =head1 VERSION
 
-version 0.12
+version 0.13
 
 =head1 DESCRIPTION
 

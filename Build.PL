@@ -17,7 +17,7 @@ my %module_build_args = (
     'Steven Haryanto <stevenharyanto@gmail.com>'
   ],
   'dist_name' => 'Org-Parser',
-  'dist_version' => '0.12',
+  'dist_version' => '0.13',
   'license' => 'perl',
   'module_name' => 'Org::Parser',
   'recommends' => {},
@@ -34,8 +34,7 @@ my %module_build_args = (
     'perl' => '5.010000'
   },
   'script_files' => [
-    'bin/dump-org-structure',
-    'bin/remind-due-todos'
+    'bin/dump-org-structure'
   ]
 );
 

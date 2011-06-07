@@ -1,6 +1,6 @@
 package Org::Element::Base;
 BEGIN {
-  $Org::Element::Base::VERSION = '0.12';
+  $Org::Element::Base::VERSION = '0.13';
 }
 # ABSTRACT: Base class for element of Org document
 
@@ -168,18 +168,18 @@ Org::Element::Base - Base class for element of Org document
 
 =head1 VERSION
 
-version 0.12
+version 0.13
 
 =head1 ATTRIBUTES
 
 =head2 document => DOCUMENT
 
-Link to document object. Elements need this e.g. to access file-wide settings,
+Link to document object. Elements need this to access file-wide settings,
 properties, etc.
 
 =head2 parent => undef | ELEMENT
 
-Link to parent element.
+Link to parent element. Undef if this element is the root element.
 
 =head2 children => undef | ARRAY_OF_ELEMENTS
 
@@ -214,12 +214,12 @@ foo_ALL). Return undef if property cannot be found in all drawers.
 Regardless of $search_parent setting, file-wide properties will be consulted if
 property is not found in nearest properties drawer.
 
-=head2 walk(CODEREF)
+=head2 $el->walk(CODEREF)
 
 Call CODEREF for node and all descendent nodes, depth-first. Code will be given
 the element object as argument.
 
-=head2 find(CRITERIA) -> ELEMENTS
+=head2 $el->find(CRITERIA) => ELEMENTS
 
 Find subelements. CRITERIA can be a word (e.g. 'Headline' meaning of class
 'Org::Element::Headline') or a class name ('Org::Element::ListItem') or a

@@ -1,6 +1,6 @@
 package Org::Element::TableRow;
 BEGIN {
-  $Org::Element::TableRow::VERSION = '0.12';
+  $Org::Element::TableRow::VERSION = '0.13';
 }
 # ABSTRACT: Represent Org table row
 
@@ -20,6 +20,18 @@ sub as_string {
          "\n");
 }
 
+
+sub cells {
+    my ($self) = @_;
+    return [] unless $self->children;
+
+    my $cells = [];
+    for my $el (@{$self->children}) {
+        push @$cells, $el if $el->isa('Org::Element::TableCell');
+    }
+    $cells;
+}
+
 1;
 
 
@@ -31,7 +43,7 @@ Org::Element::TableRow - Represent Org table row
 
 =head1 VERSION
 
-version 0.12
+version 0.13
 
 =head1 DESCRIPTION
 
@@ -46,6 +58,10 @@ Must have L<Org::Element::TableCell> instances as its children.
 =head1 METHODS
 
 =for Pod::Coverage as_string
+
+=head2 $table->cells() => ELEMENTS
+
+Return the cells of the row.
 
 =head1 AUTHOR
 

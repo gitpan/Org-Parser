@@ -1,6 +1,6 @@
 package Org::Element::Table;
 BEGIN {
-  $Org::Element::Table::VERSION = '0.12';
+  $Org::Element::Table::VERSION = '0.13';
 }
 # ABSTRACT: Represent Org table
 
@@ -57,6 +57,50 @@ sub BUILD {
     }
 }
 
+
+sub rows {
+    my ($self) = @_;
+    return [] unless $self->children;
+    my $rows = [];
+    for my $el (@{$self->children}) {
+        push @$rows, $el if $el->isa('Org::Element::TableRow');
+    }
+    $rows;
+}
+
+
+sub row_count {
+    my ($self) = @_;
+    return 0 unless $self->children;
+    my $n = 0;
+    for my $el (@{$self->children}) {
+        $n++ if $el->isa('Org::Element::TableRow');
+    }
+    $n;
+}
+
+
+sub column_count {
+    my ($self) = @_;
+    return 0 unless $self->children;
+
+    # get first row
+    my $row;
+    for my $el (@{$self->children}) {
+        if ($el->isa('Org::Element::TableRow')) {
+            $row = $el;
+            last;
+        }
+    }
+    return 0 unless $row; # table doesn't have any row
+
+    my $n = 0;
+    for my $el (@{$row->children}) {
+        $n++ if $el->isa('Org::Element::TableCell');
+    }
+    $n;
+}
+
 1;
 
 
@@ -68,7 +112,7 @@ Org::Element::Table - Represent Org table
 
 =head1 VERSION
 
-version 0.12
+version 0.13
 
 =head1 DESCRIPTION
 
@@ -84,6 +128,19 @@ its children.
 =head1 METHODS
 
 =for Pod::Coverage BUILD
+
+=head2 $table->rows() => ELEMENTS
+
+Return the rows of the table.
+
+=head2 $table->row_count() => INT
+
+Return the number of rows that the table has.
+
+=head2 $table->column_count() => INT
+
+Return the number of columns that the table has. It is counted from the first
+row.
 
 =head1 AUTHOR
 

@@ -1,6 +1,6 @@
 package Org::Element::ShortExample;
 BEGIN {
-  $Org::Element::ShortExample::VERSION = '0.12';
+  $Org::Element::ShortExample::VERSION = '0.13';
 }
 # ABSTRACT: Represent Org in-buffer settings
 
@@ -38,7 +38,7 @@ Org::Element::ShortExample - Represent Org in-buffer settings
 
 =head1 VERSION
 
-version 0.12
+version 0.13
 
 =head1 DESCRIPTION
 

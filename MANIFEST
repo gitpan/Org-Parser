@@ -6,7 +6,6 @@ MANIFEST.SKIP
 META.yml
 README
 bin/dump-org-structure
-bin/remind-due-todos
 dist.ini
 lib/Org/Document.pm
 lib/Org/Dump.pm
