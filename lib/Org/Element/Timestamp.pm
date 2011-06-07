@@ -1,6 +1,6 @@
 package Org::Element::Timestamp;
 BEGIN {
-  $Org::Element::Timestamp::VERSION = '0.13';
+  $Org::Element::Timestamp::VERSION = '0.14';
 }
 # ABSTRACT: Represent Org timestamp
 
@@ -123,18 +123,32 @@ sub _parse_timestamp {
         );
     }
 
+    my %dt_args = (year => $+{year}, month=>$+{mon}, day=>$+{day});
+    if (defined($+{hour})) {
+        $dt_args{hour}   = $+{hour};
+        $dt_args{minute} = $+{min};
+        $self->has_time(1);
+    } else {
+        $self->has_time(0);
+    }
+    my $dt = DateTime->new(%dt_args);
+
     if ($+{repeater} && !$self->recurrence) {
         my $r;
         my $i = $+{repeater_interval};
         my $u = $+{repeater_unit};
         if ($u eq 'd') {
-            $r = DateTime::Event::Recurrence->daily(interval=>$i);
+            $r = DateTime::Event::Recurrence->daily(
+                interval=>$i, start=>$dt);
         } elsif ($u eq 'w') {
-            $r = DateTime::Event::Recurrence->weekly(interval=>$i);
+            $r = DateTime::Event::Recurrence->weekly(
+                interval=>$i, start=>$dt);
         } elsif ($u eq 'm') {
-            $r = DateTime::Event::Recurrence->monthly(interval=>$i);
+            $r = DateTime::Event::Recurrence->monthly(
+                interval=>$i, start=>$dt);
         } elsif ($u eq 'y') {
-            $r = DateTime::Event::Recurrence->yearly(interval=>$i);
+            $r = DateTime::Event::Recurrence->yearly(
+                interval=>$i, start=>$dt);
         } else {
             die "BUG: Unknown repeater unit $u in timestamp $str";
         }
@@ -155,15 +169,7 @@ sub _parse_timestamp {
         $self->_warning_period($+{warning_period});
     }
 
-    my %dt_args = (year => $+{year}, month=>$+{mon}, day=>$+{day});
-    if (defined($+{hour})) {
-        $dt_args{hour}   = $+{hour};
-        $dt_args{minute} = $+{min};
-        $self->has_time(1);
-    } else {
-        $self->has_time(0);
-    }
-    $self->datetime(DateTime->new(%dt_args));
+    $self->datetime($dt);
 }
 
 1;
@@ -177,7 +183,7 @@ Org::Element::Timestamp - Represent Org timestamp
 
 =head1 VERSION
 
-version 0.13
+version 0.14
 
 =head1 DESCRIPTION
 

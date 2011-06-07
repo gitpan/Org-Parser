@@ -20,10 +20,9 @@ requires:
   Log::Any: 0
   Moo: 0
   String::Escape: 0
-  Sub::Spec::CmdLine: 0.26
   Test::More: 0.96
   perl: 5.010000
 resources:
   homepage: http://search.cpan.org/dist/Org-Parser/
   repository: http://github.com/sharyanto/perl-Org-Parser
-version: 0.13
+version: 0.14

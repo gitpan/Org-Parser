@@ -1,6 +1,6 @@
 package Org::Element::Headline;
 BEGIN {
-  $Org::Element::Headline::VERSION = '0.13';
+  $Org::Element::Headline::VERSION = '0.14';
 }
 # ABSTRACT: Represent Org headline
 
@@ -75,6 +75,25 @@ sub get_tags {
     @res;
 }
 
+
+sub get_active_timestamp {
+    my ($self) = @_;
+
+    for my $s ($self->title, $self) {
+        my $ats;
+        $s->walk(
+            sub {
+                my ($el) = @_;
+                return if $ats;
+                $ats = $el if $el->isa('Org::Element::Timestamp') &&
+                    $el->is_active;
+            }
+        );
+        return $ats if $ats;
+    }
+    return;
+}
+
 1;
 
 
@@ -86,7 +105,7 @@ Org::Element::Headline - Represent Org headline
 
 =head1 VERSION
 
-version 0.13
+version 0.14
 
 =head1 DESCRIPTION
 
@@ -135,6 +154,11 @@ Progress.
 
 Get tags for this headline. A headline can define tags or inherit tags from its
 parent headline (or from document).
+
+=head2 $el->get_active_timestamp() => ELEMENT
+
+Get the first active timestamp element for this headline, either in the title or
+in the child elements.
 
 =head1 AUTHOR
 
