@@ -17,7 +17,7 @@ my %module_build_args = (
     'Steven Haryanto <stevenharyanto@gmail.com>'
   ],
   'dist_name' => 'Org-Parser',
-  'dist_version' => '0.14',
+  'dist_version' => '0.15',
   'license' => 'perl',
   'module_name' => 'Org::Parser',
   'recommends' => {},
@@ -32,9 +32,7 @@ my %module_build_args = (
     'Test::More' => '0.96',
     'perl' => '5.010000'
   },
-  'script_files' => [
-    'bin/dump-org-structure'
-  ]
+  'script_files' => []
 );
 
 

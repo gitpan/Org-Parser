@@ -5,7 +5,6 @@ MANIFEST
 MANIFEST.SKIP
 META.yml
 README
-bin/dump-org-structure
 dist.ini
 lib/Org/Document.pm
 lib/Org/Dump.pm
@@ -32,6 +31,7 @@ lib/Org/Element/Timestamp.pm
 lib/Org/Parser.pm
 t/00-compile.t
 t/01-basics.t
+t/base_element-field_name.t
 t/base_element-get_property.t
 t/base_element.t
 t/block.t

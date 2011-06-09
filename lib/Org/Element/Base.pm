@@ -1,6 +1,6 @@
 package Org::Element::Base;
 BEGIN {
-  $Org::Element::Base::VERSION = '0.14';
+  $Org::Element::Base::VERSION = '0.15';
 }
 # ABSTRACT: Base class for element of Org document
 
@@ -157,6 +157,31 @@ sub headline {
     $h;
 }
 
+
+sub field_name {
+    my ($self) = @_;
+
+    my $prev = $self->prev_sibling;
+    if ($prev && $prev->isa('Org::Element::Text')) {
+        my $text = $prev->as_string;
+        if ($text =~ /(?:\A|\R)\s*(.+?)\s*:\s*\z/) {
+            return $1;
+        }
+    }
+    my $parent = $self->parent;
+    if ($parent && $parent->isa('Org::Element::ListItem')) {
+        my $list = $parent->parent;
+        if ($list->type eq 'D') {
+            return $parent->desc_term->as_string;
+        }
+    }
+    # TODO
+    #if ($parent && $parent->isa('Org::Element::Drawer') &&
+    #        $parent->name eq 'PROPERTIES') {
+    #}
+    return;
+}
+
 1;
 
 __END__
@@ -168,7 +193,7 @@ Org::Element::Base - Base class for element of Org document
 
 =head1 VERSION
 
-version 0.14
+version 0.15
 
 =head1 ATTRIBUTES
 
@@ -234,6 +259,16 @@ document), or until CODEREF returns a false value. CODEREF will be supplied
 =head2 $el->headline()
 
 Get current headline.
+
+=head2 $el->field_name()
+
+Try to extract "field name", being defined as either some text on the left side:
+
+ DEADLINE: <2011-06-09 >
+
+or a description term in a description list:
+
+ - wedding anniversary :: <2011-06-10 >
 
 =head1 AUTHOR
 

@@ -1,6 +1,6 @@
 package Org::Element::Headline;
 BEGIN {
-  $Org::Element::Headline::VERSION = '0.14';
+  $Org::Element::Headline::VERSION = '0.15';
 }
 # ABSTRACT: Represent Org headline
 
@@ -94,6 +94,30 @@ sub get_active_timestamp {
     return;
 }
 
+
+sub is_leaf {
+    my ($self) = @_;
+
+    return 1 unless $self->children;
+
+    my $res;
+    for my $child (@{ $self->children }) {
+        $child->walk(
+            sub {
+                return if defined($res);
+                my ($el) = @_;
+                if ($el->isa('Org::Element::Headline')) {
+                    $res = 0;
+                    goto EXIT_WALK;
+                }
+            }
+        );
+    }
+  EXIT_WALK:
+    $res //= 1;
+    $res;
+}
+
 1;
 
 
@@ -105,7 +129,7 @@ Org::Element::Headline - Represent Org headline
 
 =head1 VERSION
 
-version 0.14
+version 0.15
 
 =head1 DESCRIPTION
 
@@ -159,6 +183,10 @@ parent headline (or from document).
 
 Get the first active timestamp element for this headline, either in the title or
 in the child elements.
+
+=head2 $el->is_leaf() => BOOL
+
+Returns true if element doesn't contain subtrees.
 
 =head1 AUTHOR
 

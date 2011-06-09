@@ -4,42 +4,40 @@
 perhaps _linenum_start and _linenum_end attributes to signify the starting and
 ending line numbers of current element. so the parser can report:
 
- syntax error in table (lines XX-YY): invalid line in table 'blah'
+: syntax error in table (lines XX-YY): invalid line in table 'blah'
 
 and then instead of:
 
- die "syntax error in table ..."
+: die "syntax error in table ..."
 
 the elements do something like this instead to report error:
 
- $doc->_croak("invalid line in table");
+: $doc->_croak("invalid line in table");
 
 and the document will provide the additional line number and element
 information.
 
 ** Element::Base
-*** DONE headline()
-return the headline this element is in.
 *** TODO set_property()
 - should create a properties drawer if necessary
 ** table
 *** TODO caption(), label(), etc
 Get it from settings:
 
- #+CAPTION: A long table
- #+LABEL: tbl:long
- |...|...|
- |...|...|
+: #+CAPTION: A long table
+: #+LABEL: tbl:long
+: |...|...|
+: |...|...|
 
 note: the setting can be interspersed with other lines/elements, they will be
 apply to the next thing (table) that wants it, e.g.:
 
- #+CAPTION: A long table
- some text
- #+LABEL: tbl:long
- some more text
- |...|...|
- |...|...|
+: #+CAPTION: A long table
+: some text
+: #+LABEL: tbl:long
+: some more text
+: |...|...|
+: |...|...|
 
 *** TODO column group (manual: 3.3)
 probably create Element::TableColGroup which is a special row that contains
@@ -54,16 +52,14 @@ format() needs to worry about this (i prefer the latter).
 *** TODO parse sexp entries?
 e.g.
 
- ** Class 7:00pm-9:00pm
-    <%%(and (= 1 (calendar-day-of-week date)) (diary-block 2 16 2009 4 20 2009))>
+: ** Class 7:00pm-9:00pm
+:    <%%(and (= 1 (calendar-day-of-week date)) (diary-block 2 16 2009 4 20 2009))>
 
- * Monthly meeting
-  <%%(diary-float t 3 3)>
+: * Monthly meeting
+:  <%%(diary-float t 3 3)>
 
 ** plain lists (ordered, unordered, description)
 ** headline
-*** DONE get_tags()
-return list of tags including inherited tags
 *** TODO Parse headline percentages
 *** TODO next_todo_state() & prev_todo_state()
 return undef if .document is undef.
@@ -71,6 +67,13 @@ return undef if .document is undef.
 *** TODO promoto_subtree() & demote_subtree()
 ** drawer & properties
 *** TODO check valid values of property (foo_ALL)
+*** TODO fix parsing of property values
+need clarification first
+
+: :PROPERTY:
+:   :birthday:  (5 7 1990)
+: :END:
+
 ** setting
 *** TODO [low] differentiate between TYP_TODO and TODO/SEQ_TODO
 "TODO and SEQ_TODO are the same. TYP_TODO is slightly different in operation.
@@ -104,21 +107,6 @@ see org-mode manual on dynamic blocks.
 basically it's just blocks with a slightly different syntax and :param value as
 args:
 
- #BEGIN: dynblockname :param1 value1 :param2 value2
- #END:
+: #BEGIN: dynblockname :param1 value1 :param2 value2
+: #END:
 
-*** TODO parse short example
-this is one line example using colon+space syntax:
-
- Here is an example
-  : Some example from a text file.
-    :  Another example.
-
-the above is equivalent to:
-
- #+BEGIN_EXAMPLE
- Some example from a text file.
- #+END_EXAMPLE
-   #+BEGIN_EXAMPLE
-    Another example.
-   #+END_EXAMPLE

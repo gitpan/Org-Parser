@@ -1,6 +1,6 @@
 package Org::Document;
 BEGIN {
-  $Org::Document::VERSION = '0.14';
+  $Org::Document::VERSION = '0.15';
 }
 # ABSTRACT: Represent an Org document
 
@@ -728,7 +728,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.14
+version 0.15
 
 =head1 SYNOPSIS
 
