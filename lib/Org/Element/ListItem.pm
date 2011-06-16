@@ -1,6 +1,6 @@
 package Org::Element::ListItem;
 BEGIN {
-  $Org::Element::ListItem::VERSION = '0.15';
+  $Org::Element::ListItem::VERSION = '0.16';
 }
 # ABSTRACT: Represent Org list item
 
@@ -44,7 +44,7 @@ Org::Element::ListItem - Represent Org list item
 
 =head1 VERSION
 
-version 0.15
+version 0.16
 
 =head1 DESCRIPTION
 

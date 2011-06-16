@@ -1,11 +1,12 @@
 package Org::Element::Timestamp;
 BEGIN {
-  $Org::Element::Timestamp::VERSION = '0.15';
+  $Org::Element::Timestamp::VERSION = '0.16';
 }
 # ABSTRACT: Represent Org timestamp
 
 use 5.010;
 use locale;
+use utf8;
 use Moo;
 extends 'Org::Element::Base';
 
@@ -76,10 +77,14 @@ sub _parse_timestamp {
     $opts->{allow_event_duration} //= 1;
     $opts->{allow_repeater} //= 1;
 
+    my $dow_re = qr/\w{1,3} |     # common, chinese 四, english thu
+                    \w{3}\.       # french, e.g. mer.
+                   /x;
+
     $str =~ /^(?<open_bracket> \[|<)
              (?<year> \d{4})-(?<mon> \d{2})-(?<day> \d{2}) \s
              (?:
-                 (?<dow> \w{2,3})
+                 (?<dow> $dow_re)
                  (?:\s
                      (?<hour> \d{2}):(?<min> \d{2})
                      (?:-
@@ -183,7 +188,7 @@ Org::Element::Timestamp - Represent Org timestamp
 
 =head1 VERSION
 
-version 0.15
+version 0.16
 
 =head1 DESCRIPTION
 
