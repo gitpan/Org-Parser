@@ -1,34 +1,21 @@
 package Org::Document;
-BEGIN {
-  $Org::Document::VERSION = '0.16';
-}
-# ABSTRACT: Represent an Org document
 
 use 5.010;
 use locale;
 use Log::Any '$log';
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+use Time::HiRes qw(gettimeofday tv_interval);
+
+our $VERSION = '0.17'; # VERSION
 
 has tags                    => (is => 'rw');
-
-
 has todo_states             => (is => 'rw');
-
-
 has done_states             => (is => 'rw');
-
-
 has priorities              => (is => 'rw');
-
-
 has drawer_names            => (is => 'rw');
-
-
 has properties              => (is => 'rw');
-
-
 has radio_targets           => (is => 'rw');
 
 our $tags_re       = qr/:(?:[A-Za-z0-9_@#%]+:)+/;
@@ -104,8 +91,6 @@ my $block_elems_re = # top level elements
        #(?<text>      .+?) # too dispersy
       /msxi;
 
-
-
 sub _init_pass1 {
     my ($self) = @_;
     $self->tags([]);
@@ -163,7 +148,6 @@ sub __format_args {
     join " ", @s;
 }
 
-
 sub BUILD {
     my ($self, $args) = @_;
     $self->document($self) unless $self->document;
@@ -185,6 +169,7 @@ sub BUILD {
 sub _parse {
     my ($self, $str, $pass) = @_;
     $log->tracef('-> _parse(%s, pass=%d)', $str, $pass);
+    my $t0 = [gettimeofday];
 
     my $last_headline;
     my $last_headlines = [$self]; # [$doc, $last_hl_level1, $last_hl_lvl2, ...]
@@ -394,7 +379,8 @@ sub _parse {
     }
     @text = ();
 
-    $log->tracef('<- _parse()');
+    $log->tracef('<- _parse(), elapsed time=%.3fs',
+                 tv_interval($t0, [gettimeofday]));
 }
 
 sub _add_text_container {
@@ -574,7 +560,7 @@ sub _apply_markup {
     #$log->trace("-> _apply_markup()");
     my ($self, $parent) = @_;
     my $last_index = 0;
-    my $c = $parent->children;
+    my $c = $parent->children or return;
 
     while (1) {
         #$log->tracef("text cluster = %s", [map {$_->as_string} @$c]);
@@ -719,6 +705,7 @@ sub __split_tags {
 }
 
 1;
+# ABSTRACT: Represent an Org document
 
 
 =pod
@@ -729,7 +716,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 SYNOPSIS
 
@@ -745,7 +732,7 @@ version 0.16
 
 =head1 DESCRIPTION
 
-Derived from L<Org::Element::Base>.
+Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 

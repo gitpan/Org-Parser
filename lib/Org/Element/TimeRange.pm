@@ -1,21 +1,14 @@
 package Org::Element::TimeRange;
-BEGIN {
-  $Org::Element::TimeRange::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org time range (TS1--TS2)
 
 use 5.010;
 use locale;
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 has ts1 => (is => 'rw');
-
-
 has ts2 => (is => 'rw');
-
-
 
 sub as_string {
     my ($self) = @_;
@@ -28,6 +21,7 @@ sub as_string {
 }
 
 1;
+# ABSTRACT: Represent Org time range (TS1--TS2)
 
 
 =pod
@@ -38,17 +32,21 @@ Org::Element::TimeRange - Represent Org time range (TS1--TS2)
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
-Derived from L<Org::Element::Base>.
+Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 
 =head2 ts1 => TIMESTAMP ELEMENT
 
+Starting timestamp.
+
 =head2 ts2 => TIMESTAMP ELEMENT
+
+Ending timestamp.
 
 =head1 METHODS
 

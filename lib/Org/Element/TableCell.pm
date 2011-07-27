@@ -1,16 +1,14 @@
 package Org::Element::TableCell;
-BEGIN {
-  $Org::Element::TableCell::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org table cell
 
 use 5.010;
 use locale;
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 1;
+# ABSTRACT: Represent Org table cell
 
 
 =pod
@@ -21,13 +19,11 @@ Org::Element::TableCell - Represent Org table cell
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
-Derived from L<Org::Element::Base>.
-
-=head1 DESCRIPTION
+Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 

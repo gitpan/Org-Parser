@@ -1,8 +1,4 @@
 package Org::Parser;
-BEGIN {
-  $Org::Parser::VERSION = '0.16';
-}
-# ABSTRACT: Parse Org documents
 
 use 5.010;
 use Moo;
@@ -10,6 +6,8 @@ use Moo;
 use File::Slurp;
 use Org::Document;
 use Scalar::Util qw(blessed);
+
+our $VERSION = '0.17'; # VERSION
 
 sub parse {
     my ($self, $arg) = @_;
@@ -42,6 +40,7 @@ sub parse_file {
 }
 
 1;
+# ABSTRACT: Parse Org documents
 
 
 =pod
@@ -52,7 +51,7 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 SYNOPSIS
 

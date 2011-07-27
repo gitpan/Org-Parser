@@ -8,7 +8,7 @@ README
 dist.ini
 lib/Org/Document.pm
 lib/Org/Dump.pm
-lib/Org/Element/Base.pm
+lib/Org/Element.pm
 lib/Org/Element/Block.pm
 lib/Org/Element/Comment.pm
 lib/Org/Element/Drawer.pm

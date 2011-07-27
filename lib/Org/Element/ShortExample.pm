@@ -1,21 +1,14 @@
 package Org::Element::ShortExample;
-BEGIN {
-  $Org::Element::ShortExample::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org in-buffer settings
 
 use 5.010;
 use locale;
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 has example => (is => 'rw');
-
-
 has indent => (is => 'rw');
-
-
 
 sub as_string {
     my ($self) = @_;
@@ -28,6 +21,7 @@ sub as_string {
 }
 
 1;
+# ABSTRACT: Represent Org in-buffer settings
 
 
 =pod
@@ -38,7 +32,7 @@ Org::Element::ShortExample - Represent Org in-buffer settings
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
@@ -59,7 +53,7 @@ which is functionally equivalent to:
      another example.
    #+END_EXAMPLE
 
-Derived from L<Org::Element::Base>.
+Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 

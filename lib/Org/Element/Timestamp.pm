@@ -1,33 +1,20 @@
 package Org::Element::Timestamp;
-BEGIN {
-  $Org::Element::Timestamp::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org timestamp
 
 use 5.010;
 use locale;
 use utf8;
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 has datetime => (is => 'rw');
-
-
 has has_time => (is => 'rw');
-
-
 has event_duration => (is => 'rw');
-
-
 has recurrence => (is => 'rw');
 has _repeater => (is => 'rw'); # stores the raw repeater spec
 has _warning_period => (is => 'rw'); # stores the raw warning period spec
-
-
 has is_active => (is => 'rw');
-
-
 
 our @dow = (undef, qw(Mon Tue Wed Thu Fri Sat Sun));
 
@@ -77,6 +64,8 @@ sub _parse_timestamp {
     $opts->{allow_event_duration} //= 1;
     $opts->{allow_repeater} //= 1;
 
+    my $num_re = qr/\d+(?:\.\d+)?/;
+
     my $dow_re = qr/\w{1,3} |     # common, chinese 四, english thu
                     \w{3}\.       # french, e.g. mer.
                    /x;
@@ -94,13 +83,13 @@ sub _parse_timestamp {
                  )?
                  (?:\s(?<repeater>
                          (?<repeater_prefix> \+\+|\.\+|\+)
-                         (?<repeater_interval> \d+)
+                         (?<repeater_interval> $num_re)
                          (?<repeater_unit> [dwmy])
                      )
                  )?
                  (?:\s(?<warning_period>
                          -
-                         (?<warning_period_interval> \d+)
+                         (?<warning_period_interval> $num_re)
                          (?<warning_period_unit> [dwmy])
                      )
                  )?
@@ -178,6 +167,7 @@ sub _parse_timestamp {
 }
 
 1;
+# ABSTRACT: Represent Org timestamp
 
 
 =pod
@@ -188,11 +178,11 @@ Org::Element::Timestamp - Represent Org timestamp
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
-Derived from L<Org::Element::Base>.
+Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 

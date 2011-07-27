@@ -1,14 +1,11 @@
 package Org::Element::TableVLine;
-BEGIN {
-  $Org::Element::TableVLine::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org table vertical line
 
 use 5.010;
 use locale;
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 sub as_string {
     my ($self) = @_;
@@ -27,11 +24,11 @@ Org::Element::TableVLine - Represent Org table vertical line
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
-Derived from L<Org::Element::Base>.
+Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 
@@ -54,4 +51,5 @@ the same terms as the Perl 5 programming language system itself.
 
 
 __END__
+# ABSTRACT: Represent Org table vertical line
 

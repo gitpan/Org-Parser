@@ -1,31 +1,20 @@
 package Org::Element::Setting;
-BEGIN {
-  $Org::Element::Setting::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org in-buffer settings
 
 use 5.010;
 use locale;
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 has name => (is => 'rw');
-
-
 has args => (is => 'rw');
-
-
 has indent => (is => 'rw');
-
-
-
 
 sub indentable_settings {
     state $data = [qw/TBLFM/];
     $data;
 }
-
 
 sub BUILD {
     require Org::Document;
@@ -127,6 +116,7 @@ sub as_string {
 }
 
 1;
+# ABSTRACT: Represent Org in-buffer settings
 
 
 =pod
@@ -137,11 +127,11 @@ Org::Element::Setting - Represent Org in-buffer settings
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
-Derived from L<Org::Element::Base>.
+Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 
@@ -159,12 +149,12 @@ Indentation (whitespaces before C<#+>), or empty string if none.
 
 =head1 METHODS
 
+=for Pod::Coverage as_string BUILD
+
 =head2 Org::Element::Setting->indentable_settings -> arrayref
 
 Return the list of setting names that can be indented. In Org, some settings can
 be indented and some can't. Setting names are all in uppercase.
-
-=for Pod::Coverage as_string BUILD
 
 =head1 AUTHOR
 

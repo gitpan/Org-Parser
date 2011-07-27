@@ -1,8 +1,4 @@
-package Org::Element::Base;
-BEGIN {
-  $Org::Element::Base::VERSION = '0.16';
-}
-# ABSTRACT: Base class for element of Org document
+package Org::Element;
 
 use 5.010;
 use locale;
@@ -10,13 +6,10 @@ use Log::Any '$log';
 use Moo;
 use Scalar::Util qw(refaddr);
 
+our $VERSION = '0.17'; # VERSION
 
 has document => (is => 'rw');
-
-
 has parent => (is => 'rw');
-
-
 has children => (is => 'rw');
 
 # store the raw string (to preserve original formatting), not all elements use
@@ -24,14 +17,11 @@ has children => (is => 'rw');
 has _str => (is => 'rw');
 has _str_include_children => (is => 'rw');
 
-
-
 sub children_as_string {
     my ($self) = @_;
     return "" unless $self->children;
     join "", map {$_->as_string} @{$self->children};
 }
-
 
 sub as_string {
     my ($self) = @_;
@@ -44,7 +34,6 @@ sub as_string {
     }
 }
 
-
 sub seniority {
     my ($self) = @_;
     my $c;
@@ -56,7 +45,6 @@ sub seniority {
     return undef;
 }
 
-
 sub prev_sibling {
     my ($self) = @_;
 
@@ -65,7 +53,6 @@ sub prev_sibling {
     my $c = $self->parent->children;
     $c->[$sen-1];
 }
-
 
 sub next_sibling {
     my ($self) = @_;
@@ -76,7 +63,6 @@ sub next_sibling {
     return undef unless $sen < @$c-1;
     $c->[$sen+1];
 }
-
 
 sub get_property {
     my ($self, $name, $search_parent) = @_;
@@ -102,7 +88,6 @@ sub get_property {
     $self->document->properties->{$name};
 }
 
-
 sub walk {
     my ($self, $code) = @_;
     $code->($self);
@@ -110,7 +95,6 @@ sub walk {
         $_->walk($code) for @{$self->children};
     }
 }
-
 
 sub find {
     my ($self, $criteria) = @_;
@@ -130,7 +114,6 @@ sub find {
     @res;
 }
 
-
 sub walk_parents {
     my ($self, $code) = @_;
     my $parent = $self->parent;
@@ -140,7 +123,6 @@ sub walk_parents {
     }
     return;
 }
-
 
 sub headline {
     my ($self) = @_;
@@ -156,7 +138,6 @@ sub headline {
         });
     $h;
 }
-
 
 sub field_name {
     my ($self) = @_;
@@ -182,18 +163,35 @@ sub field_name {
     return;
 }
 
+sub remove {
+    my ($self) = @_;
+    my $parent = $self->parent;
+    return unless $parent;
+    splice @{$parent->children}, $self->seniority, 1;
+}
+
 1;
+# ABSTRACT: Base class for Org document elements
+
 
 __END__
 =pod
 
 =head1 NAME
 
-Org::Element::Base - Base class for element of Org document
+Org::Element - Base class for Org document elements
 
 =head1 VERSION
 
-version 0.16
+version 0.17
+
+=head1 SYNOPSIS
+
+ # Don't use directly, use the other Org::Element::* classes.
+
+=head1 DESCRIPTION
+
+This is the base class for all the other Org element classes.
 
 =head1 ATTRIBUTES
 
@@ -256,11 +254,11 @@ Run CODEREF for parent, and its parent, and so on until the root element (the
 document), or until CODEREF returns a false value. CODEREF will be supplied
 ($el, $parent). Will return the last parent walked.
 
-=head2 $el->headline()
+=head2 $el->headline() => ELEMENT
 
 Get current headline.
 
-=head2 $el->field_name()
+=head2 $el->field_name() => STR
 
 Try to extract "field name", being defined as either some text on the left side:
 
@@ -269,6 +267,10 @@ Try to extract "field name", being defined as either some text on the left side:
 or a description term in a description list:
 
  - wedding anniversary :: <2011-06-10 >
+
+=head2 $el->remove()
+
+Remove element from the tree. Basically just remove the element from its parent.
 
 =head1 AUTHOR
 

@@ -1,8 +1,4 @@
 package Org::Dump;
-BEGIN {
-  $Org::Dump::VERSION = '0.16';
-}
-#ABSTRACT: Show Org document/element object in a human-friendly format
 
 use 5.010;
 use strict;
@@ -11,6 +7,7 @@ use Log::Any qw($log);
 
 use String::Escape qw(elide printable);
 
+our $VERSION = '0.17'; # VERSION
 
 sub dump_element {
     my ($el, $indent_level) = @_;
@@ -98,6 +95,9 @@ sub _format_properties {
 }
 
 1;
+#ABSTRACT: Show Org document/element object in a human-friendly format
+
+
 
 __END__
 =pod
@@ -108,7 +108,7 @@ Org::Dump - Show Org document/element object in a human-friendly format
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 FUNCTIONS
 

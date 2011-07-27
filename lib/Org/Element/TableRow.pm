@@ -1,14 +1,11 @@
 package Org::Element::TableRow;
-BEGIN {
-  $Org::Element::TableRow::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org table row
 
 use 5.010;
 use locale;
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 sub as_string {
     my ($self) = @_;
@@ -19,7 +16,6 @@ sub as_string {
          join("|", map {$_->as_string} @{$self->children}),
          "\n");
 }
-
 
 sub cells {
     my ($self) = @_;
@@ -33,6 +29,7 @@ sub cells {
 }
 
 1;
+# ABSTRACT: Represent Org table row
 
 
 =pod
@@ -43,15 +40,12 @@ Org::Element::TableRow - Represent Org table row
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
-Derived from L<Org::Element::Base>.
-
-=head1 DESCRIPTION
-
-Must have L<Org::Element::TableCell> instances as its children.
+Derived from L<Org::Element>. Must have L<Org::Element::TableCell>
+instances as its children.
 
 =head1 ATTRIBUTES
 

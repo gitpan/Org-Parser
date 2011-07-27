@@ -1,24 +1,15 @@
 package Org::Element::ListItem;
-BEGIN {
-  $Org::Element::ListItem::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org list item
 
 use 5.010;
 use locale;
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 has bullet => (is => 'rw');
-
-
 has check_state => (is => 'rw');
-
-
 has desc_term => (is => 'rw');
-
-
 
 sub header_as_string {
     my ($self) = @_;
@@ -44,13 +35,13 @@ Org::Element::ListItem - Represent Org list item
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
 Must have L<Org::Element::List> as parent.
 
-Derived from L<Org::Element::Base>.
+Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 
@@ -83,4 +74,5 @@ the same terms as the Perl 5 programming language system itself.
 
 
 __END__
+# ABSTRACT: Represent Org list item
 

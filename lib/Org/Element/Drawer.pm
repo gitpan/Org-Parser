@@ -1,21 +1,14 @@
 package Org::Element::Drawer;
-BEGIN {
-  $Org::Element::Drawer::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org drawer
 
 use 5.010;
 use locale;
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 has name => (is => 'rw');
-
-
 has properties => (is => 'rw');
-
-
 
 sub BUILD {
     my ($self, $args) = @_;
@@ -47,6 +40,7 @@ sub as_string {
 }
 
 1;
+# ABSTRACT: Represent Org drawer
 
 
 =pod
@@ -57,11 +51,11 @@ Org::Element::Drawer - Represent Org drawer
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
-Derived from L<Org::Element::Base>.
+Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 

@@ -1,18 +1,13 @@
 package Org::Element::Target;
-BEGIN {
-  $Org::Element::Target::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org target
 
 use 5.010;
 use locale;
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 has target => (is => 'rw');
-
-
 
 sub as_string {
     my ($self) = @_;
@@ -21,6 +16,7 @@ sub as_string {
 }
 
 1;
+# ABSTRACT: Represent Org target
 
 
 =pod
@@ -31,11 +27,11 @@ Org::Element::Target - Represent Org target
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
-Derived from L<Org::Element::Base>.
+Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 

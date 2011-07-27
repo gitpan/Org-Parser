@@ -1,19 +1,14 @@
 package Org::Element::Table;
-BEGIN {
-  $Org::Element::Table::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org table
 
 use 5.010;
 use locale;
 use Log::Any '$log';
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 has _dummy => (is => 'rw'); # workaround Moo bug
-
-
 
 sub BUILD {
     require Org::Element::TableRow;
@@ -57,7 +52,6 @@ sub BUILD {
     }
 }
 
-
 sub rows {
     my ($self) = @_;
     return [] unless $self->children;
@@ -68,7 +62,6 @@ sub rows {
     $rows;
 }
 
-
 sub row_count {
     my ($self) = @_;
     return 0 unless $self->children;
@@ -78,7 +71,6 @@ sub row_count {
     }
     $n;
 }
-
 
 sub column_count {
     my ($self) = @_;
@@ -102,6 +94,7 @@ sub column_count {
 }
 
 1;
+# ABSTRACT: Represent Org table
 
 
 =pod
@@ -112,16 +105,12 @@ Org::Element::Table - Represent Org table
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
-Derived from L<Org::Element::Base>.
-
-=head1 DESCRIPTION
-
-Must have L<Org::Element::TableRow> or L<Org::Element::TableVLine> instances as
-its children.
+Derived from L<Org::Element>. Must have L<Org::Element::TableRow> or
+L<Org::Element::TableVLine> instances as its children.
 
 =head1 ATTRIBUTES
 

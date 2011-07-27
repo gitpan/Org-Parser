@@ -1,25 +1,16 @@
 package Org::Element::Footnote;
-BEGIN {
-  $Org::Element::Footnote::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org footnote reference and/or definition
 
 use 5.010;
 use locale;
 use Log::Any '$log';
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 has name => (is => 'rw');
-
-
 has is_ref => (is => 'rw');
-
-
 has def => (is => 'rw');
-
-
 
 sub BUILD {
     my ($self, $args) = @_;
@@ -36,8 +27,10 @@ sub as_string {
 }
 
 1;
+# ABSTRACT: Represent Org footnote reference and/or definition
 
 
+__END__
 =pod
 
 =head1 NAME
@@ -46,11 +39,11 @@ Org::Element::Footnote - Represent Org footnote reference and/or definition
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
-Derived from L<Org::Element::Base>.
+Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 
@@ -83,7 +76,4 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
 

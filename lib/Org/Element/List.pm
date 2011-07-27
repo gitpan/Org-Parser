@@ -1,25 +1,18 @@
 package Org::Element::List;
-BEGIN {
-  $Org::Element::List::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org list
 
 use 5.010;
 use locale;
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 has indent => (is => 'rw');
-
-
 has type => (is => 'rw');
-
-
 has bullet_style => (is => 'rw');
 
-
-
+1;
+# ABSTRACT: Represent Org list
 
 
 =pod
@@ -30,13 +23,13 @@ Org::Element::List - Represent Org list
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
 Must have L<Org::Element::ListItem> (or another ::List) as children.
 
-Derived from L<Org::Element::Base>.
+Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 

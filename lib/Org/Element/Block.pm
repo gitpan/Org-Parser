@@ -1,35 +1,22 @@
 package Org::Element::Block;
-BEGIN {
-  $Org::Element::Block::VERSION = '0.16';
-}
-# ABSTRACT: Represent Org block
 
 use 5.010;
 use locale;
 use Moo;
-extends 'Org::Element::Base';
+extends 'Org::Element';
 
+our $VERSION = '0.17'; # VERSION
 
 has name => (is => 'rw');
-
-
 has args => (is => 'rw');
-
-
 has raw_content => (is => 'rw');
-
-
 has begin_indent => (is => 'rw');
-
-
 has end_indent => (is => 'rw');
 
 my @known_blocks = qw(
                          ASCII CENTER COMMENT EXAMPLE HTML
                          LATEX QUOTE SRC VERSE
                  );
-
-
 
 sub BUILD {
     my ($self, $args) = @_;
@@ -52,6 +39,7 @@ sub element_as_string {
 }
 
 1;
+# ABSTRACT: Represent Org block
 
 
 =pod
@@ -62,11 +50,11 @@ Org::Element::Block - Represent Org block
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 DESCRIPTION
 
-Derived from L<Org::Element::Base>.
+Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 
