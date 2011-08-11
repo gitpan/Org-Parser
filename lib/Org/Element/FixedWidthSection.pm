@@ -1,71 +1,68 @@
-package Org::Element::ShortExample;
+package Org::Element::FixedWidthSection;
 
 use 5.010;
 use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.17'; # VERSION
+our $VERSION = '0.18'; # VERSION
 
-has example => (is => 'rw');
-has indent => (is => 'rw');
-
-sub as_string {
+sub text {
     my ($self) = @_;
-    join("",
-         $self->indent // "",
-         ": ",
-         $self->example,
-         "\n"
-     );
+    my $res = $self->_str;
+    $res =~ s/^[ \t]*: ?//mg;
+    $res;
 }
 
 1;
-# ABSTRACT: Represent Org in-buffer settings
+# ABSTRACT: Represent Org fixed-width section
 
 
 =pod
 
 =head1 NAME
 
-Org::Element::ShortExample - Represent Org in-buffer settings
+Org::Element::FixedWidthSection - Represent Org fixed-width section
 
 =head1 VERSION
 
-version 0.17
+version 0.18
+
+=head1 SYNOPSIS
+
+ use Org::Element::FixedWidthSection;
+ my $el = Org::Element::FixedWidthSection->new(_str => ": line1\n: line2\n");
 
 =head1 DESCRIPTION
 
-Short example is one-line literal example which is preceded by colon + space.
-Example:
+Fixed width section is a block of text where each line is prefixed by colon +
+space (or just a colon + space or a colon). Example:
 
  Here is an example:
    : some example from a text file.
-   :   another example.
+   :   second line.
+   :
+   : fourth line, after the empty above.
 
 which is functionally equivalent to:
 
  Here is an example:
    #+BEGIN_EXAMPLE
    some example from a text file.
-   #+END_EXAMPLE
-   #+BEGIN_EXAMPLE
      another example.
+
+   fourth line, after the empty above.
    #+END_EXAMPLE
 
 Derived from L<Org::Element>.
 
 =head1 ATTRIBUTES
 
-=head2 example => STR
-
-Example content.
-
-=head2 indent => STR
-
-Indentation (whitespaces before C<#+>), or empty string if none.
-
 =head1 METHODS
+
+=head2 $el->text => STR
+
+The text (without colon prefix).
 
 =for Pod::Coverage as_string BUILD
 

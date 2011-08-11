@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.17'; # VERSION
+our $VERSION = '0.18'; # VERSION
 
 has link => (is => 'rw');
 has description => (is => 'rw');
@@ -34,7 +34,7 @@ Org::Element::Link - Represent Org hyperlink
 
 =head1 VERSION
 
-version 0.17
+version 0.18
 
 =head1 DESCRIPTION
 
