@@ -2,7 +2,7 @@ NAME
     Org::Parser - Parse Org documents
 
 VERSION
-    version 0.19
+    version 0.20
 
 SYNOPSIS
      use 5.010;
@@ -85,7 +85,7 @@ METHODS
   new()
     Create a new parser instance.
 
-  $orgp->parse($str | $arrayref | $coderef | $filehandle) => $doc
+  $orgp->parse($str | $arrayref | $coderef | $filehandle, $opts) => $doc
     Parse document (which can be contained in a scalar $str, an array of
     lines $arrayref, a subroutine which will be called for chunks until it
     returns undef, or a filehandle).
@@ -97,7 +97,10 @@ METHODS
 
     Will die if there are syntax errors in documents.
 
-  $orgp->parse_file($filename) => $doc
+    $opts is a hashref and can contain these keys: "time_zone" (will be
+    passed to Org::Document's constructor).
+
+  $orgp->parse_file($filename, $opts) => $doc
     Just like parse(), but will load document from file instead.
 
 FAQ

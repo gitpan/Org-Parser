@@ -8,7 +8,7 @@ extends 'Org::Element';
 
 use Time::HiRes qw(gettimeofday tv_interval);
 
-our $VERSION = '0.19'; # VERSION
+our $VERSION = '0.20'; # VERSION
 
 has tags                    => (is => 'rw');
 has todo_states             => (is => 'rw');
@@ -17,6 +17,8 @@ has priorities              => (is => 'rw');
 has drawer_names            => (is => 'rw');
 has properties              => (is => 'rw');
 has radio_targets           => (is => 'rw');
+
+has time_zone               => (is => 'rw');
 
 our $tags_re       = qr/:(?:[A-Za-z0-9_@#%]+:)+/;
 my  $ls_re         = qr/(?:(?<=[\015\012])|\A)/;
@@ -713,7 +715,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.19
+version 0.20
 
 =head1 SYNOPSIS
 
@@ -760,6 +762,10 @@ File-wide properties.
 =head2 radio_targets => ARRAY
 
 List of radio target text.
+
+=head2 time_zone => ARRAY
+
+If set, will be passed to DateTime->new() (e.g. by L<Org::Element::Timestamp>).
 
 =head1 METHODS
 

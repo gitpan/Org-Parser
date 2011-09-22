@@ -6,7 +6,7 @@ use utf8;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.19'; # VERSION
+our $VERSION = '0.20'; # VERSION
 
 has datetime => (is => 'rw');
 has has_time => (is => 'rw');
@@ -125,6 +125,10 @@ sub _parse_timestamp {
     } else {
         $self->has_time(0);
     }
+    if ($self->document->time_zone) {
+        $dt_args{time_zone} = $self->document->time_zone;
+    }
+    use Data::Dump; dd \%dt_args;
     my $dt = DateTime->new(%dt_args);
 
     if ($+{repeater} && !$self->recurrence) {
@@ -178,7 +182,7 @@ Org::Element::Timestamp - Represent Org timestamp
 
 =head1 VERSION
 
-version 0.19
+version 0.20
 
 =head1 DESCRIPTION
 
