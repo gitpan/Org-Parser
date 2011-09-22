@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.18'; # VERSION
+our $VERSION = '0.19'; # VERSION
 
 sub as_string {
     my ($self) = @_;
@@ -15,6 +15,12 @@ sub as_string {
          "|",
          join("|", map {$_->as_string} @{$self->children}),
          "\n");
+}
+
+sub as_array {
+    my ($self) = @_;
+
+    [map {$_->as_string} @{$self->children}];
 }
 
 sub cells {
@@ -40,7 +46,7 @@ Org::Element::TableRow - Represent Org table row
 
 =head1 VERSION
 
-version 0.18
+version 0.19
 
 =head1 DESCRIPTION
 
@@ -56,6 +62,11 @@ instances as its children.
 =head2 $table->cells() => ELEMENTS
 
 Return the cells of the row.
+
+=head2 $table->as_array() => ARRAYREF
+
+Return an arrayref containing the cells of the row, each cells already
+stringified with as_string().
 
 =head1 AUTHOR
 

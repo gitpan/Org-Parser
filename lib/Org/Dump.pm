@@ -7,7 +7,7 @@ use Log::Any qw($log);
 
 use String::Escape qw(elide printable);
 
-our $VERSION = '0.18'; # VERSION
+our $VERSION = '0.19'; # VERSION
 
 sub dump_element {
     my ($el, $indent_level) = @_;
@@ -108,7 +108,7 @@ Org::Dump - Show Org document/element object in a human-friendly format
 
 =head1 VERSION
 
-version 0.18
+version 0.19
 
 =head1 FUNCTIONS
 

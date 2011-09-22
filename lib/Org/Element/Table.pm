@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.18'; # VERSION
+our $VERSION = '0.19'; # VERSION
 
 has _dummy => (is => 'rw'); # workaround Moo bug
 
@@ -93,6 +93,18 @@ sub column_count {
     $n;
 }
 
+sub as_aoa {
+    my ($self) = @_;
+    return [] unless $self->children;
+
+    my @rows;
+    for my $row (@{$self->children}) {
+        next unless $row->isa('Org::Element::TableRow');
+        push @rows, $row->as_array;
+    }
+    \@rows;
+}
+
 1;
 # ABSTRACT: Represent Org table
 
@@ -105,7 +117,7 @@ Org::Element::Table - Represent Org table
 
 =head1 VERSION
 
-version 0.18
+version 0.19
 
 =head1 DESCRIPTION
 
@@ -121,6 +133,11 @@ L<Org::Element::TableVLine> instances as its children.
 =head2 $table->rows() => ELEMENTS
 
 Return the rows of the table.
+
+=head2 $table->as_aoa() => ARRAYREF
+
+Return the rows of the table, each row already an array of cells produced using
+as_array() method. Vertical lines will be skipped/ignored.
 
 =head2 $table->row_count() => INT
 

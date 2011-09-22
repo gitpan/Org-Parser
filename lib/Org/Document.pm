@@ -8,7 +8,7 @@ extends 'Org::Element';
 
 use Time::HiRes qw(gettimeofday tv_interval);
 
-our $VERSION = '0.18'; # VERSION
+our $VERSION = '0.19'; # VERSION
 
 has tags                    => (is => 'rw');
 has todo_states             => (is => 'rw');
@@ -713,7 +713,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.18
+version 0.19
 
 =head1 SYNOPSIS
 

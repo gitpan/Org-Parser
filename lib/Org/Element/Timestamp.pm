@@ -6,7 +6,7 @@ use utf8;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.18'; # VERSION
+our $VERSION = '0.19'; # VERSION
 
 has datetime => (is => 'rw');
 has has_time => (is => 'rw');
@@ -178,7 +178,7 @@ Org::Element::Timestamp - Represent Org timestamp
 
 =head1 VERSION
 
-version 0.18
+version 0.19
 
 =head1 DESCRIPTION
 
