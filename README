@@ -2,7 +2,7 @@ NAME
     Org::Parser - Parse Org documents
 
 VERSION
-    version 0.22
+    version 0.23
 
 SYNOPSIS
      use 5.010;

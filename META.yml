@@ -25,4 +25,4 @@ requires:
 resources:
   homepage: http://search.cpan.org/dist/Org-Parser/
   repository: http://github.com/sharyanto/perl-Org-Parser
-version: 0.22
+version: 0.23
