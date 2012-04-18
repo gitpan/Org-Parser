@@ -6,7 +6,7 @@ use utf8;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.21'; # VERSION
+our $VERSION = '0.22'; # VERSION
 
 has datetime => (is => 'rw');
 has has_time => (is => 'rw');
@@ -71,23 +71,23 @@ sub _parse_timestamp {
                    /x;
 
     $str =~ /^(?<open_bracket> \[|<)
-             (?<year> \d{4})-(?<mon> \d{2})-(?<day> \d{2}) \s
+             (?<year> \d{4})-(?<mon> \d{2})-(?<day> \d{2}) \s+
              (?:
-                 (?<dow> $dow_re)
-                 (?:\s
+                 (?<dow> $dow_re) \s*?
+                 (?:\s+
                      (?<hour> \d{2}):(?<min> \d{2})
                      (?:-
                          (?<event_duration>
                              (?<hour2> \d{2}):(?<min2> \d{2}))
                      )?
                  )?
-                 (?:\s(?<repeater>
+                 (?:\s+(?<repeater>
                          (?<repeater_prefix> \+\+|\.\+|\+)
                          (?<repeater_interval> $num_re)
                          (?<repeater_unit> [dwmy])
                      )
                  )?
-                 (?:\s(?<warning_period>
+                 (?:\s+(?<warning_period>
                          -
                          (?<warning_period_interval> $num_re)
                          (?<warning_period_unit> [dwmy])
@@ -182,7 +182,7 @@ Org::Element::Timestamp - Represent Org timestamp
 
 =head1 VERSION
 
-version 0.21
+version 0.22
 
 =head1 DESCRIPTION
 
@@ -216,7 +216,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Steven Haryanto.
+This software is copyright (c) 2012 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

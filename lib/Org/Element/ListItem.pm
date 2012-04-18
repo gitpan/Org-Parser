@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.21'; # VERSION
+our $VERSION = '0.22'; # VERSION
 
 has bullet => (is => 'rw');
 has check_state => (is => 'rw');
@@ -25,8 +25,11 @@ sub as_string {
     $self->header_as_string . $self->children_as_string;
 }
 
+1;
+#ABSTRACT: Represent Org list item
 
 
+__END__
 =pod
 
 =head1 NAME
@@ -35,7 +38,7 @@ Org::Element::ListItem - Represent Org list item
 
 =head1 VERSION
 
-version 0.21
+version 0.22
 
 =head1 DESCRIPTION
 
@@ -65,14 +68,10 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Steven Haryanto.
+This software is copyright (c) 2012 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-# ABSTRACT: Represent Org list item
 

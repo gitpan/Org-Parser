@@ -7,7 +7,7 @@ use File::Slurp;
 use Org::Document;
 use Scalar::Util qw(blessed);
 
-our $VERSION = '0.21'; # VERSION
+our $VERSION = '0.22'; # VERSION
 
 sub parse {
     my ($self, $arg, $opts) = @_;
@@ -53,7 +53,7 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-version 0.21
+version 0.22
 
 =head1 SYNOPSIS
 
@@ -170,11 +170,8 @@ notes and todo files, I have no complaints.
 
 =head2 It's too slow!
 
-Startup is a tad slow (but still under 0.5-1 s), due to having to load largish
-modules like DateTime.
-
 Parser is completely regex-based at the moment (I plan to use L<Marpa> someday).
-Performance is not great but I'm not annoyed enough at the moment to overhaul
+Performance is quite lousy but I'm not annoyed enough at the moment to overhaul
 it.
 
 =head1 SEE ALSO
@@ -187,7 +184,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Steven Haryanto.
+This software is copyright (c) 2012 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
