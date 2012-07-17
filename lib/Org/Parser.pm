@@ -7,7 +7,7 @@ use File::Slurp;
 use Org::Document;
 use Scalar::Util qw(blessed);
 
-our $VERSION = '0.23'; # VERSION
+our $VERSION = '0.24'; # VERSION
 
 sub parse {
     my ($self, $arg, $opts) = @_;
@@ -38,7 +38,7 @@ sub parse {
 
 sub parse_file {
     my ($self, $filename, $opts) = @_;
-    $self->parse(scalar read_file($filename), $opts);
+    $self->parse(scalar read_file($filename, binmode => ':utf8'), $opts);
 }
 
 1;
@@ -53,7 +53,7 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-version 0.23
+version 0.24
 
 =head1 SYNOPSIS
 

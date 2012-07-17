@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.23'; # VERSION
+our $VERSION = '0.24'; # VERSION
 
 has level => (is => 'rw');
 has title => (is => 'rw');
@@ -200,7 +200,7 @@ Org::Element::Headline - Represent Org headline
 
 =head1 VERSION
 
-version 0.23
+version 0.24
 
 =head1 DESCRIPTION
 
