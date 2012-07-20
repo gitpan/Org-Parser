@@ -39,6 +39,11 @@ t/block.t
 t/comment.t
 t/data/custom_todo_kw.org
 t/data/listitem.org
+t/data/unicode/fr.org
+t/data/unicode/hr.org
+t/data/unicode/latin1.org
+t/data/unicode/latin2.org
+t/data/unicode/zh.org
 t/data/various.org
 t/drawer.t
 t/fixed_width_section.t
@@ -57,5 +62,6 @@ t/testlib.pl
 t/text.t
 t/timerange.t
 t/timestamp.t
+t/unicode.t
 t/various.t
 todo.org

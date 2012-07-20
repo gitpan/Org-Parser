@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.24'; # VERSION
+our $VERSION = '0.25'; # VERSION
 
 has name => (is => 'rw');
 has properties => (is => 'rw');
@@ -51,7 +51,7 @@ Org::Element::Drawer - Represent Org drawer
 
 =head1 VERSION
 
-version 0.24
+version 0.25
 
 =head1 DESCRIPTION
 

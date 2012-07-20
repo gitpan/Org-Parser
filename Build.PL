@@ -8,6 +8,7 @@ use Module::Build 0.3601;
 my %module_build_args = (
   "build_requires" => {
     "Module::Build" => "0.3601",
+    "Test::Exception" => 0,
     "Test::More" => "0.96"
   },
   "configure_requires" => {
@@ -18,7 +19,7 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Org-Parser",
-  "dist_version" => "0.24",
+  "dist_version" => "0.25",
   "license" => "perl",
   "module_name" => "Org::Parser",
   "recommends" => {},

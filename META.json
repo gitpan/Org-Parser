@@ -37,6 +37,7 @@
       },
       "test" : {
          "requires" : {
+            "Test::Exception" : 0,
             "Test::More" : "0.96"
          }
       }
@@ -48,6 +49,6 @@
          "url" : "http://github.com/sharyanto/perl-Org-Parser"
       }
    },
-   "version" : "0.24"
+   "version" : "0.25"
 }
 

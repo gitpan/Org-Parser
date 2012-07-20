@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.24'; # VERSION
+our $VERSION = '0.25'; # VERSION
 
 1;
 # ABSTRACT: Represent Org table cell
@@ -19,7 +19,7 @@ Org::Element::TableCell - Represent Org table cell
 
 =head1 VERSION
 
-version 0.24
+version 0.25
 
 =head1 DESCRIPTION
 
