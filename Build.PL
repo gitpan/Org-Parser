@@ -19,7 +19,7 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Org-Parser",
-  "dist_version" => "0.25",
+  "dist_version" => "0.26",
   "license" => "perl",
   "module_name" => "Org::Parser",
   "recommends" => {},
@@ -29,6 +29,7 @@ my %module_build_args = (
     "DateTime::Event::Recurrence" => 0,
     "File::Slurp" => 0,
     "Log::Any" => 0,
+    "Module::List" => 0,
     "Moo" => 0,
     "String::Escape" => 0,
     "perl" => "5.010000"

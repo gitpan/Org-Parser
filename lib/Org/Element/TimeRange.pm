@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.25'; # VERSION
+our $VERSION = '0.26'; # VERSION
 
 has ts1 => (is => 'rw');
 has ts2 => (is => 'rw');
@@ -32,7 +32,7 @@ Org::Element::TimeRange - Represent Org time range (TS1--TS2)
 
 =head1 VERSION
 
-version 0.25
+version 0.26
 
 =head1 DESCRIPTION
 

@@ -7,7 +7,7 @@ use File::Slurp;
 use Org::Document;
 use Scalar::Util qw(blessed);
 
-our $VERSION = '0.25'; # VERSION
+our $VERSION = '0.26'; # VERSION
 
 sub parse {
     my ($self, $arg, $opts) = @_;
@@ -38,7 +38,34 @@ sub parse {
 
 sub parse_file {
     my ($self, $filename, $opts) = @_;
-    $self->parse(scalar read_file($filename, binmode => ':utf8'), $opts);
+    $opts //= {};
+
+    state $loaded;
+
+    my $content = scalar read_file($filename, binmode => ':utf8');
+
+    my $cf = $opts->{cache_file};
+    my $doc;
+    my $cache; # undef = no caching; 0 = not cached, should cache; 1 = cached
+    if ($cf) {
+        require Storable;
+        $cache = !!((-e $cf) && (-M $cf) <= (-M $filename));
+        if ($cache) {
+            $doc = Storable::retrieve($cf);
+            $doc->load_element_modules unless $loaded++;
+        }
+    }
+
+    $doc = $self->parse($content, $opts) unless $cache;
+    if (defined($cache) && !$cache) {
+        require Storable;
+        for ($doc->find('Timestamp')) {
+            $_->clear_parse_result;
+        }
+        Storable::store($doc, $cf);
+    }
+
+    $doc;
 }
 
 1;
@@ -53,7 +80,7 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-version 0.25
+version 0.26
 
 =head1 SYNOPSIS
 
@@ -141,7 +168,7 @@ implemented stuffs.
 
 Create a new parser instance.
 
-=head2 $orgp->parse($str | $arrayref | $coderef | $filehandle, $opts) => $doc
+=head2 $orgp->parse($str | $arrayref | $coderef | $filehandle, \%opts) => $doc
 
 Parse document (which can be contained in a scalar $str, an array of lines
 $arrayref, a subroutine which will be called for chunks until it returns undef,
@@ -154,12 +181,33 @@ parsing. See the 'handler' attribute for more details.
 
 Will die if there are syntax errors in documents.
 
-$opts is a hashref and can contain these keys: C<time_zone> (will be passed to
-Org::Document's constructor).
+Known options:
 
-=head2 $orgp->parse_file($filename, $opts) => $doc
+=over 4
+
+=item * time_zone => STR
+
+Will be passed to Org::Document's constructor.
+
+=back
+
+=head2 $orgp->parse_file($filename, \%opts) => $doc
 
 Just like parse(), but will load document from file instead.
+
+Known options (aside from those known by parse()):
+
+=over 4
+
+=item * cache_file => STR
+
+Path to cache file.
+
+Since Org::Parser can spend some time to parse largish Org files, this is an
+option to store the parse result (using L<Storable>). Caching is turned on if
+this option is set.
+
+=back
 
 =head1 FAQ
 

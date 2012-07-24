@@ -7,7 +7,7 @@ use Log::Any qw($log);
 
 use String::Escape qw(elide printable);
 
-our $VERSION = '0.25'; # VERSION
+our $VERSION = '0.26'; # VERSION
 
 sub _dump_ts {
     my ($self, $ts) = @_;
@@ -128,7 +128,7 @@ Org::Dump - Show Org document/element object in a human-friendly format
 
 =head1 VERSION
 
-version 0.25
+version 0.26
 
 =head1 FUNCTIONS
 

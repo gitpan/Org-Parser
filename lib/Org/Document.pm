@@ -8,7 +8,7 @@ extends 'Org::Element';
 
 use Time::HiRes qw(gettimeofday tv_interval);
 
-our $VERSION = '0.25'; # VERSION
+our $VERSION = '0.26'; # VERSION
 
 has tags                    => (is => 'rw');
 has todo_states             => (is => 'rw');
@@ -483,16 +483,16 @@ sub _add_text {
             );
             my $opts = {allow_event_duration=>0, allow_repeater=>0};
             $el->ts1(Org::Element::Timestamp->new(
-                document=>$self, parent=>$parent));
+                _str=>$m{trange_ts1}, document=>$self, parent=>$parent));
             $el->ts1->_parse_timestamp($m{trange_ts1}, $opts);
             $el->ts2(Org::Element::Timestamp->new(
-                document=>$self, parent=>$parent));
+                _str=>$m{trange_ts2}, document=>$self, parent=>$parent));
             $el->ts2->_parse_timestamp($m{trange_ts2}, $opts);
             $el->children([$el->ts1, $el->ts2]);
         } elsif ($m{tstamp} && $pass == 2) {
             require Org::Element::Timestamp;
             $el = Org::Element::Timestamp->new(
-                document => $self, parent => $parent,
+                _str => $m{tstamp}, document => $self, parent => $parent,
             );
             $el->_parse_timestamp($m{tstamp});
         } elsif ($m{act_trange} && $pass == 2) {
@@ -503,16 +503,16 @@ sub _add_text {
             );
             my $opts = {allow_event_duration=>0, allow_repeater=>0};
             $el->ts1(Org::Element::Timestamp->new(
-                document=>$self, parent=>$parent));
+                _str=>$m{act_trange_ts1}, document=>$self, parent=>$parent));
             $el->ts1->_parse_timestamp($m{act_trange_ts1}, $opts);
             $el->ts2(Org::Element::Timestamp->new(
-                document=>$self, parent=>$parent));
+                _str=>$m{act_trange_ts2}, document=>$self, parent=>$parent));
             $el->ts2->_parse_timestamp($m{act_trange_ts2}, $opts);
             $el->children([$el->ts1, $el->ts2]);
         } elsif ($m{act_tstamp} && $pass == 2) {
             require Org::Element::Timestamp;
             $el = Org::Element::Timestamp->new(
-                document => $self, parent => $parent,
+                 _str => $m{act_tstamp}, document => $self, parent => $parent,
             );
             $el->_parse_timestamp($m{act_tstamp});
         } elsif ($m{markup_start} && $pass == 2) {
@@ -711,6 +711,16 @@ sub __split_tags {
     [$_[0] =~ /:([^:]+)/g];
 }
 
+sub load_element_modules {
+    require Module::List;
+    require Module::Load;
+
+    my $mm = Module::List::list_modules("Org::Element::", {list_modules=>1});
+    for (keys %$mm) {
+        Module::Load::load($_);
+    }
+}
+
 1;
 # ABSTRACT: Represent an Org document
 
@@ -723,7 +733,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.25
+version 0.26
 
 =head1 SYNOPSIS
 
@@ -782,6 +792,12 @@ If set, will be passed to DateTime->new() (e.g. by L<Org::Element::Timestamp>).
 =head2 new(from_string => ...)
 
 Create object from string.
+
+=head2 load_element_modules()
+
+Load all Org::Element::* modules. This is useful when wanting to work with
+element objects retrieved from serialization, where the element modules have not
+been loaded.
 
 =head1 AUTHOR
 

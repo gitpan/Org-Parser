@@ -2,7 +2,7 @@ NAME
     Org::Parser - Parse Org documents
 
 VERSION
-    version 0.25
+    version 0.26
 
 SYNOPSIS
      use 5.010;
@@ -85,7 +85,7 @@ METHODS
   new()
     Create a new parser instance.
 
-  $orgp->parse($str | $arrayref | $coderef | $filehandle, $opts) => $doc
+  $orgp->parse($str | $arrayref | $coderef | $filehandle, \%opts) => $doc
     Parse document (which can be contained in a scalar $str, an array of
     lines $arrayref, a subroutine which will be called for chunks until it
     returns undef, or a filehandle).
@@ -97,11 +97,24 @@ METHODS
 
     Will die if there are syntax errors in documents.
 
-    $opts is a hashref and can contain these keys: "time_zone" (will be
-    passed to Org::Document's constructor).
+    Known options:
 
-  $orgp->parse_file($filename, $opts) => $doc
+    *   time_zone => STR
+
+        Will be passed to Org::Document's constructor.
+
+  $orgp->parse_file($filename, \%opts) => $doc
     Just like parse(), but will load document from file instead.
+
+    Known options (aside from those known by parse()):
+
+    *   cache_file => STR
+
+        Path to cache file.
+
+        Since Org::Parser can spend some time to parse largish Org files,
+        this is an option to store the parse result (using Storable).
+        Caching is turned on if this option is set.
 
 FAQ
   Why? Just as only perl can parse Perl, only org-mode can parse Org anyway!

@@ -45,6 +45,7 @@ t/data/unicode/latin1.org
 t/data/unicode/latin2.org
 t/data/unicode/zh.org
 t/data/various.org
+t/document.t
 t/drawer.t
 t/fixed_width_section.t
 t/footnote.t

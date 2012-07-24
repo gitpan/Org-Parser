@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 use Scalar::Util qw(refaddr);
 
-our $VERSION = '0.25'; # VERSION
+our $VERSION = '0.26'; # VERSION
 
 has document => (is => 'rw');
 has parent => (is => 'rw');
@@ -88,12 +88,15 @@ sub get_property {
     $self->document->properties->{$name};
 }
 
+sub extra_walkables { return () }
+
 sub walk {
     my ($self, $code) = @_;
     $code->($self);
     if ($self->children) {
         $_->walk($code) for @{$self->children};
     }
+    $_->walk($code) for $self->extra_walkables;
 }
 
 sub find {
@@ -183,7 +186,7 @@ Org::Element - Base class for Org document elements
 
 =head1 VERSION
 
-version 0.25
+version 0.26
 
 =head1 SYNOPSIS
 
@@ -237,10 +240,16 @@ foo_ALL). Return undef if property cannot be found in all drawers.
 Regardless of $search_parent setting, file-wide properties will be consulted if
 property is not found in nearest properties drawer.
 
+=head2 $el->extra_walkables => LIST
+
+Return extra walkable elements. The default is to return an empty list, but some
+elements can have this, for L<Org::Element::Headline>'s title is also a walkable
+element.
+
 =head2 $el->walk(CODEREF)
 
-Call CODEREF for node and all descendent nodes, depth-first. Code will be given
-the element object as argument.
+Call CODEREF for node and all descendent nodes (and extra walkables),
+depth-first. Code will be given the element object as argument.
 
 =head2 $el->find(CRITERIA) => ELEMENTS
 
