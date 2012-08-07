@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.26'; # VERSION
+our $VERSION = '0.27'; # VERSION
 
 has name => (is => 'rw');
 has is_ref => (is => 'rw');
@@ -39,7 +39,7 @@ Org::Element::Footnote - Represent Org footnote reference and/or definition
 
 =head1 VERSION
 
-version 0.26
+version 0.27
 
 =head1 DESCRIPTION
 

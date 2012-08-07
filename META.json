@@ -4,7 +4,7 @@
       "Steven Haryanto <stevenharyanto@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300002, CPAN::Meta::Converter version 2.112150",
+   "generated_by" : "Dist::Zilla version 4.300006, CPAN::Meta::Converter version 2.113640",
    "license" : [
       "perl_5"
    ],
@@ -33,7 +33,7 @@
             "Module::List" : 0,
             "Moo" : 0,
             "String::Escape" : 0,
-            "perl" : "5.010000"
+            "perl" : "5.010001"
          }
       },
       "test" : {
@@ -50,6 +50,6 @@
          "url" : "http://github.com/sharyanto/perl-Org-Parser"
       }
    },
-   "version" : "0.26"
+   "version" : "0.27"
 }
 

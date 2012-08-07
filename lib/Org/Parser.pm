@@ -7,7 +7,7 @@ use File::Slurp;
 use Org::Document;
 use Scalar::Util qw(blessed);
 
-our $VERSION = '0.26'; # VERSION
+our $VERSION = '0.27'; # VERSION
 
 sub parse {
     my ($self, $arg, $opts) = @_;
@@ -80,7 +80,7 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-version 0.26
+version 0.27
 
 =head1 SYNOPSIS
 

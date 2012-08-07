@@ -4,9 +4,9 @@ use 5.010;
 use locale;
 use Log::Any '$log';
 use Moo;
-use Scalar::Util qw(refaddr);
+use Scalar::Util qw(refaddr reftype);
 
-our $VERSION = '0.26'; # VERSION
+our $VERSION = '0.27'; # VERSION
 
 has document => (is => 'rw');
 has parent => (is => 'rw');
@@ -186,7 +186,7 @@ Org::Element - Base class for Org document elements
 
 =head1 VERSION
 
-version 0.26
+version 0.27
 
 =head1 SYNOPSIS
 
