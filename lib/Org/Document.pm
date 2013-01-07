@@ -8,7 +8,7 @@ extends 'Org::Element';
 
 use Time::HiRes qw(gettimeofday tv_interval);
 
-our $VERSION = '0.27'; # VERSION
+our $VERSION = '0.28'; # VERSION
 
 has tags                    => (is => 'rw');
 has todo_states             => (is => 'rw');
@@ -121,7 +121,7 @@ sub __parse_args {
     return [] unless defined($args) && length($args);
     #$log->tracef("args = %s", $args);
     my @args;
-    while ($args =~ /$arg_re (?:\s+|\z)/xg) {
+    while ($args =~ /$arg_re (?:\s+|\z)/xgo) {
         if (defined $+{squote}) {
             push @args, $+{squote};
         } elsif (defined $+{dquote}) {
@@ -341,21 +341,21 @@ sub _parse {
             $el->tags(__split_tags($m{h_tags})) if ($m{h_tags});
             my $title = $m{h_title};
 
-            # recognize todo keyword. XXX cache re
+            # recognize todo keyword
             my $todo_kw_re = "(?:".
                 join("|", map {quotemeta}
                          @{$self->todo_states}, @{$self->done_states}) . ")";
-            if ($title =~ s/^($todo_kw_re)(\s+|\W)/$2/) {
+            if ($title =~ s/^($todo_kw_re)(\s+|\W)/$2/o) {
                 my $state = $1;
                 $title =~ s/^\s+//;
                 $el->is_todo(1);
                 $el->todo_state($state);
                 $el->is_done($state ~~ @{ $self->done_states } ? 1:0);
 
-                # recognize priority. XXX cache re
+                # recognize priority
                 my $prio_re = "(?:".
                     join("|", map {quotemeta} @{$self->priorities}) . ")";
-                if ($title =~ s/\[#($prio_re)\]\s*//) {
+                if ($title =~ s/\[#($prio_re)\]\s*//o) {
                     $el->todo_priority($1);
                 }
             }
@@ -733,7 +733,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.27
+version 0.28
 
 =head1 SYNOPSIS
 
@@ -805,7 +805,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Steven Haryanto.
+This software is copyright (c) 2013 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

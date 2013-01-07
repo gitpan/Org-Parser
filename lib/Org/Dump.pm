@@ -7,7 +7,7 @@ use Log::Any qw($log);
 
 use String::Escape qw(elide printable);
 
-our $VERSION = '0.27'; # VERSION
+our $VERSION = '0.28'; # VERSION
 
 sub _dump_ts {
     my ($self, $ts) = @_;
@@ -128,7 +128,7 @@ Org::Dump - Show Org document/element object in a human-friendly format
 
 =head1 VERSION
 
-version 0.27
+version 0.28
 
 =head1 FUNCTIONS
 
@@ -144,7 +144,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Steven Haryanto.
+This software is copyright (c) 2013 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

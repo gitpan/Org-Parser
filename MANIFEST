@@ -30,6 +30,7 @@ lib/Org/Element/Text.pm
 lib/Org/Element/TimeRange.pm
 lib/Org/Element/Timestamp.pm
 lib/Org/Parser.pm
+t/#1.org#
 t/00-compile.t
 t/01-basics.t
 t/base_element-field_name.t
@@ -56,6 +57,7 @@ t/radio_target.t
 t/regression-rt68443.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t
+t/release-rinci.t
 t/setting-todo.t
 t/setting.t
 t/table.t
