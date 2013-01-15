@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.28'; # VERSION
+our $VERSION = '0.29'; # VERSION
 
 has bullet => (is => 'rw');
 has check_state => (is => 'rw');
@@ -38,7 +38,7 @@ Org::Element::ListItem - Represent Org list item
 
 =head1 VERSION
 
-version 0.28
+version 0.29
 
 =head1 DESCRIPTION
 

@@ -30,11 +30,9 @@ lib/Org/Element/Text.pm
 lib/Org/Element/TimeRange.pm
 lib/Org/Element/Timestamp.pm
 lib/Org/Parser.pm
-t/#1.org#
 t/00-compile.t
 t/01-basics.t
 t/base_element-field_name.t
-t/base_element-get_property.t
 t/base_element.t
 t/block.t
 t/comment.t
@@ -50,6 +48,7 @@ t/document.t
 t/drawer.t
 t/fixed_width_section.t
 t/footnote.t
+t/headline-get_property.t
 t/headline.t
 t/link_and_target.t
 t/list.t

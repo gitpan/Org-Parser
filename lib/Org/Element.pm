@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 use Scalar::Util qw(refaddr reftype);
 
-our $VERSION = '0.28'; # VERSION
+our $VERSION = '0.29'; # VERSION
 
 has document => (is => 'rw');
 has parent => (is => 'rw');
@@ -62,30 +62,6 @@ sub next_sibling {
     my $c = $self->parent->children;
     return undef unless $sen < @$c-1;
     $c->[$sen+1];
-}
-
-sub get_property {
-    my ($self, $name, $search_parent) = @_;
-    #$log->tracef("-> get_property(%s, search_par=%s)", $name, $search_parent);
-    my $p = $self->parent;
-    my $s = $p->children if $p;
-
-    if ($s) {
-        for my $d (@$s) {
-        #$log->tracef("searching in sibling: %s (%s)", $d->as_string, ref($d));
-            next unless $d->isa('Org::Element::Drawer')
-                && $d->name eq 'PROPERTIES' && $d->properties;
-            return $d->properties->{$name} if defined $d->properties->{$name};
-        }
-    }
-
-    if ($p && $search_parent) {
-        my $res = $p->get_property($name, 1);
-        return $res if defined $res;
-    }
-
-    $log->tracef("Getting property from document's .properties");
-    $self->document->properties->{$name};
 }
 
 sub extra_walkables { return () }
@@ -186,7 +162,7 @@ Org::Element - Base class for Org document elements
 
 =head1 VERSION
 
-version 0.28
+version 0.29
 
 =head1 SYNOPSIS
 
@@ -229,16 +205,6 @@ child of parent, return 0. If we are the second child, return 1, and so on.
 =head2 $el->prev_sibling() => ELEMENT | undef
 
 =head2 $el->next_sibling() => ELEMENT | undef
-
-=head2 $el->get_property($name, $search_parent) => VALUE
-
-Search for property named $name in the nearest properties drawer. If
-$search_parent is set to true (default is false), will also search in
-upper-level properties (useful for searching for inherited property, like
-foo_ALL). Return undef if property cannot be found in all drawers.
-
-Regardless of $search_parent setting, file-wide properties will be consulted if
-property is not found in nearest properties drawer.
 
 =head2 $el->extra_walkables => LIST
 
