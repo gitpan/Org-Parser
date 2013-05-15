@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.30'; # VERSION
+our $VERSION = '0.31'; # VERSION
 
 has level => (is => 'rw');
 has title => (is => 'rw');
@@ -237,7 +237,7 @@ Org::Element::Headline - Represent Org headline
 
 =head1 VERSION
 
-version 0.30
+version 0.31
 
 =head1 DESCRIPTION
 

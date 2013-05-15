@@ -8,7 +8,7 @@ extends 'Org::Element';
 
 use Time::HiRes qw(gettimeofday tv_interval);
 
-our $VERSION = '0.30'; # VERSION
+our $VERSION = '0.31'; # VERSION
 
 has tags                    => (is => 'rw');
 has todo_states             => (is => 'rw');
@@ -83,7 +83,7 @@ my $block_elems_re = # top level elements
        (?<li_header> $ls_re (?<li_indent>[ \t]*)
                      (?<li_bullet>[+*-]|\d+\.) [ \t]+
                      (?<li_checkbox> \[(?<li_cbstate> [ X-])\])?
-                     (?: (?<li_dt> [^\n]+?) [ \t]+ ::)?) |
+                     (?: (?<li_dt> [^\n]+?) [ ]::)?) |
        (?<table>     (?: $ls_re [ \t]* \| [ \t]* \S[^\n]* $le_re)+) |
        (?<drawer>    $ls_re [ \t]* :(?<drawer_name> \w+): [ \t]*\R
                      (?<drawer_content>(?:.|\R)*?)
@@ -733,7 +733,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.30
+version 0.31
 
 =head1 SYNOPSIS
 

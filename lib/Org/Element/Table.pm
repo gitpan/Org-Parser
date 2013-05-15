@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.30'; # VERSION
+our $VERSION = '0.31'; # VERSION
 
 has _dummy => (is => 'rw'); # workaround Moo bug
 
@@ -117,7 +117,7 @@ Org::Element::Table - Represent Org table
 
 =head1 VERSION
 
-version 0.30
+version 0.31
 
 =head1 DESCRIPTION
 

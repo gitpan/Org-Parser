@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.30'; # VERSION
+our $VERSION = '0.31'; # VERSION
 
 has bullet => (is => 'rw');
 has check_state => (is => 'rw');
@@ -17,6 +17,7 @@ sub header_as_string {
          $self->parent->indent,
          $self->bullet, " ",
          defined($self->check_state) ? "[".$self->check_state."]" : "",
+         defined($self->desc_term) ? $self->desc_term->as_string . " ::" : "",
      );
 }
 
@@ -38,7 +39,7 @@ Org::Element::ListItem - Represent Org list item
 
 =head1 VERSION
 
-version 0.30
+version 0.31
 
 =head1 DESCRIPTION
 

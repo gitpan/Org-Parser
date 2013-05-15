@@ -1,13 +1,13 @@
 package Org::Parser;
 
-use 5.010;
+use 5.010001;
 use Moo;
 
 use File::Slurp;
 use Org::Document;
 use Scalar::Util qw(blessed);
 
-our $VERSION = '0.30'; # VERSION
+our $VERSION = '0.31'; # VERSION
 
 sub parse {
     my ($self, $arg, $opts) = @_;
@@ -80,7 +80,7 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-version 0.30
+version 0.31
 
 =head1 SYNOPSIS
 

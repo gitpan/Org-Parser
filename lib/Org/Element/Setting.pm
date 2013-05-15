@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.30'; # VERSION
+our $VERSION = '0.31'; # VERSION
 
 has name => (is => 'rw');
 has args => (is => 'rw');
@@ -127,7 +127,7 @@ Org::Element::Setting - Represent Org in-buffer settings
 
 =head1 VERSION
 
-version 0.30
+version 0.31
 
 =head1 DESCRIPTION
 
