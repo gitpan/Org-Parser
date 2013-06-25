@@ -23,8 +23,9 @@ requires:
   Module::List: 0
   Moo: 0
   String::Escape: 0
+  experimental: 0
   perl: 5.010001
 resources:
   homepage: http://search.cpan.org/dist/Org-Parser/
   repository: http://github.com/sharyanto/perl-Org-Parser
-version: 0.31
+version: 0.32

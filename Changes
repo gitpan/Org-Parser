@@ -1,11 +1,16 @@
 Revision history for Org-Parser
 
+0.32    2013-06-25 (SHARYANTO)
+
+        No functional changes. Add 'use experimental "smartmatch"' for 5.18+.
+
+
 0.31    2013-05-15 (SHARYANTO)
 
         [BUG FIXES]
 
-        - ListItem: dumping description list didn't dump the description term
-          and the " ::" string.
+        - ListItem: dumping description list item didn't dump the description
+          term and the " ::" string.
 
 
 0.30    2013-02-06 (SHARYANTO)

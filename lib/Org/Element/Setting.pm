@@ -1,11 +1,12 @@
 package Org::Element::Setting;
 
 use 5.010;
+use experimental 'smartmatch';
 use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.31'; # VERSION
+our $VERSION = '0.32'; # VERSION
 
 has name => (is => 'rw');
 has args => (is => 'rw');
@@ -127,7 +128,7 @@ Org::Element::Setting - Represent Org in-buffer settings
 
 =head1 VERSION
 
-version 0.31
+version 0.32
 
 =head1 DESCRIPTION
 
