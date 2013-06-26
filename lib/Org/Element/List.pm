@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.32'; # VERSION
+our $VERSION = '0.33'; # VERSION
 
 has indent => (is => 'rw');
 has type => (is => 'rw');
@@ -23,7 +23,7 @@ Org::Element::List - Represent Org list
 
 =head1 VERSION
 
-version 0.32
+version 0.33
 
 =head1 DESCRIPTION
 

@@ -1,12 +1,12 @@
 package Org::Element::Drawer;
 
 use 5.010;
-use experimental 'smartmatch';
 use locale;
 use Moo;
+use experimental 'smartmatch';
 extends 'Org::Element';
 
-our $VERSION = '0.32'; # VERSION
+our $VERSION = '0.33'; # VERSION
 
 has name => (is => 'rw');
 has properties => (is => 'rw');
@@ -52,7 +52,7 @@ Org::Element::Drawer - Represent Org drawer
 
 =head1 VERSION
 
-version 0.32
+version 0.33
 
 =head1 DESCRIPTION
 

@@ -1,15 +1,15 @@
 package Org::Document;
 
 use 5.010;
-use experimental 'smartmatch';
 use locale;
 use Log::Any '$log';
 use Moo;
+use experimental 'smartmatch';
 extends 'Org::Element';
 
 use Time::HiRes qw(gettimeofday tv_interval);
 
-our $VERSION = '0.32'; # VERSION
+our $VERSION = '0.33'; # VERSION
 
 has tags                    => (is => 'rw');
 has todo_states             => (is => 'rw');
@@ -734,7 +734,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.32
+version 0.33
 
 =head1 SYNOPSIS
 

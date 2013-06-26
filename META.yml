@@ -28,4 +28,4 @@ requires:
 resources:
   homepage: http://search.cpan.org/dist/Org-Parser/
   repository: http://github.com/sharyanto/perl-Org-Parser
-version: 0.32
+version: 0.33
