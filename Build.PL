@@ -19,7 +19,7 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Org-Parser",
-  "dist_version" => "0.33",
+  "dist_version" => "0.34",
   "license" => "perl",
   "module_name" => "Org::Parser",
   "recommends" => {},
