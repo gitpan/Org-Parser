@@ -7,7 +7,7 @@ use Moo;
 use experimental 'smartmatch';
 extends 'Org::Element';
 
-our $VERSION = '0.34'; # VERSION
+our $VERSION = '0.35'; # VERSION
 
 has level => (is => 'rw');
 has title => (is => 'rw');
@@ -229,6 +229,7 @@ sub get_property {
 1;
 # ABSTRACT: Represent Org headline
 
+__END__
 
 =pod
 
@@ -238,7 +239,7 @@ Org::Element::Headline - Represent Org headline
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 DESCRIPTION
 
@@ -379,7 +380,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-

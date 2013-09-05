@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.34'; # VERSION
+our $VERSION = '0.35'; # VERSION
 
 has bullet => (is => 'rw');
 has check_state => (is => 'rw');
@@ -29,8 +29,8 @@ sub as_string {
 1;
 #ABSTRACT: Represent Org list item
 
-
 __END__
+
 =pod
 
 =head1 NAME
@@ -39,7 +39,7 @@ Org::Element::ListItem - Represent Org list item
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 DESCRIPTION
 
@@ -75,4 +75,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

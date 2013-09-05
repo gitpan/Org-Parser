@@ -9,7 +9,7 @@ extends 'Org::Element';
 
 use Time::HiRes qw(gettimeofday tv_interval);
 
-our $VERSION = '0.34'; # VERSION
+our $VERSION = '0.35'; # VERSION
 
 has tags                    => (is => 'rw');
 has todo_states             => (is => 'rw');
@@ -177,6 +177,7 @@ sub _parse {
     my $last_headlines = [$self]; # [$doc, $last_hl_level1, $last_hl_lvl2, ...]
     my $last_listitem;
     my $last_lists = []; # [last_List_obj_for_indent_level0, ...]
+    my $last_el;
     my $parent;
 
     my @text;
@@ -186,8 +187,8 @@ sub _parse {
         my %m = %+;
         next unless keys %m; # perlre bug?
         #if ($log->is_trace) {
-        #    # profiler shows that this is very heavy
-        #    $log->tracef("match block element: %s", \%+);
+        #    # profiler shows that this is very heavy, so commenting this out
+        #    $log->tracef("TMP: match block element: %s", \%+) if $pass==2;
         #}
 
         if (defined $m{text}) {
@@ -195,9 +196,38 @@ sub _parse {
             next;
         } else {
             if (@text) {
-                $self->_add_text(join("", @text), $parent, $pass);
+                my $text = join("", @text);
+                if ($last_el && $last_el->isa('Org::Element::ListItem')) {
+                    # new in org-mode 7.x? the presence of text below a list
+                    # item, indented at the same level as or less than the list
+                    # item, will break the list.
+                    my ($firstline, $restlines) = $text =~ /(.*?\r?\n)(.+)/s;
+                    if ($restlines) {
+                        $restlines =~ /\A([ \t]*)/;
+                        my $rllevel = length($1);
+                        my $listlevel = length($last_el->parent->indent);
+                        if ($rllevel <= $listlevel) {
+                            my $origparent = $parent;
+                            # find lesser-indented list
+                            $parent = $last_headline // $self;
+                            for (my $i=$rllevel-1; $i>=0; $i--) {
+                                if ($last_lists->[$i]) {
+                                    $parent = $last_lists->[$i];
+                                    last;
+                                }
+                            }
+                            splice @$last_lists, $rllevel;
+                            $self->_add_text($firstline, $origparent, $pass);
+                            $self->_add_text($restlines, $parent, $pass);
+                            goto SKIP1;
+                        }
+                    }
+                }
+                $self->_add_text($text, $parent, $pass);
+              SKIP1:
+                @text = ();
+                $last_el = undef;
             }
-            @text = ();
         }
 
         my $el;
@@ -375,6 +405,7 @@ sub _parse {
 
         $parent->children([]) if !$parent->children;
         push @{ $parent->children }, $el;
+        $last_el = $el;
     }
 
     # remaining text
@@ -411,8 +442,8 @@ sub _add_text {
     while ($str =~ /$text_re/og) {
         my %m = %+;
         #if ($log->is_trace) {
-        #    # profiler shows that this is very heavy
-        #    $log->tracef("match text: %s", \%+);
+        #    # profiler shows that this is very heavy, so commenting this out
+        #    $log->tracef("TMP: match text: %s", \%+);
         #}
         my $el;
 
@@ -725,6 +756,7 @@ sub load_element_modules {
 1;
 # ABSTRACT: Represent an Org document
 
+__END__
 
 =pod
 
@@ -734,7 +766,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -812,7 +844,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-

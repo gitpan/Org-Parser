@@ -7,7 +7,7 @@ use File::Slurp;
 use Org::Document;
 use Scalar::Util qw(blessed);
 
-our $VERSION = '0.34'; # VERSION
+our $VERSION = '0.35'; # VERSION
 
 sub parse {
     my ($self, $arg, $opts) = @_;
@@ -71,7 +71,6 @@ sub parse_file {
 1;
 # ABSTRACT: Parse Org documents
 
-
 =pod
 
 =head1 NAME
@@ -80,7 +79,7 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 SYNOPSIS
 
@@ -238,7 +237,6 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
 
 __END__
 

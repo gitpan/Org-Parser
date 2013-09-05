@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.34'; # VERSION
+our $VERSION = '0.35'; # VERSION
 
 has link => (is => 'rw');
 has description => (is => 'rw');
@@ -25,6 +25,7 @@ sub as_string {
 1;
 # ABSTRACT: Represent Org hyperlink
 
+__END__
 
 =pod
 
@@ -34,7 +35,7 @@ Org::Element::Link - Represent Org hyperlink
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 DESCRIPTION
 
@@ -64,7 +65,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-

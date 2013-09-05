@@ -5,11 +5,12 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.34'; # VERSION
+our $VERSION = '0.35'; # VERSION
 
 1;
 # ABSTRACT: Represent Org comment
 
+__END__
 
 =pod
 
@@ -19,7 +20,7 @@ Org::Element::Comment - Represent Org comment
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 DESCRIPTION
 
@@ -41,7 +42,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-

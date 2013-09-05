@@ -5,15 +5,25 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.34'; # VERSION
+our $VERSION = '0.35'; # VERSION
 
 has indent => (is => 'rw');
 has type => (is => 'rw');
 has bullet_style => (is => 'rw');
 
+sub items {
+    my $self = shift;
+    my @items;
+    for (@{ $self->children }) {
+        push @items, $_ if $_->isa('Org::Element::ListItem');
+    }
+    \@items;
+}
+
 1;
 # ABSTRACT: Represent Org list
 
+__END__
 
 =pod
 
@@ -23,13 +33,20 @@ Org::Element::List - Represent Org list
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 DESCRIPTION
 
 Must have L<Org::Element::ListItem> (or another ::List) as children.
 
 Derived from L<Org::Element>.
+
+=begin Pod::Coverage
+
+
+
+
+=end Pod::Coverage
 
 =head1 ATTRIBUTES
 
@@ -48,12 +65,9 @@ E.g. '-', '*', '+'. For ordered list, currently just use '<N>.'
 
 =head1 METHODS
 
-=begin Pod::Coverage
+=head2 $list->items() => ARRAY OF OBJECTS
 
-
-
-
-=end Pod::Coverage
+Return the items, which are array of L<Org::Element::ListItem> objects.
 
 =head1 AUTHOR
 
@@ -67,7 +81,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-

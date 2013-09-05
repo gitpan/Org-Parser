@@ -7,7 +7,7 @@ use Log::Any qw($log);
 
 use String::Escape qw(elide printable);
 
-our $VERSION = '0.34'; # VERSION
+our $VERSION = '0.35'; # VERSION
 
 sub _dump_ts {
     my ($self, $ts) = @_;
@@ -117,9 +117,8 @@ sub _format_properties {
 1;
 #ABSTRACT: Show Org document/element object in a human-friendly format
 
-
-
 __END__
+
 =pod
 
 =head1 NAME
@@ -128,7 +127,7 @@ Org::Dump - Show Org document/element object in a human-friendly format
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 FUNCTIONS
 
@@ -150,4 +149,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

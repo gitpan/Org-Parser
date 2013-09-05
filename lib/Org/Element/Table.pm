@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.34'; # VERSION
+our $VERSION = '0.35'; # VERSION
 
 has _dummy => (is => 'rw'); # workaround Moo bug
 
@@ -108,6 +108,7 @@ sub as_aoa {
 1;
 # ABSTRACT: Represent Org table
 
+__END__
 
 =pod
 
@@ -117,7 +118,7 @@ Org::Element::Table - Represent Org table
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 DESCRIPTION
 
@@ -160,7 +161,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-

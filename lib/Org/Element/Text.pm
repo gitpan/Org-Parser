@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.34'; # VERSION
+our $VERSION = '0.35'; # VERSION
 
 has text => (is => 'rw');
 has style => (is => 'rw');
@@ -27,6 +27,7 @@ sub as_string {
 1;
 # ABSTRACT: Represent text
 
+__END__
 
 =pod
 
@@ -36,7 +37,7 @@ Org::Element::Text - Represent text
 
 =head1 VERSION
 
-version 0.34
+version 0.35
 
 =head1 DESCRIPTION
 
@@ -67,8 +68,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-
-
