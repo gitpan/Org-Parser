@@ -7,7 +7,7 @@ use Moo;
 use experimental 'smartmatch';
 extends 'Org::Element';
 
-our $VERSION = '0.35'; # VERSION
+our $VERSION = '0.36'; # VERSION
 
 has level => (is => 'rw');
 has title => (is => 'rw');
@@ -239,7 +239,7 @@ Org::Element::Headline - Represent Org headline
 
 =head1 VERSION
 
-version 0.35
+version 0.36
 
 =head1 DESCRIPTION
 

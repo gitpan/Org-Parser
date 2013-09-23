@@ -1,74 +1,66 @@
-#!perl
-
 use strict;
 use warnings;
 
-use Test::More;
+# this test was generated with Dist::Zilla::Plugin::Test::Compile 2.030
+
+use Test::More  tests => 23 + ($ENV{AUTHOR_TESTING} ? 1 : 0);
 
 
 
-use File::Find;
-use File::Temp qw{ tempdir };
-
-my @modules;
-find(
-  sub {
-    return if $File::Find::name !~ /\.pm\z/;
-    my $found = $File::Find::name;
-    $found =~ s{^lib/}{};
-    $found =~ s{[/\\]}{::}g;
-    $found =~ s/\.pm$//;
-    # nothing to skip
-    push @modules, $found;
-  },
-  'lib',
+my @module_files = (
+    'Org/Document.pm',
+    'Org/Dump.pm',
+    'Org/Element.pm',
+    'Org/Element/Block.pm',
+    'Org/Element/Comment.pm',
+    'Org/Element/Drawer.pm',
+    'Org/Element/FixedWidthSection.pm',
+    'Org/Element/Footnote.pm',
+    'Org/Element/Headline.pm',
+    'Org/Element/Link.pm',
+    'Org/Element/List.pm',
+    'Org/Element/ListItem.pm',
+    'Org/Element/RadioTarget.pm',
+    'Org/Element/Setting.pm',
+    'Org/Element/Table.pm',
+    'Org/Element/TableCell.pm',
+    'Org/Element/TableRow.pm',
+    'Org/Element/TableVLine.pm',
+    'Org/Element/Target.pm',
+    'Org/Element/Text.pm',
+    'Org/Element/TimeRange.pm',
+    'Org/Element/Timestamp.pm',
+    'Org/Parser.pm'
 );
 
-sub _find_scripts {
-    my $dir = shift @_;
 
-    my @found_scripts = ();
-    find(
-      sub {
-        return unless -f;
-        my $found = $File::Find::name;
-        # nothing to skip
-        open my $FH, '<', $_ or do {
-          note( "Unable to open $found in ( $! ), skipping" );
-          return;
-        };
-        my $shebang = <$FH>;
-        return unless $shebang =~ /^#!.*?\bperl\b\s*$/;
-        push @found_scripts, $found;
-      },
-      $dir,
-    );
 
-    return @found_scripts;
-}
+# no fake home requested
 
-my @scripts;
-do { push @scripts, _find_scripts($_) if -d $_ }
-    for qw{ bin script scripts };
+use IPC::Open3;
+use IO::Handle;
 
-my $plan = scalar(@modules) + scalar(@scripts);
-$plan ? (plan tests => $plan) : (plan skip_all => "no tests to run");
-
+my @warnings;
+for my $lib (@module_files)
 {
-    # fake home for cpan-testers
-    # no fake requested ## local $ENV{HOME} = tempdir( CLEANUP => 1 );
+    # see L<perlfaq8/How can I capture STDERR from an external command?>
+    my $stdin = '';     # converted to a gensym by open3
+    my $stderr = IO::Handle->new;
 
-    like( qx{ $^X -Ilib -e "require $_; print '$_ ok'" }, qr/^\s*$_ ok/s, "$_ loaded ok" )
-        for sort @modules;
+    my $pid = open3($stdin, '>&STDERR', $stderr, qq{$^X -Mblib -e"require q[$lib]"});
+    binmode $stderr, ':crlf' if $^O; # eq 'MSWin32';
+    waitpid($pid, 0);
+    is($? >> 8, 0, "$lib loaded ok");
 
-    SKIP: {
-        eval "use Test::Script 1.05; 1;";
-        skip "Test::Script needed to test script compilation", scalar(@scripts) if $@;
-        foreach my $file ( @scripts ) {
-            my $script = $file;
-            $script =~ s!.*/!!;
-            script_compiles( $file, "$script script compiles" );
-        }
+    if (my @_warnings = <$stderr>)
+    {
+        warn @_warnings;
+        push @warnings, @_warnings;
     }
-
 }
+
+
+
+is(scalar(@warnings), 0, 'no warnings found') if $ENV{AUTHOR_TESTING};
+
+
