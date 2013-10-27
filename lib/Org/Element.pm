@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 use Scalar::Util qw(refaddr reftype);
 
-our $VERSION = '0.36'; # VERSION
+our $VERSION = '0.37'; # VERSION
 
 has document => (is => 'rw');
 has parent => (is => 'rw');
@@ -156,13 +156,11 @@ __END__
 
 =pod
 
+=encoding utf-8
+
 =head1 NAME
 
 Org::Element - Base class for Org document elements
-
-=head1 VERSION
-
-version 0.36
 
 =head1 SYNOPSIS
 
@@ -246,6 +244,23 @@ or a description term in a description list:
 =head2 $el->remove()
 
 Remove element from the tree. Basically just remove the element from its parent.
+
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Org-Parser>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Org-Parser
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
 
 =head1 AUTHOR
 

@@ -3,6 +3,7 @@ abstract: 'Parse Org documents'
 author:
   - 'Steven Haryanto <stevenharyanto@gmail.com>'
 build_requires:
+  File::Spec: 0
   IO::Handle: 0
   IPC::Open3: 0
   Test::Exception: 0
@@ -10,7 +11,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.30
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300038, CPAN::Meta::Converter version 2.132510'
+generated_by: 'Dist::Zilla version 4.300039, CPAN::Meta::Converter version 2.132140'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -26,7 +27,5 @@ requires:
   String::Escape: 0
   experimental: 0
   perl: 5.010001
-resources:
-  homepage: http://search.cpan.org/dist/Org-Parser/
-  repository: http://github.com/sharyanto/perl-Org-Parser
-version: 0.36
+resources: {}
+version: 0.37

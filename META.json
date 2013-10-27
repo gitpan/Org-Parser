@@ -4,7 +4,7 @@
       "Steven Haryanto <stevenharyanto@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300038, CPAN::Meta::Converter version 2.132510",
+   "generated_by" : "Dist::Zilla version 4.300039, CPAN::Meta::Converter version 2.132140",
    "license" : [
       "perl_5"
    ],
@@ -42,6 +42,7 @@
       },
       "test" : {
          "requires" : {
+            "File::Spec" : "0",
             "IO::Handle" : "0",
             "IPC::Open3" : "0",
             "Test::Exception" : "0",
@@ -50,12 +51,7 @@
       }
    },
    "release_status" : "stable",
-   "resources" : {
-      "homepage" : "http://search.cpan.org/dist/Org-Parser/",
-      "repository" : {
-         "url" : "http://github.com/sharyanto/perl-Org-Parser"
-      }
-   },
-   "version" : "0.36"
+   "resources" : {},
+   "version" : "0.37"
 }
 

@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.36'; # VERSION
+our $VERSION = '0.37'; # VERSION
 
 has name => (is => 'rw');
 has is_ref => (is => 'rw');
@@ -33,13 +33,11 @@ __END__
 
 =pod
 
+=encoding utf-8
+
 =head1 NAME
 
 Org::Element::Footnote - Represent Org footnote reference and/or definition
-
-=head1 VERSION
-
-version 0.36
 
 =head1 DESCRIPTION
 
@@ -63,6 +61,23 @@ Set to make this a footnote definition.
 =head1 METHODS
 
 =for Pod::Coverage as_string BUILD
+
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Org-Parser>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Org-Parser
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
 
 =head1 AUTHOR
 

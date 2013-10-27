@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.36'; # VERSION
+our $VERSION = '0.37'; # VERSION
 
 sub text {
     my ($self) = @_;
@@ -21,13 +21,11 @@ __END__
 
 =pod
 
+=encoding utf-8
+
 =head1 NAME
 
 Org::Element::FixedWidthSection - Represent Org fixed-width section
-
-=head1 VERSION
-
-version 0.36
 
 =head1 SYNOPSIS
 
@@ -66,6 +64,23 @@ Derived from L<Org::Element>.
 The text (without colon prefix).
 
 =for Pod::Coverage as_string BUILD
+
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Org-Parser>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Org-Parser
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
 
 =head1 AUTHOR
 

@@ -67,3 +67,4 @@ t/timestamp.t
 t/unicode.t
 t/various.t
 todo.org
+weaver.ini

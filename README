@@ -1,9 +1,6 @@
 NAME
     Org::Parser - Parse Org documents
 
-VERSION
-    version 0.36
-
 SYNOPSIS
      use 5.010;
      use Org::Parser;
@@ -128,6 +125,20 @@ FAQ
 
 SEE ALSO
     Org::Document
+
+HOMEPAGE
+    Please visit the project's homepage at
+    <https://metacpan.org/release/Org-Parser>.
+
+SOURCE
+    Source repository is at <https://github.com/sharyanto/perl-Org-Parser>.
+
+BUGS
+    Please report any bugs or feature requests on the bugtracker website
+    http://rt.cpan.org/Public/Dist/Display.html?Name=Org-Parser
+
+    When submitting a bug or request, please include a test-file or a patch
+    to an existing test-file that illustrates the bug or desired feature.
 
 AUTHOR
     Steven Haryanto <stevenharyanto@gmail.com>

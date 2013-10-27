@@ -7,7 +7,7 @@ use Log::Any qw($log);
 
 use String::Escape qw(elide printable);
 
-our $VERSION = '0.36'; # VERSION
+our $VERSION = '0.37'; # VERSION
 
 sub _dump_ts {
     my ($self, $ts) = @_;
@@ -121,13 +121,11 @@ __END__
 
 =pod
 
+=encoding utf-8
+
 =head1 NAME
 
 Org::Dump - Show Org document/element object in a human-friendly format
-
-=head1 VERSION
-
-version 0.36
 
 =head1 FUNCTIONS
 
@@ -136,6 +134,23 @@ None are exported.
 =for Pod::Coverage new
 
 =head2 dump_element($elem) => STR
+
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Org-Parser>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Org-Parser
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
 
 =head1 AUTHOR
 

@@ -6,7 +6,7 @@ use utf8;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.36'; # VERSION
+our $VERSION = '0.37'; # VERSION
 
 my @attrs = (qw/datetime has_time event_duration recurrence is_active/);
 for (@attrs) {
@@ -100,6 +100,8 @@ sub _parse_timestamp {
                          (?<repeater_prefix> \+\+|\.\+|\+)
                          (?<repeater_interval> $num_re)
                          (?<repeater_unit> [dwmy])
+                         (?:\/(?<repeater_interval_max> $num_re)
+                             (?<repeater_unit_max> [dwmy]))?
                      )
                  )?
                  (?:\s+(?<warning_period>
@@ -193,17 +195,33 @@ __END__
 
 =pod
 
+=encoding utf-8
+
 =head1 NAME
 
 Org::Element::Timestamp - Represent Org timestamp
 
-=head1 VERSION
-
-version 0.36
-
 =head1 DESCRIPTION
 
 Derived from L<Org::Element>.
+
+Supported formats:
+
+=over
+
+=item * C<[...]> and C<< <...> >> (active) forms
+
+=item * basic date: C<[2013-10-27 Sun]>
+
+=item * event duration: C<[2011-03-23 Wed 10:12-11:23]>
+
+=item * repeater: C<[2011-03-23 Wed +3m]> including C<++> and C<.+>
+
+=item * habit-style repeater: C<[2011-03-23 Wed 10:12 +1d/2d]>
+
+=item * warning period: C<< <2011-05-25 Wed +17.1m -13.2d> >>
+
+=back
 
 =head1 ATTRIBUTES
 
@@ -237,6 +255,34 @@ You can do this prior to serializing the object.
 
 Timestamp will automatically be parsed again from _str when one of the
 attributes is accessed.
+
+=head1 BUGS AND LIMITATIONS
+
+=over
+
+=item * Habit-style repeater (e.g. 2d/3d) is not yet represented in C<recurrence>
+
+The recurrence object currently will still only include 2d (without the maximum
+interval).
+
+=back
+
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Org-Parser>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Org-Parser
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
 
 =head1 AUTHOR
 

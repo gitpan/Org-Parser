@@ -7,7 +7,7 @@ use File::Slurp;
 use Org::Document;
 use Scalar::Util qw(blessed);
 
-our $VERSION = '0.36'; # VERSION
+our $VERSION = '0.37'; # VERSION
 
 sub parse {
     my ($self, $arg, $opts) = @_;
@@ -73,13 +73,11 @@ sub parse_file {
 
 =pod
 
+=encoding utf-8
+
 =head1 NAME
 
 Org::Parser - Parse Org documents
-
-=head1 VERSION
-
-version 0.36
 
 =head1 SYNOPSIS
 
@@ -224,6 +222,23 @@ it.
 =head1 SEE ALSO
 
 L<Org::Document>
+
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Org-Parser>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Org-Parser
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
 
 =head1 AUTHOR
 

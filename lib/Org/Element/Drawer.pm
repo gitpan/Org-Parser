@@ -6,7 +6,7 @@ use Moo;
 use experimental 'smartmatch';
 extends 'Org::Element';
 
-our $VERSION = '0.36'; # VERSION
+our $VERSION = '0.37'; # VERSION
 
 has name => (is => 'rw');
 has properties => (is => 'rw');
@@ -37,7 +37,7 @@ sub as_string {
     join("",
          ":", $self->name, ":\n",
          $self->children_as_string,
-         ":END:\n");
+         ":END:");
 }
 
 1;
@@ -47,13 +47,11 @@ __END__
 
 =pod
 
+=encoding utf-8
+
 =head1 NAME
 
 Org::Element::Drawer - Represent Org drawer
-
-=head1 VERSION
-
-version 0.36
 
 =head1 DESCRIPTION
 
@@ -72,6 +70,23 @@ Collected properties in the drawer.
 =head1 METHODS
 
 =for Pod::Coverage BUILD as_string
+
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Org-Parser>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Org-Parser
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
 
 =head1 AUTHOR
 

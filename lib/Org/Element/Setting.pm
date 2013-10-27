@@ -6,7 +6,7 @@ use Moo;
 use experimental 'smartmatch';
 extends 'Org::Element';
 
-our $VERSION = '0.36'; # VERSION
+our $VERSION = '0.37'; # VERSION
 
 our @known_settings = qw(
 ARCHIVE
@@ -175,13 +175,11 @@ __END__
 
 =pod
 
+=encoding utf-8
+
 =head1 NAME
 
 Org::Element::Setting - Represent Org in-buffer settings
-
-=head1 VERSION
-
-version 0.36
 
 =head1 DESCRIPTION
 
@@ -209,6 +207,23 @@ Indentation (whitespaces before C<#+>), or empty string if none.
 
 Return the list of setting names that can be indented. In Org, some settings can
 be indented and some can't. Setting names are all in uppercase.
+
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Org-Parser>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Org-Parser
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
 
 =head1 AUTHOR
 

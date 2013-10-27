@@ -6,7 +6,7 @@ use Moo;
 use experimental 'smartmatch';
 extends 'Org::Element';
 
-our $VERSION = '0.36'; # VERSION
+our $VERSION = '0.37'; # VERSION
 
 has name => (is => 'rw');
 has args => (is => 'rw');
@@ -46,13 +46,11 @@ __END__
 
 =pod
 
+=encoding utf-8
+
 =head1 NAME
 
 Org::Element::Block - Represent Org block
-
-=head1 VERSION
-
-version 0.36
 
 =head1 DESCRIPTION
 
@@ -79,6 +77,23 @@ Indentation on end line (before C<#+END>), or empty string if none.
 =head1 METHODS
 
 =for Pod::Coverage element_as_string BUILD
+
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Org-Parser>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Org-Parser
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
 
 =head1 AUTHOR
 
