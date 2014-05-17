@@ -6,7 +6,7 @@ use utf8;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.37'; # VERSION
+our $VERSION = '0.38'; # VERSION
 
 my @attrs = (qw/datetime has_time event_duration recurrence is_active/);
 for (@attrs) {
@@ -86,7 +86,7 @@ sub _parse_timestamp {
                    /x;
 
     $str =~ /^(?<open_bracket> \[|<)
-             (?<year> \d{4})-(?<mon> \d{2})-(?<day> \d{2}) \s+
+             (?<year> \d{4})-(?<mon> \d{2})-(?<day> \d{2}) \s*
              (?:
                  (?<dow> $dow_re) \s*?
                  (?:\s+
@@ -195,11 +195,15 @@ __END__
 
 =pod
 
-=encoding utf-8
+=encoding UTF-8
 
 =head1 NAME
 
 Org::Element::Timestamp - Represent Org timestamp
+
+=head1 VERSION
+
+This document describes version 0.38 of Org::Element::Timestamp (from Perl distribution Org-Parser), released on 2014-05-17.
 
 =head1 DESCRIPTION
 
@@ -277,8 +281,7 @@ Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
 
 =head1 BUGS
 
-Please report any bugs or feature requests on the bugtracker website
-http://rt.cpan.org/Public/Dist/Display.html?Name=Org-Parser
+Please report any bugs or feature requests on the bugtracker website L<https://rt.cpan.org/Public/Dist/Display.html?Name=Org-Parser>
 
 When submitting a bug or request, please include a test-file or a
 patch to an existing test-file that illustrates the bug or desired
@@ -290,7 +293,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Steven Haryanto.
+This software is copyright (c) 2014 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
