@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.38'; # VERSION
+our $VERSION = '0.39'; # VERSION
 
 has indent => (is => 'rw');
 has type => (is => 'rw');
@@ -35,7 +35,7 @@ Org::Element::List - Represent Org list
 
 =head1 VERSION
 
-This document describes version 0.38 of Org::Element::List (from Perl distribution Org-Parser), released on 2014-05-17.
+This document describes version 0.39 of Org::Element::List (from Perl distribution Org-Parser), released on 2014-07-17.
 
 =head1 DESCRIPTION
 
@@ -69,7 +69,7 @@ E.g. '-', '*', '+'. For ordered list, currently just use '<N>.'
 
 =head2 $list->items() => ARRAY OF OBJECTS
 
-Return the items, which are array of L<Org::Element::ListItem> objects.
+Return the items, which are an arrayref of L<Org::Element::ListItem> objects.
 
 =head1 HOMEPAGE
 

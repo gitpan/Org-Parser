@@ -6,7 +6,7 @@ use Moo;
 use experimental 'smartmatch';
 extends 'Org::Element';
 
-our $VERSION = '0.38'; # VERSION
+our $VERSION = '0.39'; # VERSION
 
 our @known_settings = qw(
 ARCHIVE
@@ -183,7 +183,7 @@ Org::Element::Setting - Represent Org in-buffer settings
 
 =head1 VERSION
 
-This document describes version 0.38 of Org::Element::Setting (from Perl distribution Org-Parser), released on 2014-05-17.
+This document describes version 0.39 of Org::Element::Setting (from Perl distribution Org-Parser), released on 2014-07-17.
 
 =head1 DESCRIPTION
 
@@ -207,10 +207,11 @@ Indentation (whitespaces before C<#+>), or empty string if none.
 
 =for Pod::Coverage as_string BUILD
 
-=head2 Org::Element::Setting->indentable_settings -> arrayref
+=head2 Org::Element::Setting->indentable_settings -> ARRAY
 
-Return the list of setting names that can be indented. In Org, some settings can
-be indented and some can't. Setting names are all in uppercase.
+Return an arrayref containing the setting names that can be indented. In Org,
+some settings can be indented and some can't. Setting names are all in
+uppercase.
 
 =head1 HOMEPAGE
 

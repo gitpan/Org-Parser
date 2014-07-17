@@ -6,7 +6,7 @@ use Moo;
 use experimental 'smartmatch';
 extends 'Org::Element';
 
-our $VERSION = '0.38'; # VERSION
+our $VERSION = '0.39'; # VERSION
 
 has name => (is => 'rw');
 has properties => (is => 'rw');
@@ -55,7 +55,7 @@ Org::Element::Drawer - Represent Org drawer
 
 =head1 VERSION
 
-This document describes version 0.38 of Org::Element::Drawer (from Perl distribution Org-Parser), released on 2014-05-17.
+This document describes version 0.39 of Org::Element::Drawer (from Perl distribution Org-Parser), released on 2014-07-17.
 
 =head1 DESCRIPTION
 

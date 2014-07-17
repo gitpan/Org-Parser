@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 use Scalar::Util qw(refaddr reftype);
 
-our $VERSION = '0.38'; # VERSION
+our $VERSION = '0.39'; # VERSION
 
 has document => (is => 'rw');
 has parent => (is => 'rw');
@@ -164,7 +164,7 @@ Org::Element - Base class for Org document elements
 
 =head1 VERSION
 
-This document describes version 0.38 of Org::Element (from Perl distribution Org-Parser), released on 2014-05-17.
+This document describes version 0.39 of Org::Element (from Perl distribution Org-Parser), released on 2014-07-17.
 
 =head1 SYNOPSIS
 

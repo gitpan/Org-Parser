@@ -7,7 +7,7 @@ use File::Slurp::Tiny qw(read_file);
 use Org::Document;
 use Scalar::Util qw(blessed);
 
-our $VERSION = '0.38'; # VERSION
+our $VERSION = '0.39'; # VERSION
 
 sub parse {
     my ($self, $arg, $opts) = @_;
@@ -83,7 +83,7 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-This document describes version 0.38 of Org::Parser (from Perl distribution Org-Parser), released on 2014-05-17.
+This document describes version 0.39 of Org::Parser (from Perl distribution Org-Parser), released on 2014-07-17.
 
 =head1 SYNOPSIS
 
@@ -173,7 +173,7 @@ Create a new parser instance.
 
 =head2 $orgp->parse($str | $arrayref | $coderef | $filehandle, \%opts) => $doc
 
-Parse document (which can be contained in a scalar $str, an array of lines
+Parse document (which can be contained in a scalar $str, an arrayref of lines
 $arrayref, a subroutine which will be called for chunks until it returns undef,
 or a filehandle).
 

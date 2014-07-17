@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.38'; # VERSION
+our $VERSION = '0.39'; # VERSION
 
 has _dummy => (is => 'rw'); # workaround Moo bug
 
@@ -120,7 +120,7 @@ Org::Element::Table - Represent Org table
 
 =head1 VERSION
 
-This document describes version 0.38 of Org::Element::Table (from Perl distribution Org-Parser), released on 2014-05-17.
+This document describes version 0.39 of Org::Element::Table (from Perl distribution Org-Parser), released on 2014-07-17.
 
 =head1 DESCRIPTION
 
@@ -137,10 +137,10 @@ L<Org::Element::TableVLine> instances as its children.
 
 Return the rows of the table.
 
-=head2 $table->as_aoa() => ARRAYREF
+=head2 $table->as_aoa() => ARRAY
 
-Return the rows of the table, each row already an array of cells produced using
-as_array() method. Vertical lines will be skipped/ignored.
+Return the rows of the table, each row already an arrayref of cells produced
+using as_array() method. Vertical lines will be skipped/ignored.
 
 =head2 $table->row_count() => INT
 

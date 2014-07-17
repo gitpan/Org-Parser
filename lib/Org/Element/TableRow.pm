@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.38'; # VERSION
+our $VERSION = '0.39'; # VERSION
 
 sub as_string {
     my ($self) = @_;
@@ -49,7 +49,7 @@ Org::Element::TableRow - Represent Org table row
 
 =head1 VERSION
 
-This document describes version 0.38 of Org::Element::TableRow (from Perl distribution Org-Parser), released on 2014-05-17.
+This document describes version 0.39 of Org::Element::TableRow (from Perl distribution Org-Parser), released on 2014-07-17.
 
 =head1 DESCRIPTION
 
@@ -66,7 +66,7 @@ instances as its children.
 
 Return the cells of the row.
 
-=head2 $table->as_array() => ARRAYREF
+=head2 $table->as_array() => ARRAY
 
 Return an arrayref containing the cells of the row, each cells already
 stringified with as_string().

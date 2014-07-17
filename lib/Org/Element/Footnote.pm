@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.38'; # VERSION
+our $VERSION = '0.39'; # VERSION
 
 has name => (is => 'rw');
 has is_ref => (is => 'rw');
@@ -41,7 +41,7 @@ Org::Element::Footnote - Represent Org footnote reference and/or definition
 
 =head1 VERSION
 
-This document describes version 0.38 of Org::Element::Footnote (from Perl distribution Org-Parser), released on 2014-05-17.
+This document describes version 0.39 of Org::Element::Footnote (from Perl distribution Org-Parser), released on 2014-07-17.
 
 =head1 DESCRIPTION
 

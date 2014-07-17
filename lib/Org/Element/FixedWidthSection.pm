@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.38'; # VERSION
+our $VERSION = '0.39'; # VERSION
 
 sub text {
     my ($self) = @_;
@@ -29,7 +29,7 @@ Org::Element::FixedWidthSection - Represent Org fixed-width section
 
 =head1 VERSION
 
-This document describes version 0.38 of Org::Element::FixedWidthSection (from Perl distribution Org-Parser), released on 2014-05-17.
+This document describes version 0.39 of Org::Element::FixedWidthSection (from Perl distribution Org-Parser), released on 2014-07-17.
 
 =head1 SYNOPSIS
 

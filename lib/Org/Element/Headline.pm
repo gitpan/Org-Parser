@@ -7,16 +7,19 @@ use Moo;
 use experimental 'smartmatch';
 extends 'Org::Element';
 
-our $VERSION = '0.38'; # VERSION
+our $VERSION = '0.39'; # VERSION
 
 has level => (is => 'rw');
 has title => (is => 'rw');
-has todo_priority => (is => 'rw');
+has priority => (is => 'rw');
 has tags => (is => 'rw');
 has is_todo => (is => 'rw');
 has is_done => (is => 'rw');
 has todo_state => (is => 'rw');
 has progress => (is => 'rw');
+
+# old name, deprecated since 2014-07-17, will be removed in the future
+sub todo_priority { shift->priority(@_) }
 
 sub extra_walkables {
     my $self = shift;
@@ -30,7 +33,8 @@ sub header_as_string {
          "*" x $self->level,
          " ",
          $self->is_todo ? $self->todo_state." " : "",
-         $self->todo_priority ? "[#".$self->todo_priority."] " : "",
+         $self->priority ? "[#".$self->priority."] " : "",
+         $self->progress ? "[".$self->progress."] " : "",
          $self->title->as_string,
          $self->tags && @{$self->tags} ?
              "  :".join(":", @{$self->tags}).":" : "",
@@ -241,11 +245,13 @@ Org::Element::Headline - Represent Org headline
 
 =head1 VERSION
 
-This document describes version 0.38 of Org::Element::Headline (from Perl distribution Org-Parser), released on 2014-05-17.
+This document describes version 0.39 of Org::Element::Headline (from Perl distribution Org-Parser), released on 2014-07-17.
 
 =head1 DESCRIPTION
 
 Derived from L<Org::Element>.
+
+=for Pod::Coverage ^(todo_priority)$
 
 =head1 ATTRIBUTES
 
@@ -257,7 +263,7 @@ Level of headline (e.g. 1, 2, 3). Corresponds to the number of bullet stars.
 
 L<Org::Element::Text> representing the headline title
 
-=head2 todo_priority => STR
+=head2 priority => STR
 
 String (optional) representing priority.
 
@@ -280,7 +286,7 @@ TODO state.
 
 =head2 progress => STR
 
-Progress.
+Progress cookie, e.g. '5/10' or '50%'
 
 =head1 METHODS
 

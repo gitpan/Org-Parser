@@ -6,7 +6,7 @@ use utf8;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.38'; # VERSION
+our $VERSION = '0.39'; # VERSION
 
 my @attrs = (qw/datetime has_time event_duration recurrence is_active/);
 for (@attrs) {
@@ -203,7 +203,7 @@ Org::Element::Timestamp - Represent Org timestamp
 
 =head1 VERSION
 
-This document describes version 0.38 of Org::Element::Timestamp (from Perl distribution Org-Parser), released on 2014-05-17.
+This document describes version 0.39 of Org::Element::Timestamp (from Perl distribution Org-Parser), released on 2014-07-17.
 
 =head1 DESCRIPTION
 

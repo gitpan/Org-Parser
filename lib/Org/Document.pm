@@ -9,7 +9,7 @@ extends 'Org::Element';
 
 use Time::HiRes qw(gettimeofday tv_interval);
 
-our $VERSION = '0.38'; # VERSION
+our $VERSION = '0.39'; # VERSION
 
 has tags                    => (is => 'rw');
 has todo_states             => (is => 'rw');
@@ -33,7 +33,7 @@ my  $tstamp_re     = qr/(?:\[\d{4}-\d{2}-\d{2} [^\n\]]*\])/x;
 my  $act_tstamp_re = qr/(?: <\d{4}-\d{2}-\d{2} [^\n>]*  >)/x;
 my  $fn_name_re    = qr/(?:[^ \t\n:\]]+)/x;
 my  $text_re       =
-    qr(
+    qr{
        (?<link>         \[\[(?<link_link> [^\]\n]+)\]
                         (?:\[(?<link_desc> (?:[^\]]|\R)+)\])?\]) |
        (?<radio_target> <<<(?<rt_target> [^>\n]+)>>>) |
@@ -54,7 +54,7 @@ my  $text_re       =
        (?<fn_nameidef>  \[fn:(?<fn_nameidef_name> $fn_name_re?):?
                         (?<fn_nameidef_def> ([^\n\]]+)?)\]) |
 
-       (?<markup_start> (?:(?<=\s)|\A)
+       (?<markup_start> (?:(?<=\s|\(|\{)|\A) # whitespace, open paren, open curly paren
                         [*/+=~_]
                         (?=\S)) |
        (?<markup_end>   (?<=\S)
@@ -64,7 +64,7 @@ my  $text_re       =
 
        (?<plain_text>   (?:[^\[<*/+=~_\n]+|.+?))
        #(?<plain_text>   .+?) # too dispersy
-      )sxi;
+      }sxi;
 
 my $block_elems_re = # top level elements
     qr/(?<block>     $ls_re (?<block_begin_indent>[ \t]*)
@@ -382,13 +382,18 @@ sub _parse {
                 $el->is_todo(1);
                 $el->todo_state($state);
                 $el->is_done($state ~~ @{ $self->done_states } ? 1:0);
+            }
 
-                # recognize priority
-                my $prio_re = "(?:".
-                    join("|", map {quotemeta} @{$self->priorities}) . ")";
-                if ($title =~ s/\[#($prio_re)\]\s*//o) {
-                    $el->todo_priority($1);
-                }
+            # recognize priority
+            my $prio_re = "(?:".
+                join("|", map {quotemeta} @{$self->priorities}) . ")";
+            if ($title =~ s/\[#($prio_re)\]\s*//o) {
+                $el->priority($1);
+            }
+
+            # recognize priority
+            if ($title =~ s!\[(\d+%|\d+/\d+)\]\s*!!o) {
+                $el->progress($1);
             }
 
             $el->title($self->_add_text_container($title, $parent, $pass));
@@ -768,7 +773,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-This document describes version 0.38 of Org::Document (from Perl distribution Org-Parser), released on 2014-05-17.
+This document describes version 0.39 of Org::Document (from Perl distribution Org-Parser), released on 2014-07-17.
 
 =head1 SYNOPSIS
 
