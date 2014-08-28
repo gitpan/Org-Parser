@@ -1,5 +1,11 @@
 Revision history for Org-Parser
 
+0.40    2014-07-17 (PERLANCAR)
+
+        - [Bugfix] miscached todo keywords and priorities from previous parse
+          due to the use of /o regex modifier [RT#98375].
+
+
 0.39    2014-07-17 (SHARYANTO)
 
         [ENHANCEMENTS]
@@ -14,7 +20,8 @@ Revision history for Org-Parser
 
         - Non-TODO headlines can have priority too, so the 'todo_priority'
           attribute is renamed to 'priority' [RT#95947](2014-07-16). The old
-          name is still supported for a while.
+          name is deprecated and will be supported for a while before it is
+          removed.
 
         [DOCUMENTATION]
 

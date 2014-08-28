@@ -6,7 +6,7 @@ use utf8;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.39'; # VERSION
+our $VERSION = '0.40'; # VERSION
 
 my @attrs = (qw/datetime has_time event_duration recurrence is_active/);
 for (@attrs) {
@@ -203,7 +203,7 @@ Org::Element::Timestamp - Represent Org timestamp
 
 =head1 VERSION
 
-This document describes version 0.39 of Org::Element::Timestamp (from Perl distribution Org-Parser), released on 2014-07-17.
+This document describes version 0.40 of Org::Element::Timestamp (from Perl distribution Org-Parser), released on 2014-08-28.
 
 =head1 DESCRIPTION
 
@@ -277,7 +277,7 @@ Please visit the project's homepage at L<https://metacpan.org/release/Org-Parser
 
 =head1 SOURCE
 
-Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
+Source repository is at L<https://github.com/perlancar/perl-Org-Parser>.
 
 =head1 BUGS
 
@@ -289,11 +289,11 @@ feature.
 
 =head1 AUTHOR
 
-Steven Haryanto <stevenharyanto@gmail.com>
+perlancar <perlancar@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Steven Haryanto.
+This software is copyright (c) 2014 by perlancar@cpan.org.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

@@ -11,7 +11,7 @@ use ExtUtils::MakeMaker 6.30;
 
 my %WriteMakefileArgs = (
   "ABSTRACT" => "Parse Org documents",
-  "AUTHOR" => "Steven Haryanto <stevenharyanto\@gmail.com>",
+  "AUTHOR" => "perlancar <perlancar\@cpan.org>",
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
   },
@@ -34,9 +34,9 @@ my %WriteMakefileArgs = (
     "IO::Handle" => 0,
     "IPC::Open3" => 0,
     "Test::Exception" => 0,
-    "Test::More" => "0.96"
+    "Test::More" => "0.98"
   },
-  "VERSION" => "0.39",
+  "VERSION" => "0.40",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -55,7 +55,7 @@ my %FallbackPrereqs = (
   "Moo" => 0,
   "String::Escape" => 0,
   "Test::Exception" => 0,
-  "Test::More" => "0.96",
+  "Test::More" => "0.98",
   "experimental" => 0
 );
 
