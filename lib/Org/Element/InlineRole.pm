@@ -1,33 +1,21 @@
-package Org::Element::TimeRange;
+package Org::Element::InlineRole;
 
 our $DATE = '2014-11-18'; # DATE
 our $VERSION = '0.41'; # VERSION
 
 use 5.010;
-use locale;
-use Moo;
-extends 'Org::Element';
-with 'Org::Element::InlineRole';
+use Moo::Role;
 
-has ts1 => (is => 'rw');
-has ts2 => (is => 'rw');
+requires 'as_text';
 
-sub as_string {
+sub children_as_text {
     my ($self) = @_;
-    return $self->_str if $self->_str;
-    join("",
-         $self->ts1->as_string,
-         "--",
-         $self->ts2->as_string
-     );
-}
-
-sub as_text {
-    goto \&as_string;
+    return "" unless $self->children;
+    join "", map {$_->as_text} @{$self->children};
 }
 
 1;
-# ABSTRACT: Represent Org time range (TS1--TS2)
+# ABSTRACT: Inline elements
 
 __END__
 
@@ -37,35 +25,29 @@ __END__
 
 =head1 NAME
 
-Org::Element::TimeRange - Represent Org time range (TS1--TS2)
+Org::Element::InlineRole - Inline elements
 
 =head1 VERSION
 
-This document describes version 0.41 of Org::Element::TimeRange (from Perl distribution Org-Parser), released on 2014-11-18.
+This document describes version 0.41 of Org::Element::InlineRole (from Perl distribution Org-Parser), released on 2014-11-18.
 
 =head1 DESCRIPTION
 
-Derived from L<Org::Element>.
+This role is applied to elements that are "inline": elements that can occur
+inside text and put as a child of L<Org::Element::Text>.
 
-=head1 ATTRIBUTES
-
-=head2 ts1 => TIMESTAMP ELEMENT
-
-Starting timestamp.
-
-=head2 ts2 => TIMESTAMP ELEMENT
-
-Ending timestamp.
-
-=head1 METHODS
-
-=head2 as_string => str
-
-From L<Org::Element>.
+=head1 REQUIRES
 
 =head2 as_text => str
 
-From L<Org::Element::InlineRole>.
+Get the "rendered plaintext" representation of element. Most elements would
+return the same result as C<as_string>, except for elements like
+L<Org::Element::Link> which will return link description instead of the link
+itself.
+
+=head1 METHODS
+
+=head2 children_as_text => str
 
 =head1 HOMEPAGE
 

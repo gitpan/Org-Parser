@@ -24,6 +24,7 @@ requires:
   Log::Any: '0'
   Module::List: '0'
   Moo: '0'
+  Moo::Role: '0'
   String::Escape: '0'
   experimental: '0'
   perl: '5.010001'
@@ -31,7 +32,7 @@ resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=Org-Parser
   homepage: https://metacpan.org/release/Org-Parser
   repository: git://github.com/perlancar/perl-Org-Parser.git
-version: '0.40'
+version: '0.41'
 x_Dist_Zilla:
   perl:
     version: '5.018002'
@@ -116,6 +117,10 @@ x_Dist_Zilla:
       name: '@Author::PERLANCAR/MetaConfig'
       version: '5.019'
     -
+      class: Dist::Zilla::Plugin::Rinci::InstallCompletion
+      name: '@Author::PERLANCAR/Rinci::InstallCompletion'
+      version: '0.03'
+    -
       class: Dist::Zilla::Plugin::OurDate
       name: '@Author::PERLANCAR/OurDate'
       version: '0.01'
@@ -184,6 +189,14 @@ x_Dist_Zilla:
               name: '@Author::PERLANCAR/postlude'
               version: '4.006'
             -
+              class: Pod::Weaver::Section::BashCompletion::GetoptLongComplete
+              name: '@Author::PERLANCAR/BashCompletion::GetoptLongComplete'
+              version: '0.01'
+            -
+              class: Pod::Weaver::Section::BashCompletion::PerinciCmdLine
+              name: '@Author::PERLANCAR/BashCompletion::PerinciCmdLine'
+              version: '0.03'
+            -
               class: Pod::Weaver::Section::Homepage::DefaultCPAN
               name: '@Author::PERLANCAR/Homepage::DefaultCPAN'
               version: '0.02'
@@ -224,7 +237,7 @@ x_Dist_Zilla:
     -
       class: Dist::Zilla::Plugin::Rinci::Validate
       name: '@Author::PERLANCAR/Rinci::Validate'
-      version: '0.14'
+      version: '0.19'
     -
       class: Dist::Zilla::Plugin::SetScriptShebang
       name: '@Author::PERLANCAR/SetScriptShebang'

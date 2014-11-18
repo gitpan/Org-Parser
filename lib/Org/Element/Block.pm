@@ -6,7 +6,7 @@ use Moo;
 use experimental 'smartmatch';
 extends 'Org::Element';
 
-our $VERSION = '0.40'; # VERSION
+our $VERSION = '0.41'; # VERSION
 
 has name => (is => 'rw');
 has args => (is => 'rw');
@@ -54,7 +54,7 @@ Org::Element::Block - Represent Org block
 
 =head1 VERSION
 
-This document describes version 0.40 of Org::Element::Block (from Perl distribution Org-Parser), released on 2014-08-28.
+This document describes version 0.41 of Org::Element::Block (from Perl distribution Org-Parser), released on 2014-11-18.
 
 =head1 DESCRIPTION
 

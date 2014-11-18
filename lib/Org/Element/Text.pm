@@ -1,11 +1,13 @@
 package Org::Element::Text;
 
+our $DATE = '2014-11-18'; # DATE
+our $VERSION = '0.41'; # VERSION
+
 use 5.010;
 use locale;
 use Moo;
 extends 'Org::Element';
-
-our $VERSION = '0.40'; # VERSION
+with 'Org::Element::InlineRole';
 
 has text => (is => 'rw');
 has style => (is => 'rw');
@@ -24,6 +26,16 @@ sub as_string {
          $muchar);
 }
 
+sub as_text {
+    my $self = shift;
+    my $muchar = $style2mu{$self->style // ''} // '';
+
+    join("",
+         $muchar,
+         $self->text // '', $self->children_as_text,
+         $muchar);
+}
+
 1;
 # ABSTRACT: Represent text
 
@@ -39,24 +51,44 @@ Org::Element::Text - Represent text
 
 =head1 VERSION
 
-This document describes version 0.40 of Org::Element::Text (from Perl distribution Org-Parser), released on 2014-08-28.
+This document describes version 0.41 of Org::Element::Text (from Perl distribution Org-Parser), released on 2014-11-18.
 
 =head1 DESCRIPTION
 
 Derived from L<Org::Element>.
 
+Org::Element::Text is an object that represents a piece of text. It has C<text>
+and C<style> attributes. Simple text like C<Jakarta> or C<*Jakarta!*> will be
+represented, respectively, as C<(text=Jakarta, style='')> and C<text=Jakarta!,
+style=B> (for bold).
+
+This object can also hold other inline (non-block) elements, e.g. links, radio
+targets, timestamps, time ranges. They are all put in the C<children> attribute.
+
+=for Pod::Coverage as_string
+
 =head1 ATTRIBUTES
 
-=head2 text
+=head2 text => str
 
-=head2 style
+Plain text for this object I<only>. Note that if you want to get a plain text
+representation for the whole text (including child elements), you'd want the
+C<as_text> method.
+
+=head2 style => str
 
 ''=normal, I=italic, B=bold, U=underline, S=strikethrough, V=verbatim,
 C=code
 
 =head1 METHODS
 
-=for Pod::Coverage as_string
+=head2 as_text => str
+
+From L<Org::Element::InlineRole>.
+
+=head2 as_string => str
+
+From L<Org::Element>.
 
 =head1 HOMEPAGE
 

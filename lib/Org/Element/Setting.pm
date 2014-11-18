@@ -6,7 +6,7 @@ use Moo;
 use experimental 'smartmatch';
 extends 'Org::Element';
 
-our $VERSION = '0.40'; # VERSION
+our $VERSION = '0.41'; # VERSION
 
 our @known_settings = qw(
 ARCHIVE
@@ -61,6 +61,7 @@ INFOJS_OPT
 KEYWORDS
 LABEL
 LANGUAGE
+LAST_MOBILE_CHANGE
 LATEX
 LATEX_CLASS
 LATEX_CLASS_OPTIONS
@@ -76,11 +77,13 @@ OPTIONS
 ORGLST
 ORGTBL
 PLOT
+POSTID
 PRIORITIES
 PROPERTY
 RESULTS
 SEQ_TODO
 SETUPFILE
+SRCNAME
 STARTUP
 STYLE
 TAGS
@@ -183,7 +186,7 @@ Org::Element::Setting - Represent Org in-buffer settings
 
 =head1 VERSION
 
-This document describes version 0.40 of Org::Element::Setting (from Perl distribution Org-Parser), released on 2014-08-28.
+This document describes version 0.41 of Org::Element::Setting (from Perl distribution Org-Parser), released on 2014-11-18.
 
 =head1 DESCRIPTION
 

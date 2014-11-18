@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.40'; # VERSION
+our $VERSION = '0.41'; # VERSION
 
 has _dummy => (is => 'rw'); # workaround Moo bug
 
@@ -120,7 +120,7 @@ Org::Element::Table - Represent Org table
 
 =head1 VERSION
 
-This document describes version 0.40 of Org::Element::Table (from Perl distribution Org-Parser), released on 2014-08-28.
+This document describes version 0.41 of Org::Element::Table (from Perl distribution Org-Parser), released on 2014-11-18.
 
 =head1 DESCRIPTION
 

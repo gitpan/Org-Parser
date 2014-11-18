@@ -7,7 +7,7 @@ use Log::Any qw($log);
 
 use String::Escape qw(elide printable);
 
-our $VERSION = '0.40'; # VERSION
+our $VERSION = '0.41'; # VERSION
 
 sub _dump_ts {
     my ($self, $ts) = @_;
@@ -131,7 +131,7 @@ Org::Dump - Show Org document/element object in a human-friendly format
 
 =head1 VERSION
 
-This document describes version 0.40 of Org::Dump (from Perl distribution Org-Parser), released on 2014-08-28.
+This document describes version 0.41 of Org::Dump (from Perl distribution Org-Parser), released on 2014-11-18.
 
 =head1 FUNCTIONS
 

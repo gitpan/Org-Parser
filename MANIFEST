@@ -16,6 +16,7 @@ lib/Org/Element/Drawer.pm
 lib/Org/Element/FixedWidthSection.pm
 lib/Org/Element/Footnote.pm
 lib/Org/Element/Headline.pm
+lib/Org/Element/InlineRole.pm
 lib/Org/Element/Link.pm
 lib/Org/Element/List.pm
 lib/Org/Element/ListItem.pm

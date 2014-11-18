@@ -1,12 +1,14 @@
 package Org::Element::Footnote;
 
+our $DATE = '2014-11-18'; # DATE
+our $VERSION = '0.41'; # VERSION
+
 use 5.010;
 use locale;
 use Log::Any '$log';
 use Moo;
 extends 'Org::Element';
-
-our $VERSION = '0.40'; # VERSION
+with 'Org::Element::InlineRole';
 
 has name => (is => 'rw');
 has is_ref => (is => 'rw');
@@ -26,6 +28,10 @@ sub as_string {
          "]");
 }
 
+sub as_text {
+    goto \&as_string;
+}
+
 1;
 # ABSTRACT: Represent Org footnote reference and/or definition
 
@@ -41,11 +47,13 @@ Org::Element::Footnote - Represent Org footnote reference and/or definition
 
 =head1 VERSION
 
-This document describes version 0.40 of Org::Element::Footnote (from Perl distribution Org-Parser), released on 2014-08-28.
+This document describes version 0.41 of Org::Element::Footnote (from Perl distribution Org-Parser), released on 2014-11-18.
 
 =head1 DESCRIPTION
 
 Derived from L<Org::Element>.
+
+=for Pod::Coverage ^(BUILD)$
 
 =head1 ATTRIBUTES
 
@@ -64,7 +72,13 @@ Set to make this a footnote definition.
 
 =head1 METHODS
 
-=for Pod::Coverage as_string BUILD
+=head2 as_string => str
+
+From L<Org::Element>.
+
+=head2 as_text => str
+
+From L<Org::Element::InlineRole>.
 
 =head1 HOMEPAGE
 

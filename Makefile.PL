@@ -26,6 +26,7 @@ my %WriteMakefileArgs = (
     "Log::Any" => 0,
     "Module::List" => 0,
     "Moo" => 0,
+    "Moo::Role" => 0,
     "String::Escape" => 0,
     "experimental" => 0
   },
@@ -36,7 +37,7 @@ my %WriteMakefileArgs = (
     "Test::Exception" => 0,
     "Test::More" => "0.98"
   },
-  "VERSION" => "0.40",
+  "VERSION" => "0.41",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -53,6 +54,7 @@ my %FallbackPrereqs = (
   "Log::Any" => 0,
   "Module::List" => 0,
   "Moo" => 0,
+  "Moo::Role" => 0,
   "String::Escape" => 0,
   "Test::Exception" => 0,
   "Test::More" => "0.98",

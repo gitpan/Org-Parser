@@ -4,7 +4,7 @@ use warnings;
 
 # this test was generated with Dist::Zilla::Plugin::Test::Compile 2.040
 
-use Test::More  tests => 23 + ($ENV{AUTHOR_TESTING} ? 1 : 0);
+use Test::More  tests => 24 + ($ENV{AUTHOR_TESTING} ? 1 : 0);
 
 
 
@@ -18,6 +18,7 @@ my @module_files = (
     'Org/Element/FixedWidthSection.pm',
     'Org/Element/Footnote.pm',
     'Org/Element/Headline.pm',
+    'Org/Element/InlineRole.pm',
     'Org/Element/Link.pm',
     'Org/Element/List.pm',
     'Org/Element/ListItem.pm',

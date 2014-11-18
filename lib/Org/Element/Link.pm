@@ -1,11 +1,13 @@
 package Org::Element::Link;
 
+our $DATE = '2014-11-18'; # DATE
+our $VERSION = '0.41'; # VERSION
+
 use 5.010;
 use locale;
 use Moo;
 extends 'Org::Element';
-
-our $VERSION = '0.40'; # VERSION
+with 'Org::Element::InlineRole';
 
 has link => (is => 'rw');
 has description => (is => 'rw');
@@ -20,6 +22,12 @@ sub as_string {
          (defined($self->description) && length($self->description) ?
               ("[", $self->description->as_string, "]") : ()),
          "]");
+}
+
+sub as_text {
+    my $self = shift;
+    my $desc = $self->description;
+    defined($desc) ? $desc->as_text : $self->link;
 }
 
 1;
@@ -37,7 +45,7 @@ Org::Element::Link - Represent Org hyperlink
 
 =head1 VERSION
 
-This document describes version 0.40 of Org::Element::Link (from Perl distribution Org-Parser), released on 2014-08-28.
+This document describes version 0.41 of Org::Element::Link (from Perl distribution Org-Parser), released on 2014-11-18.
 
 =head1 DESCRIPTION
 
@@ -47,13 +55,19 @@ Derived from L<Org::Element>.
 
 =head2 link => STR
 
-=head2 description => STR
+=head2 description => OBJ
 
 =head2 from_radio_target => BOOL
 
 =head1 METHODS
 
-=for Pod::Coverage as_string
+=head1 as_string => str
+
+From L<Org::Element>.
+
+=head2 as_text => str
+
+From L<Org::Element::InlineRole>.
 
 =head1 HOMEPAGE
 
