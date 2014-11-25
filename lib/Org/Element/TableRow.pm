@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.41'; # VERSION
+our $VERSION = '0.42'; # VERSION
 
 sub as_string {
     my ($self) = @_;
@@ -49,7 +49,7 @@ Org::Element::TableRow - Represent Org table row
 
 =head1 VERSION
 
-This document describes version 0.41 of Org::Element::TableRow (from Perl distribution Org-Parser), released on 2014-11-18.
+This document describes version 0.42 of Org::Element::TableRow (from Perl distribution Org-Parser), released on 2014-11-26.
 
 =head1 DESCRIPTION
 
@@ -77,7 +77,7 @@ Please visit the project's homepage at L<https://metacpan.org/release/Org-Parser
 
 =head1 SOURCE
 
-Source repository is at L<https://github.com/perlancar/perl-Org-Parser>.
+Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
 
 =head1 BUGS
 

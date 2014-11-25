@@ -2,8 +2,8 @@ NAME
     Org::Parser - Parse Org documents
 
 VERSION
-    This document describes version 0.41 of Org::Parser (from Perl
-    distribution Org-Parser), released on 2014-11-18.
+    This document describes version 0.42 of Org::Parser (from Perl
+    distribution Org-Parser), released on 2014-11-26.
 
 SYNOPSIS
      use 5.010;
@@ -135,7 +135,7 @@ HOMEPAGE
     <https://metacpan.org/release/Org-Parser>.
 
 SOURCE
-    Source repository is at <https://github.com/perlancar/perl-Org-Parser>.
+    Source repository is at <https://github.com/sharyanto/perl-Org-Parser>.
 
 BUGS
     Please report any bugs or feature requests on the bugtracker website

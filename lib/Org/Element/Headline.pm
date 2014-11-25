@@ -7,7 +7,7 @@ use Moo;
 use experimental 'smartmatch';
 extends 'Org::Element';
 
-our $VERSION = '0.41'; # VERSION
+our $VERSION = '0.42'; # VERSION
 
 has level => (is => 'rw');
 has title => (is => 'rw');
@@ -47,7 +47,7 @@ sub as_string {
 }
 
 sub get_tags {
-    my ($self, $name, $search_parent) = @_;
+    my ($self, $name) = @_;
     my @res = @{ $self->tags // [] };
     $self->walk_parents(
         sub {
@@ -217,13 +217,16 @@ sub get_property {
     #$log->tracef("-> get_property(%s, search_par=%s)", $name, $search_parent);
     my $p = $self->parent;
 
-	my $pd = $self->get_drawer("PROPERTIES");
-	return $pd->properties->{$name} if ($pd and defined $pd->properties->{$name});
+    my $pd = $self->get_drawer("PROPERTIES");
+    return $pd->properties->{$name} if ($pd and defined $pd->properties->{$name});
 
     if ($p && $search_parent) {
-        next unless $p->isa('Org::Element::Headline');
-        my $res = $p->get_property($name, 1);
-        return $res if defined $res;
+        while ($p) {
+            next unless $p->isa('Org::Element::Headline');
+            my $res = $p->get_property($name, 1);
+            return $res if defined $res;
+            $p = $p->parent;
+        }
     }
 
     $log->tracef("Getting property from document's .properties");
@@ -245,7 +248,7 @@ Org::Element::Headline - Represent Org headline
 
 =head1 VERSION
 
-This document describes version 0.41 of Org::Element::Headline (from Perl distribution Org-Parser), released on 2014-11-18.
+This document describes version 0.42 of Org::Element::Headline (from Perl distribution Org-Parser), released on 2014-11-26.
 
 =head1 DESCRIPTION
 
@@ -382,7 +385,7 @@ Please visit the project's homepage at L<https://metacpan.org/release/Org-Parser
 
 =head1 SOURCE
 
-Source repository is at L<https://github.com/perlancar/perl-Org-Parser>.
+Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
 
 =head1 BUGS
 

@@ -6,7 +6,7 @@ use Log::Any '$log';
 use Moo;
 use Scalar::Util qw(refaddr reftype);
 
-our $VERSION = '0.41'; # VERSION
+our $VERSION = '0.42'; # VERSION
 
 has document => (is => 'rw');
 has parent => (is => 'rw');
@@ -164,7 +164,7 @@ Org::Element - Base class for Org document elements
 
 =head1 VERSION
 
-This document describes version 0.41 of Org::Element (from Perl distribution Org-Parser), released on 2014-11-18.
+This document describes version 0.42 of Org::Element (from Perl distribution Org-Parser), released on 2014-11-26.
 
 =head1 SYNOPSIS
 
@@ -255,7 +255,7 @@ Please visit the project's homepage at L<https://metacpan.org/release/Org-Parser
 
 =head1 SOURCE
 
-Source repository is at L<https://github.com/perlancar/perl-Org-Parser>.
+Source repository is at L<https://github.com/sharyanto/perl-Org-Parser>.
 
 =head1 BUGS
 
