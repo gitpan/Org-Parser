@@ -7,7 +7,7 @@ use File::Slurp::Tiny qw(read_file);
 use Org::Document;
 use Scalar::Util qw(blessed);
 
-our $VERSION = '0.42'; # VERSION
+our $VERSION = '0.43'; # VERSION
 
 sub parse {
     my ($self, $arg, $opts) = @_;
@@ -83,7 +83,7 @@ Org::Parser - Parse Org documents
 
 =head1 VERSION
 
-This document describes version 0.42 of Org::Parser (from Perl distribution Org-Parser), released on 2014-11-26.
+This document describes version 0.43 of Org::Parser (from Perl distribution Org-Parser), released on 2014-12-01.
 
 =head1 SYNOPSIS
 
@@ -155,10 +155,6 @@ available for debugging:
 
 This module parses Org documents. See http://orgmode.org/ for more details on
 Org documents.
-
-This module uses L<Log::Any> logging framework.
-
-This module uses L<Moo> object system.
 
 See C<todo.org> in the distribution for the list of already- and not yet
 implemented stuffs.

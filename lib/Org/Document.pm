@@ -9,7 +9,7 @@ extends 'Org::Element';
 
 use Time::HiRes qw(gettimeofday tv_interval);
 
-our $VERSION = '0.42'; # VERSION
+our $VERSION = '0.43'; # VERSION
 
 has tags                    => (is => 'rw');
 has todo_states             => (is => 'rw');
@@ -773,7 +773,7 @@ Org::Document - Represent an Org document
 
 =head1 VERSION
 
-This document describes version 0.42 of Org::Document (from Perl distribution Org-Parser), released on 2014-11-26.
+This document describes version 0.43 of Org::Document (from Perl distribution Org-Parser), released on 2014-12-01.
 
 =head1 SYNOPSIS
 

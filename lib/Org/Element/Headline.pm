@@ -1,13 +1,14 @@
 package Org::Element::Headline;
 
+our $DATE = '2014-12-01'; # DATE
+our $VERSION = '0.43'; # VERSION
+
 use 5.010;
 use locale;
 use Log::Any '$log';
 use Moo;
 use experimental 'smartmatch';
 extends 'Org::Element';
-
-our $VERSION = '0.42'; # VERSION
 
 has level => (is => 'rw');
 has title => (is => 'rw');
@@ -213,24 +214,29 @@ sub get_drawer {
 }
 
 sub get_property {
-    my ($self, $name, $search_parent) = @_;
+    my ($self, $name, $search_parent, $search_docprop) = @_;
     #$log->tracef("-> get_property(%s, search_par=%s)", $name, $search_parent);
-    my $p = $self->parent;
+    my $parent = $self->parent;
 
-    my $pd = $self->get_drawer("PROPERTIES");
-    return $pd->properties->{$name} if ($pd and defined $pd->properties->{$name});
+    my $propd = $self->get_drawer("PROPERTIES");
+    return $propd->properties->{$name} if
+        $propd && defined $propd->properties->{$name};
 
-    if ($p && $search_parent) {
-        while ($p) {
-            next unless $p->isa('Org::Element::Headline');
-            my $res = $p->get_property($name, 1);
-            return $res if defined $res;
-            $p = $p->parent;
+    if ($parent && $search_parent) {
+        while ($parent) {
+            if ($parent->isa('Org::Element::Headline')) {
+                my $res = $parent->get_property($name, 0, 0);
+                return $res if defined $res;
+            }
+            $parent = $parent->parent;
         }
     }
 
-    $log->tracef("Getting property from document's .properties");
-    $self->document->properties->{$name};
+    if ($search_docprop // 1) {
+        $log->tracef("Getting property from document's .properties");
+        return $self->document->properties->{$name};
+    }
+    undef;
 }
 
 1;
@@ -248,7 +254,7 @@ Org::Element::Headline - Represent Org headline
 
 =head1 VERSION
 
-This document describes version 0.42 of Org::Element::Headline (from Perl distribution Org-Parser), released on 2014-11-26.
+This document describes version 0.43 of Org::Element::Headline (from Perl distribution Org-Parser), released on 2014-12-01.
 
 =head1 DESCRIPTION
 

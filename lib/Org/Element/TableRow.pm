@@ -5,7 +5,7 @@ use locale;
 use Moo;
 extends 'Org::Element';
 
-our $VERSION = '0.42'; # VERSION
+our $VERSION = '0.43'; # VERSION
 
 sub as_string {
     my ($self) = @_;
@@ -49,7 +49,7 @@ Org::Element::TableRow - Represent Org table row
 
 =head1 VERSION
 
-This document describes version 0.42 of Org::Element::TableRow (from Perl distribution Org-Parser), released on 2014-11-26.
+This document describes version 0.43 of Org::Element::TableRow (from Perl distribution Org-Parser), released on 2014-12-01.
 
 =head1 DESCRIPTION
 

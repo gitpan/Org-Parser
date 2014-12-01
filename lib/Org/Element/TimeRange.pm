@@ -1,7 +1,7 @@
 package Org::Element::TimeRange;
 
-our $DATE = '2014-11-26'; # DATE
-our $VERSION = '0.42'; # VERSION
+our $DATE = '2014-12-01'; # DATE
+our $VERSION = '0.43'; # VERSION
 
 use 5.010;
 use locale;
@@ -41,7 +41,7 @@ Org::Element::TimeRange - Represent Org time range (TS1--TS2)
 
 =head1 VERSION
 
-This document describes version 0.42 of Org::Element::TimeRange (from Perl distribution Org-Parser), released on 2014-11-26.
+This document describes version 0.43 of Org::Element::TimeRange (from Perl distribution Org-Parser), released on 2014-12-01.
 
 =head1 DESCRIPTION
 

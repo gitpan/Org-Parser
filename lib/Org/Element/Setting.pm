@@ -6,7 +6,7 @@ use Moo;
 use experimental 'smartmatch';
 extends 'Org::Element';
 
-our $VERSION = '0.42'; # VERSION
+our $VERSION = '0.43'; # VERSION
 
 our @known_settings = qw(
 ARCHIVE
@@ -186,7 +186,7 @@ Org::Element::Setting - Represent Org in-buffer settings
 
 =head1 VERSION
 
-This document describes version 0.42 of Org::Element::Setting (from Perl distribution Org-Parser), released on 2014-11-26.
+This document describes version 0.43 of Org::Element::Setting (from Perl distribution Org-Parser), released on 2014-12-01.
 
 =head1 DESCRIPTION
 
